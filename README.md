@@ -1,9 +1,10 @@
 # JadyerSDK[![License](https://img.shields.io/hexpm/l/plug.svg)](https://github.com/jadyer/JadyerSDK/blob/master/LICENSE)
 个人研发的含微信SDK的SDK集<br/>
 
-大家有问题可以提在这里https://github.com/jadyer/JadyerSDK/issues<br/>
-SDK中mpp用于存放微信或QQ公众平台SDK，你可以理解为Media and Public Platform<br/>
-使用时继承WeixinMsgController或其适配器类，并保证&lt;context:component-scan base-package="com.jadyer.sdk"/&gt;<br/>
+1.大家有问题可以提在这里https://github.com/jadyer/JadyerSDK/issues<br/>
+2.SDK中mpp用于存放微信或QQ公众平台SDK，你可以理解为Media and Public Platform<br/>
+3.使用时extends WeixinMsgController或者extends WeixinMsgControllerAdapter等适配器类<br/>
+4.并保证Spring能够扫描到&lt;context:component-scan base-package="com.jadyer.sdk"/&gt;<br/>
 
 # 更新日志
 [v1.0.1] 2015.10.20<br/>
