@@ -40,7 +40,6 @@ public abstract class WeixinMsgController {
 	@RequestMapping(value="/{token}")
 	public void index(@PathVariable String token, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		//验签
-		System.out.println("token=" + token);
 		token = DigestUtils.md5Hex(token + "http://blog.csdn.net/jadyer" + token);
 		if(!this.verifySignature(token, request)){
 			PrintWriter out = response.getWriter();
