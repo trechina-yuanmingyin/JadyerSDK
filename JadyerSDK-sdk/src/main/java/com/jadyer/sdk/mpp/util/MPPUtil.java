@@ -31,7 +31,7 @@ public final class MPPUtil {
 	 */
 	public static String getWeixinAccessToken(String appid, String appsecret){
 		String reqURL = MPPConstants.URL_WEIXIN_GET_ACCESSTOKEN.replace(MPPConstants.URL_PLACEHOLDER_APPID, appid).replace(MPPConstants.URL_PLACEHOLDER_APPSECRET, appsecret);
-		String respData = HttpUtil.get(reqURL);
+		String respData = HttpUtil.post(reqURL);
 		logger.info("获取微信access_token,微信应答报文为-->{}", respData);
 		Map<String, String> map = JSON.parseObject(respData, new TypeReference<Map<String, String>>(){});
 		if(respData.contains("access_token")){
@@ -48,10 +48,19 @@ public final class MPPUtil {
 
 	/**
 	 * 获取用户基本信息
+	 * @see 微信服务器的应答报文是下面这样的,一般Content-Type里面编码都用charset,它竟然用encoding
+	 * @see HTTP/1.1 200 OK
+	 * @see Server: nginx/1.8.0
+	 * @see Date: Wed, 21 Oct 2015 03:56:53 GMT
+	 * @see Content-Type: application/json; encoding=utf-8
+	 * @see Content-Length: 357
+	 * @see Connection: keep-alive
+	 * @see 
+	 * @see {"subscribe":1,"openid":"o3SHot22_IqkUI7DpahNv-KBiFIs","nickname":"玄玉","sex":1,"language":"en","city":"江北","province":"重庆","country":"中国","headimgurl":"http:\/\/wx.qlogo.cn\/mmopen\/Sa1DhFzJREXnSqZKc2Y2AficBdiaaiauFNBbiakfO7fJkf8Cp3oLgJQhbgkwmlN3co2aJr9iabEKJq5jsZYup3gibaVCHD5W13XRmR\/0","subscribe_time":1445398219,"remark":"","groupid":0}]
 	 */
 	public static FansInfo getFansInfo(String accesstoken, String openid){
 		String reqURL = MPPConstants.URL_WEIXIN_GET_FANSINFO.replace(MPPConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken).replace(MPPConstants.URL_PLACEHOLDER_OPENID, openid);
-		String respData = HttpUtil.get(reqURL);
+		String respData = HttpUtil.post(reqURL);
 		return JSON.parseObject(respData, FansInfo.class);
 	}
 
@@ -138,7 +147,7 @@ public final class MPPUtil {
 			return MPPConstants.URL_WEIXIN_OAUTH2_GET_CODE.replace(MPPConstants.URL_PLACEHOLDER_APPID, appid)
 														  .replace(MPPConstants.URL_PLACEHOLDER_SCOPE, scope)
 														  .replace(MPPConstants.URL_PLACEHOLDER_STATE, state)
-														  .replace(MPPConstants.URL_PLACEHOLDER_REDIRECT_URI, URLEncoder.encode(redirectURI, MPPConstants.CHARSET));
+														  .replace(MPPConstants.URL_PLACEHOLDER_REDIRECT_URI, URLEncoder.encode(redirectURI, HttpUtil.DEFAULT_CHARSET));
 		} catch (UnsupportedEncodingException e) {
 			return null;
 		}
@@ -156,7 +165,7 @@ public final class MPPUtil {
 		String reqURL = MPPConstants.URL_WEIXIN_OAUTH2_GET_ACCESSTOKEN.replace(MPPConstants.URL_PLACEHOLDER_APPID, appid)
 																	  .replace(MPPConstants.URL_PLACEHOLDER_APPSECRET, appsecret)
 																	  .replace(MPPConstants.URL_PLACEHOLDER_CODE, code);
-		String respData = HttpUtil.get(reqURL);
+		String respData = HttpUtil.post(reqURL);
 		logger.info("获取微信网页access_token,微信应答报文为-->{}", respData);
 		OAuthAccessToken oauthAccessToken = JSON.parseObject(respData, OAuthAccessToken.class);
 		if(oauthAccessToken.getErrcode() != 0){

@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.jadyer.sdk.mpp.constant.MPPConstants;
+import com.jadyer.sdk.mpp.util.HttpUtil;
 import com.jadyer.sdk.mpp.util.MPPUtil;
 
 /**
@@ -86,8 +87,8 @@ public class OAuthFilter implements Filter {
 			 */
 			String userAgent = request.getHeader("User-Agent");
 			if(!userAgent.contains("MicroMessenger") || (!userAgent.contains("iPhone") && !userAgent.contains("Android"))){
-				response.setCharacterEncoding(MPPConstants.CHARSET);
-				response.setContentType("text/plain; charset=" + MPPConstants.CHARSET);
+				response.setCharacterEncoding(HttpUtil.DEFAULT_CHARSET);
+				response.setContentType("text/plain; charset=" + HttpUtil.DEFAULT_CHARSET);
 				response.setHeader("Cache-Control", "no-cache");
 				response.setHeader("Pragma", "no-cache");
 				response.setDateHeader("Expires", 0);

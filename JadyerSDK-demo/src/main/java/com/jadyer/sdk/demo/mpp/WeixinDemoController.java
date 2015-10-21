@@ -40,7 +40,7 @@ public class WeixinDemoController extends WeixinMsgControllerAdapter {
 	@ResponseBody
 	@RequestMapping(value="/getFansInfo")
 	public FansInfo getFansInfo(){
-		String accesstoken = "nHVQXjVPWlyvdglrU6EgGr7spBq2QW6IoW5a7UNDC5zye0Jzw9OeQgeM76FTc9D7ELvgm2s2v1UZ_cbtx6tGOLFd9WGFbS_zTI0Jp5D5GS4";
+		String accesstoken = "axJDAkVIyi5SEYXTnHbWQZypbO0O8p5cDM5CdU0gs4loKMtpB3QCSuK4S6rfPebIArXx33Lmg_U5QoSLflUIHwKQnlGSsTlqhgFk-5RT2y0";
 		String openid = "o3SHot22_IqkUI7DpahNv-KBiFIs";
 		return MPPUtil.getFansInfo(accesstoken, openid);
 	}
@@ -49,7 +49,7 @@ public class WeixinDemoController extends WeixinMsgControllerAdapter {
 	@ResponseBody
 	@RequestMapping(value="/createMenu")
 	public ErrorInfo createMenu(){
-		String accesstoken = "5fRyRK6LF0JAyU3kGKc17WZKjr3pRjjR3t_zvQlbD_aZzkoL5fF3ah5Q4wrzF2oDPMir-_j9f2GEHXtIZ-xqIT7kceai0E9ORvtkarFf3E8";
+		String accesstoken = "axJDAkVIyi5SEYXTnHbWQZypbO0O8p5cDM5CdU0gs4loKMtpB3QCSuK4S6rfPebIArXx33Lmg_U5QoSLflUIHwKQnlGSsTlqhgFk-5RT2y0";
 		SubViewButton btn11 = new SubViewButton("我的博客", "http://blog.csdn.net/jadyer");
 		SubViewButton btn22 = new SubViewButton("我的GitHub", "http://jadyer.tunnel.mobi/weixin/getOpenid?oauth=base&openid=openid");
 		SubClickButton btn33 = new SubClickButton("历史上的今天", "history");
@@ -65,10 +65,10 @@ public class WeixinDemoController extends WeixinMsgControllerAdapter {
 	@ResponseBody
 	@RequestMapping(value="/pushMsgToFans")
 	public ErrorInfo pushMsgToFans(){
-		String accesstoken = "nHVQXjVPWlyvdglrU6EgGr7spBq2QW6IoW5a7UNDC5zye0Jzw9OeQgeM76FTc9D7ELvgm2s2v1UZ_cbtx6tGOLFd9WGFbS_zTI0Jp5D5GS4";
+		String accesstoken = "axJDAkVIyi5SEYXTnHbWQZypbO0O8p5cDM5CdU0gs4loKMtpB3QCSuK4S6rfPebIArXx33Lmg_U5QoSLflUIHwKQnlGSsTlqhgFk-5RT2y0";
 		String openid = "o3SHot22_IqkUI7DpahNv-KBiFIs";
 		//推文本消息
-		CustomTextMsg customTextMsg = new CustomTextMsg(openid, new Text("明天发布微信SDK"));
+		CustomTextMsg customTextMsg = new CustomTextMsg(openid, new Text("[呲牙]SDK已发布，详见<a href=\"https://github.com/jadyer/JadyerSDK\">我的Github</a>[呲牙]"));
 		MPPUtil.pushMsgToFans(accesstoken, customTextMsg);
 		//推图文消息
 		CustomNewsMsg.News.Article article11 = new Article("欢迎访问玄玉博客", "玄玉博客是一个开放态度的Java生态圈", "http://avatar.csdn.net/6/0/B/1_jadyer.jpg", "http://blog.csdn.net/jadyer");

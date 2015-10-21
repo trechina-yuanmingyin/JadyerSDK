@@ -1,7 +1,9 @@
 package com.jadyer.sdk.mpp.constant;
 
 public interface MPPConstants {
-	String CHARSET = "UTF-8";
+	/**
+	 * 网页授权获取用户信息的方式
+	 */
 	String OAUTH_SCOPE_SNSAPI_BASE     = "snsapi_base";
 	String OAUTH_SCOPE_SNSAPI_USERINFO = "snsapi_userinfo";
 

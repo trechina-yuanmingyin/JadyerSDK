@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-import com.jadyer.sdk.mpp.constant.MPPConstants;
 import com.jadyer.sdk.mpp.filter.OAuthFilter;
 import com.jadyer.sdk.mpp.model.OAuthAccessToken;
+import com.jadyer.sdk.mpp.util.HttpUtil;
 import com.jadyer.sdk.mpp.util.MPPUtil;
 
 /**
@@ -56,8 +56,8 @@ public class WeixinOAuthController {
 				return InternalResourceViewResolver.REDIRECT_URL_PREFIX + fullURI;
 			}
 		}
-		response.setCharacterEncoding(MPPConstants.CHARSET);
-		response.setContentType("text/plain; charset=" + MPPConstants.CHARSET);
+		response.setCharacterEncoding(HttpUtil.DEFAULT_CHARSET);
+		response.setContentType("text/plain; charset=" + HttpUtil.DEFAULT_CHARSET);
 		response.setHeader("Cache-Control", "no-cache");
 		response.setHeader("Pragma", "no-cache");
 		response.setDateHeader("Expires", 0);
