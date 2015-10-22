@@ -77,7 +77,7 @@ function login(){
 	}
 	flag = false;
 	o.attr("disabled", true).text("登录中...").css({"background":"#28b779", "cursor":"auto"});
-	$.get("${pageContext.request.contextPath}/user/login/${userId}/" + username + "/" + password,
+	$.get("${pageContext.request.contextPath}/user/login/" + username + "/" + password,
 		function(data){
 			if(1000 == data.code){
 				window.location.href = "${pageContext.request.contextPath}/user/welcome";

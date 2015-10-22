@@ -55,9 +55,9 @@
 </div>
 <div class="c_main_r">
 	<div class="c_topBar">
-		<p class="p1"><i></i><span class="fm2">您好：${user.name}，欢迎访问半步多管理平台，现在是：<fmt:formatDate value="<%=new Date()%>" pattern="yyyy年MM月dd日 HH:mm:ss E"/></span></p>
+		<p class="p1"><i></i><span class="fm2">您好：${userInfo.username}，欢迎访问半步多管理平台，现在是：<fmt:formatDate value="<%=new Date()%>" pattern="yyyy年MM月dd日 HH:mm:ss E"/></span></p>
 		<p class="p2 fm2">
 			<a href="javascript:alert('暂未开放');" class="mr_20"><i class="i_man"></i><span class="va_m">修改信息</span></a>
-			<a href="#"><i class="i_sw"></i><span class="va_m">退出</span></a>
+			<a href="${ctx}/user/logout"><i class="i_sw"></i><span class="va_m">退出</span></a>
 		</p>
 	</div>

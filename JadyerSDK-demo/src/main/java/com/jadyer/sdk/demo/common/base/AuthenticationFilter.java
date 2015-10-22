@@ -59,7 +59,7 @@ public class AuthenticationFilter implements Filter {
 				break;
 			}
 		}
-		if(disallowAnonymousVisit && null==request.getSession().getAttribute(Constants.USER)){
+		if(disallowAnonymousVisit && null==request.getSession().getAttribute(Constants.USERINFO)){
 			response.sendRedirect(request.getContextPath() + this.url);
 		}else{
 			chain.doFilter(req, resp);
