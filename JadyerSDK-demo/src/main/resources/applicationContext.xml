@@ -104,7 +104,7 @@
 	<mvc:resources mapping="/css/**" location="/css/"/>
 	<mvc:resources mapping="/img/**" location="/img/"/>
 	<mvc:resources mapping="/druid" location="/druid/index.html"/>
-	<mvc:view-controller path="/" view-name="forward:/"/>
+	<mvc:view-controller path="/" view-name="forward:/login.jsp"/>
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/jsp/"/>
 		<property name="suffix" value=".jsp"/>
