@@ -32,6 +32,7 @@
 	</table>
 	<!--/Table list-->
 	<!--Paging-->
+	<!-- 
 	<div class="paging">
 		<a href="#" title="第一页">第一页</a>
 		<a href="#" title="上一页">上一页</a>
@@ -50,6 +51,7 @@
 			<b class="va_m pl_10">共 7 页，第 1 页</b>
 		</span>
 	</div>
+	 -->
 	<!--/Paging-->
 </div>
 <!--/Content-->

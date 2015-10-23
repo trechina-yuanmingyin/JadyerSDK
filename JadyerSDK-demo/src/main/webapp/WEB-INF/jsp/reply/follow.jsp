@@ -14,7 +14,11 @@ function saveOrUpdate(){
 		$.promptBox("回复内容不能为空", "#ffb848");
 		return;
 	}
-	$.post("${pageContext.request.contextPath}/reply/save/follow",
+	if($("#content").val().length > 1024){
+		$.promptBox("回复的文本内容不能超过1024", "#ffb848");
+		return;
+	}
+	$.post("${pageContext.request.contextPath}/reply/follow/save",
 		{id:id, content:$("#content").val()},
 		function(data){
 			if(1000 == data.code){

@@ -12,7 +12,7 @@
 <div class="c_content">
 	<!--Title-->
 	<div class="title txt_r">
-		<a class="bgre va_m" href="${ctx}/reply/get/keyword">+新增关键字</a>
+		<a class="bgre va_m" href="${ctx}/reply/keyword/toadd">+新增关键字</a>
 	</div>
 	<!--/Title-->
 	<!--Table list-->
@@ -29,15 +29,15 @@
 				<td><span>${reply.type eq 0 ? '文本' : reply.type eq 1?'图文' : reply.type eq 2?'图片' : reply.type eq 3?'活动' : reply.type eq 4?'转发到多客服':'未知'}</span></td>
 				<td>
 					<span>
-						<c:if test="${fn:length(reply.content)>5}">
-							${fn:substring(reply.content,0,5)}...
+						<c:if test="${fn:length(reply.content)>16}">
+							${fn:substring(reply.content,0,16)}...
 						</c:if>
-						<c:if test="${fn:length(reply.content)<=5}">
+						<c:if test="${fn:length(reply.content)<=16}">
 							${reply.content}
 						</c:if>
 					</span>
 				</td>
-				<td><a class="c09f mr_15" href="${ctx}/reply/get/keyword/${reply.id}">查看</a><a class="c09f" href="#">编辑</a></td>
+				<td><a class="c09f mr_15" href="${ctx}/reply/keyword/get/${reply.id}">查看</a><a class="c09f" href="${ctx}/reply/keyword/toupdate/${reply.id}">编辑</a></td>
 			</tr>
 		</c:forEach>
 	</table>

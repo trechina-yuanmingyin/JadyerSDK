@@ -23,7 +23,7 @@ public class ReplyController{
 	/**
 	 * 查询关注后回复的内容
 	 */
-	@RequestMapping("/get/follow")
+	@RequestMapping("/follow/get")
 	public String getFollow(HttpServletRequest request){
 		int uid = (Integer)request.getSession().getAttribute(Constants.UID);
 		List<ReplyInfo> replyInfoList = replyInfoDao.findByCategory(uid, "1");
@@ -37,7 +37,7 @@ public class ReplyController{
 	 * 更新关注后回复的内容
 	 */
 	@ResponseBody
-	@RequestMapping("/save/follow")
+	@RequestMapping("/follow/save")
 	public CommonResult saveFollow(ReplyInfo replyInfo, HttpServletRequest request){
 		replyInfo.setUid((Integer)request.getSession().getAttribute(Constants.UID));
 		replyInfo.setCategory("1");
@@ -48,7 +48,7 @@ public class ReplyController{
 	/**
 	 * 查询通用的回复内容
 	 */
-	@RequestMapping("/get/common")
+	@RequestMapping("/common/get")
 	public String getCommon(HttpServletRequest request){
 		int uid = (Integer)request.getSession().getAttribute(Constants.UID);
 		List<ReplyInfo> replyInfoList = replyInfoDao.findByCategory(uid, "0");
@@ -61,7 +61,7 @@ public class ReplyController{
 	/**
 	 * 查询关键字回复列表
 	 */
-	@RequestMapping("/list/keyword")
+	@RequestMapping("/keyword/list")
 	public String listKeyword(HttpServletRequest request){
 		int uid = (Integer)request.getSession().getAttribute(Constants.UID);
 		List<ReplyInfo> replyInfoList = replyInfoDao.findByCategory(uid, "2");
@@ -72,9 +72,35 @@ public class ReplyController{
 	/**
 	 * 查询关键字回复的内容
 	 */
-	@RequestMapping("/get/keyword/{id}")
+	@RequestMapping("/keyword/get/{id}")
 	public String getKeyword(@PathVariable int id, HttpServletRequest request){
 		request.setAttribute("reply", replyInfoDao.findOne(id));
 		return "reply/keyword_get";
+	}
+
+	/**
+	 * 跳转到新增关键字页面
+	 */
+	@RequestMapping("/keyword/toadd")
+	public String toaddKeyword(){
+		return "reply/keyword_save";
+	}
+
+	/**
+	 * 跳转到更新关键字页面
+	 */
+	@RequestMapping("/keyword/toupdate/{id}")
+	public String updateKeyword(@PathVariable int id, HttpServletRequest request){
+		request.setAttribute("replyInfo", replyInfoDao.findOne(id));
+		return "reply/keyword_save";
+	}
+
+	/**
+	 * saveOrUpdate关键字
+	 */
+	@RequestMapping("/keyword/save")
+	public String saveKeyword(ReplyInfo replyInfo, HttpServletRequest request){
+		replyInfoDao.saveAndFlush(replyInfo);
+		return this.listKeyword(request);
 	}
 }

@@ -24,9 +24,9 @@
 		<li ${currentMenu eq 'menu_reply' ? 'class="on"' : ''}>
 			<a href="#"><span>回复设置</span><i></i></a>
 			<div>
-				<a href="${ctx}/reply/list/keyword"><span>关键字回复</span></a>
-				<a href="${ctx}/reply/get/follow"><span>关注后回复</span></a>
-				<a href="${ctx}/reply/get/common"><span>通用的回复</span></a>
+				<a href="${ctx}/reply/keyword/list"><span>关键字回复</span></a>
+				<a href="${ctx}/reply/follow/get"><span>关注后回复</span></a>
+				<a href="${ctx}/reply/common/get"><span>通用的回复</span></a>
 			</div>
 		</li>
 		<li ${currentMenu eq 'menu_plugin' ? 'class="on"' : ''}>
