@@ -19,7 +19,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Table(name="t_fans_info")
 public class FansInfo {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	private int uid;
 	private String openid;

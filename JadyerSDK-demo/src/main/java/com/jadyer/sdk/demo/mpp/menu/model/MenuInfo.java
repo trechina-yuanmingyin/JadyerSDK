@@ -19,7 +19,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Table(name="t_menu_info")
 public class MenuInfo {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	private int uid;
 	private int parentId;

@@ -19,7 +19,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Table(name="t_user_info")
 public class UserInfo {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	private int parentId;
 	private String username;
