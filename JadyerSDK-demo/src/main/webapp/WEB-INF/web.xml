@@ -89,9 +89,19 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	
+	<!-- 菜单过滤 -->
+	<filter>
+		<filter-name>MenuFilter</filter-name>
+		<filter-class>com.jadyer.sdk.demo.filter.MenuFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>MenuFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
 	<!-- 微信通过网页授权获取网页access_token -->
 	<filter>
-		<filter-name>oauthFilter</filter-name>
+		<filter-name>OAuthFilter</filter-name>
 		<filter-class>com.jadyer.sdk.mpp.filter.OAuthFilter</filter-class>
 		<init-param>
 			<param-name>appid</param-name>
@@ -107,7 +117,7 @@
 		</init-param>
 	</filter>
 	<filter-mapping>
-		<filter-name>oauthFilter</filter-name>
+		<filter-name>OAuthFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 

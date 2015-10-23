@@ -6,6 +6,7 @@ import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -18,10 +19,13 @@ import org.hibernate.annotations.DynamicUpdate;
 @Table(name="t_fans_info")
 public class FansInfo {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
 	private int uid;
 	private String openid;
+	private String name;
+	private String idCard;
+	private String phoneNo;
 	private String subscribe;
 	private String nickname;
 	private String sex;
@@ -56,6 +60,24 @@ public class FansInfo {
 	}
 	public void setOpenid(String openid) {
 		this.openid = openid;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getIdCard() {
+		return idCard;
+	}
+	public void setIdCard(String idCard) {
+		this.idCard = idCard;
+	}
+	public String getPhoneNo() {
+		return phoneNo;
+	}
+	public void setPhoneNo(String phoneNo) {
+		this.phoneNo = phoneNo;
 	}
 	public String getSubscribe() {
 		return subscribe;

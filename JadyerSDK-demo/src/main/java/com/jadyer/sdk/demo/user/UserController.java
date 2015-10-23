@@ -27,6 +27,7 @@ public class UserController{
 		if(null == userInfo){
 			return new CommonResult(CodeEnum.SYSTEM_BUSY.getCode(), "无效的用户名或密码");
 		}
+		request.getSession().setAttribute(Constants.UID, userInfo.getId());
 		request.getSession().setAttribute(Constants.USERINFO, userInfo);
 		return new CommonResult();
 	}
@@ -37,8 +38,8 @@ public class UserController{
 		return InternalResourceViewResolver.REDIRECT_URL_PREFIX + "/login.jsp";
 	}
 
-	@RequestMapping("/welcome")
-	public String welcome(){
-		return "welcome";
+	@RequestMapping("/info")
+	public String info(){
+		return "userInfo";
 	}
 }

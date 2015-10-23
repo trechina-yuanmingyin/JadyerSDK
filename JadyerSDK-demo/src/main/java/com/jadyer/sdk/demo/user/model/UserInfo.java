@@ -6,6 +6,7 @@ import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -18,7 +19,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Table(name="t_user_info")
 public class UserInfo {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
 	private int parentId;
 	private String username;

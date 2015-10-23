@@ -80,7 +80,7 @@ function login(){
 	$.get("${pageContext.request.contextPath}/user/login/" + username + "/" + password,
 		function(data){
 			if(1000 == data.code){
-				window.location.href = "${pageContext.request.contextPath}/user/welcome";
+				window.location.href = "${pageContext.request.contextPath}/user/info";
 			}else{
 				o.attr("disabled", false).text("登录").css({"background":"#5bb75b", "cursor":"auto"});
  				$.promptBox(data.message, "#ffb848");

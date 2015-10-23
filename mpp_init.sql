@@ -26,6 +26,9 @@ CREATE TABLE t_fans_info(
 id            INT AUTO_INCREMENT PRIMARY KEY COMMENT '主键',
 uid           INT NOT NULL COMMENT '平台用户ID，对应t_user#id',
 openid        VARCHAR(64) NOT NULL COMMENT '粉丝的openid',
+name          VARCHAR(16) COMMENT '粉丝的真实姓名',
+idCard        VARCHAR(18) COMMENT '粉丝的身份证号',
+phoneNo       CHAR(11) COMMENT '粉丝的手机号',
 subscribe     CHAR(1) NOT NULL COMMENT '关注状态：0--未关注，其它为已关注',
 nickname      VARCHAR(32) COMMENT '粉丝的昵称',
 sex           CHAR(1) COMMENT '粉丝的性别：0--未知，1--男，2--女',
@@ -48,9 +51,9 @@ CREATE TABLE t_reply_info(
 id         INT AUTO_INCREMENT PRIMARY KEY COMMENT '主键',
 uid        INT NOT NULL COMMENT '平台用户ID，对应t_user#id',
 category   CHAR(1) NOT NULL COMMENT '回复的类别：0--通用的回复，1--关注后回复，2--关键字回复',
-type       CHAR(1) NOT NULL COMMENT '回复的类型：0--文本，1--图文，2--图片，3--活动',
+type       CHAR(1) NOT NULL COMMENT '回复的类型：0--文本，1--图文，2--图片，3--活动，4--转发到多客服',
 keyword    VARCHAR(8) COMMENT '关键字',
-content    VARCHAR(256) COMMENT '回复的内容',
+content    VARCHAR(2048) COMMENT '回复的内容',
 pluginId   INT COMMENT '活动插件ID，对应t_plugin#id',
 createTime TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
 updateTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'
@@ -72,5 +75,6 @@ updateTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMEST
 )ENGINE=InnoDB DEFAULT CHARSET=UTF8 COMMENT='自定义菜单表';
 
 
+INSERT INTO t_reply_info(uid, category, type) VALUES(2, '0', '4');
 INSERT INTO t_user_info(parentId, username, password, uuid, bindStatus) VALUES(0, 'admin', '38fa7ad72e2b908b9921238eb2601981', REPLACE(UUID(),'-',''), '0');
 INSERT INTO t_user_info(parentId, username, password, uuid, bindStatus) VALUES(0, 'test', '398f2a4045f3caa202735395d58dc92f', REPLACE(UUID(),'-',''), '0');

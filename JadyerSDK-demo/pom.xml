@@ -20,7 +20,6 @@
 		<mysql.driver.version>5.1.37</mysql.driver.version>
 		<spring.data.jpa.version>1.9.0.RELEASE</spring.data.jpa.version>
 		<hibernate.entitymanager.version>5.0.2.Final</hibernate.entitymanager.version>
-		<hibernate.validator.version>5.2.2.Final</hibernate.validator.version>
 		<druid.version>1.0.15</druid.version>
 		<jsp.jstl.version>1.2.1</jsp.jstl.version>
 		<jsp.standard.version>1.1.2</jsp.standard.version>
@@ -81,11 +80,6 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>${hibernate.entitymanager.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>${hibernate.validator.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.alibaba</groupId>

@@ -5,7 +5,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -16,14 +15,12 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.jadyer.sdk.demo.common.constant.CodeEnum;
-import com.jadyer.sdk.demo.common.exception.EngineException;
 import com.jadyer.sdk.demo.common.util.IPUtil;
 import com.jadyer.sdk.demo.common.util.LogUtil;
-import com.jadyer.sdk.demo.common.util.ValidatorUtil;
 
 /**
  * 日志记录和表单验证的切面器
+ * @see 完整版见https://github.com/jadyer/JadyerEngine/blob/master/JadyerEngine-common/src/main/java/com/jadyer/engine/common/base/LogAndFormAspect.java
  * @create Apr 18, 2015 9:49:12 AM
  * @author 玄玉<http://blog.csdn.net/jadyer>
  */
@@ -44,19 +41,6 @@ public class LogAndFormAspect {
 		 */
 		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
 		LogUtil.getAppLogger().info(methodInfo + "()被调用, 客户端IP=" + IPUtil.getClientIP(request) + ", 入参为" + buildStringFromMapWithStringArray(request.getParameterMap()));
-		/**
-		 * 表单验证
-		 */
-		Object[] objs = joinPoint.getArgs();
-		for(int i=0,len=objs.length; i<len; i++){
-			if(null!=objs[i] && objs[i].getClass().getName().startsWith("com.jadyer.sdk.demo")){
-				String validateResult = ValidatorUtil.validate(objs[i]);
-				LogUtil.getAppLogger().info(methodInfo + "()的表单-->" + (StringUtils.isBlank(validateResult)?"验证通过":"验证未通过"));
-				if(StringUtils.isNotBlank(validateResult)){
-					throw new EngineException(CodeEnum.SYSTEM_BUSY.getCode(), validateResult);
-				}
-			}
-		}
 		/**
 		 * 执行Controller的方法
 		 */

@@ -21,34 +21,34 @@
 <div class="c_main_l">
 	<div class="c_logo"><img height="35" src="${ctx}/img/logo.png"/></div>
 	<ul class="c_menu">
-		<li>
+		<li ${currentMenu eq 'menu_reply' ? 'class="on"' : ''}>
 			<a href="#"><span>回复设置</span><i></i></a>
 			<div>
 				<a href="#"><span>关键字回复</span></a>
-				<a href="#"><span>关注后回复</span></a>
-				<a href="#"><span>通用的回复</span></a>
+				<a href="${ctx}/reply/get/follow"><span>关注后回复</span></a>
+				<a href="${ctx}/reply/get/common"><span>通用的回复</span></a>
 			</div>
 		</li>
-		<li>
+		<li ${currentMenu eq 'menu_plugin' ? 'class="on"' : ''}>
 			<a href="#"><span>插件管理</span><i></i></a>
 			<div>
 				<a href="javascript:alert('暂未开放');"><span>一站到底</span></a>
-				<a href="javascript:alert('暂未开放');"><span>幸运刮奖</span></a>
 				<a href="javascript:alert('暂未开放');"><span>员工之家</span></a>
+				<a href="javascript:alert('暂未开放');"><span>幸运刮奖</span></a>
 			</div>
 		</li>
-		<li class="on">
+		<li ${currentMenu eq 'menu_fans' ? 'class="on"' : ''}>
 			<a href="#"><span>粉丝管理</span><i></i></a>
 			<div>
-				<a href="#"><span>粉丝列表</span></a>
+				<a href="${ctx}/fans/list"><span>粉丝列表</span></a>
 			</div>
 		</li>
-		<li>
+		<li ${currentMenu eq 'menu_sys' ? 'class="on"' : ''}>
 			<a href="#"><span>平台设置</span><i></i></a>
 			<div>
 				<a href="#"><span>微信菜单</span></a>
 				<a href="#"><span>微信绑定</span></a>
-				<a href="#"><span>个人资料</span></a>
+				<a href="${ctx}/user/info"><span>个人资料</span></a>
 			</div>
 		</li>
 	</ul>
