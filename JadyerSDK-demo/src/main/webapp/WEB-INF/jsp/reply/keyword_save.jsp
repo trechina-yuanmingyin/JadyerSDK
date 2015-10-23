@@ -7,7 +7,7 @@
 <script>
 function validateForm(){
 	if(isEmpty($("#keyword").val())){
-		$.promptBox("关键字不能为空", "#ffb848");
+		$.promptBox("请输入关键字", "#ffb848");
 	}else if($("#type").val() != 0){
 		$("#type").attr("value", "0");
 		$.promptBox("暂时只能回复文本", "#ffb848");

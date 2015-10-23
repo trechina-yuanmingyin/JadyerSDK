@@ -22,6 +22,7 @@ public class FansInfo {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	private int uid;
+	private String wxId;
 	private String openid;
 	private String name;
 	private String idCard;
@@ -54,6 +55,12 @@ public class FansInfo {
 	}
 	public void setUid(int uid) {
 		this.uid = uid;
+	}
+	public String getWxId() {
+		return wxId;
+	}
+	public void setWxId(String wxId) {
+		this.wxId = wxId;
 	}
 	public String getOpenid() {
 		return openid;

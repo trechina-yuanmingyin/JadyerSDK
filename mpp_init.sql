@@ -17,7 +17,8 @@ accessToken     VARCHAR(1024) COMMENT '微信access_token',
 accessTokenTime TIMESTAMP NULL DEFAULT '0000-00-00 00:00:00' COMMENT '获取微信access_token的时间',
 bindStatus      CHAR(1) COMMENT '微信绑定状态：0--未绑定，1--已绑定',
 createTime TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
-updateTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'
+updateTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+UNIQUE INDEX unique_index_wxId(wxId)
 )ENGINE=InnoDB DEFAULT CHARSET=UTF8 COMMENT='平台用户表';
 
 
@@ -25,6 +26,7 @@ DROP TABLE IF EXISTS t_fans_info;
 CREATE TABLE t_fans_info(
 id            INT AUTO_INCREMENT PRIMARY KEY COMMENT '主键',
 uid           INT NOT NULL COMMENT '平台用户ID，对应t_user#id',
+wxId          VARCHAR(32) COMMENT '微信原始ID',
 openid        VARCHAR(64) NOT NULL COMMENT '粉丝的openid',
 name          VARCHAR(16) COMMENT '粉丝的真实姓名',
 idCard        VARCHAR(18) COMMENT '粉丝的身份证号',

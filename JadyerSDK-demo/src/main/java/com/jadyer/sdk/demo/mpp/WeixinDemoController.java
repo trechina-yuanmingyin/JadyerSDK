@@ -26,7 +26,7 @@ import com.jadyer.sdk.mpp.msg.out.OutTextMsg;
 import com.jadyer.sdk.mpp.util.MPPUtil;
 
 @Controller
-@RequestMapping(value="/weixin")
+@RequestMapping(value="/demo/weixin")
 public class WeixinDemoController extends WeixinMsgControllerAdapter {
 	@ResponseBody
 	@RequestMapping(value="/getWeixinAccessToken")
