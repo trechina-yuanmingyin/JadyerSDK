@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -58,7 +59,7 @@ public class ReplyController{
 	}
 
 	/**
-	 * 查询关键字回复的内容
+	 * 查询关键字回复列表
 	 */
 	@RequestMapping("/list/keyword")
 	public String listKeyword(HttpServletRequest request){
@@ -66,5 +67,14 @@ public class ReplyController{
 		List<ReplyInfo> replyInfoList = replyInfoDao.findByCategory(uid, "2");
 		request.setAttribute("replyInfoList", replyInfoList);
 		return "reply/keyword";
+	}
+	
+	/**
+	 * 查询关键字回复的内容
+	 */
+	@RequestMapping("/get/keyword/{id}")
+	public String getKeyword(@PathVariable int id, HttpServletRequest request){
+		request.setAttribute("reply", replyInfoDao.findOne(id));
+		return "reply/keyword_get";
 	}
 }
