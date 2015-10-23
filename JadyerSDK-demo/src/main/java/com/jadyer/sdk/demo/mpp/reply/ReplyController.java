@@ -18,8 +18,6 @@ import com.jadyer.sdk.demo.mpp.reply.model.ReplyInfo;
 public class ReplyController{
 	@Resource
 	private ReplyInfoDao replyInfoDao;
-//	@Resource
-//	private ReplyService replyService;
 
 	/**
 	 * 查询关注后回复的内容
@@ -57,5 +55,16 @@ public class ReplyController{
 			request.setAttribute("replyInfo", replyInfoList.get(0));
 		}
 		return "reply/common";
+	}
+
+	/**
+	 * 查询关键字回复的内容
+	 */
+	@RequestMapping("/list/keyword")
+	public String listKeyword(HttpServletRequest request){
+		int uid = (Integer)request.getSession().getAttribute(Constants.UID);
+		List<ReplyInfo> replyInfoList = replyInfoDao.findByCategory(uid, "2");
+		request.setAttribute("replyInfoList", replyInfoList);
+		return "reply/keyword";
 	}
 }
