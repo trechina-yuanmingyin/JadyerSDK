@@ -2,6 +2,12 @@ package com.jadyer.sdk.demo.common.constant;
 
 public interface Constants {
 	/**
+	 * 分页参数
+	 */
+	int PAGE_NO = 0;
+	int PAGE_SIZE = 10;
+
+	/**
 	 * 平台用户ID
 	 */
 	String UID = "uid";

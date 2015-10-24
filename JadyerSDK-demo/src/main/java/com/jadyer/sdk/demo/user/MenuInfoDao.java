@@ -11,10 +11,10 @@ import com.jadyer.sdk.demo.user.model.MenuInfo;
 
 public interface MenuInfoDao extends JpaRepository<MenuInfo, Integer> {
 	@Query("FROM MenuInfo WHERE uid=?1")
-	public List<MenuInfo> findMenuListByUID(int uid);
+	List<MenuInfo> findMenuListByUID(int uid);
 
 	@Modifying
 	@Transactional(timeout=10)
 	@Query("DELETE FROM MenuInfo WHERE uid=?1")
-	public int deleteByUID(int uid);
+	int deleteByUID(int uid);
 }
