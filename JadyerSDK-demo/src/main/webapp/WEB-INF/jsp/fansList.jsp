@@ -5,9 +5,14 @@
 <jsp:include page="/header.jsp"/>
 
 <script>
+/**
+ * 输入框中的this.value=this.value.replace(/\D/g,'')可保证只能输入零或正整数
+ * 输入中文等其它字符时,$("#go").val()得到的是空的值(不是null)
+ * 输入负数时,$("#go").val()得到的是对应的正数,比如输入-3,$("#go").val()得到的就是3
+ */
 function pageSubmit(pageNo){
 	if(-1 == pageNo){
-		pageNo = $("#go").val()-1;
+		pageNo = $("#go").val();
 		if(isEmpty(pageNo) || isNotNumber(pageNo)){
 			$.promptBox("请填写页数", "#ffb848");
 			return;
@@ -16,6 +21,9 @@ function pageSubmit(pageNo){
 			$("#go").val(${page.totalPages});
 			$.promptBox("最大页数${page.totalPages}页", "#ffb848");
 			return;
+		}
+		if(pageNo >= 1){
+			pageNo = pageNo-1;
 		}
 	}
 	$("#pageForm").attr("action", "${ctx}/fans/list?pageNo=" + pageNo);
@@ -56,13 +64,13 @@ function pageSubmit(pageNo){
 	<form id="pageForm" method="post">
 		<div class="paging">
 			<a href="javascript:pageSubmit(0)" title="首页" class="curr">首页</a>
-			<a href="#" title="上页">上页</a>
-			<a href="#" title="下页">下页</a>
+			<a href="javascript:pageSubmit(${page.number eq 0 ? 0 : page.number-1})" title="上页">上页</a>
+			<a href="javascript:pageSubmit(${page.number eq page.totalPages-1 ? page.number : page.number+1})" title="下页">下页</a>
 			<a href="javascript:pageSubmit('${page.totalPages-1}')" title="尾页">尾页</a>
 			<span class="pl_10">
 				<em class="va_m">跳转到</em>
 				&nbsp;<input class="inpte" type="text" maxlength="3" id="go" onchange="this.value=this.value.replace(/\D/g,'')"/>
-				&nbsp;<button class="btn" type="submit" onclick="pageSubmit(-1)">GO</button>
+				&nbsp;<input type="button" class="btn" onclick="pageSubmit(-1)" value="GO">
 				<b class="va_m pl_10">第&nbsp;${page.number+1}&nbsp;页，共&nbsp;${page.totalPages}&nbsp;页，合计：${page.totalElements}条</b>
 			</span>
 		</div>
