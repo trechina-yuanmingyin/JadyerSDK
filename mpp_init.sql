@@ -73,7 +73,7 @@ level      CHAR(1) NOT NULL COMMENT '菜单级别：0--未知，1--一级菜单�
 type       CHAR(1) NOT NULL COMMENT '菜单类型：0--占位，1--CLICK，2--VIEW',
 name       VARCHAR(16) NOT NULL COMMENT '菜单名称',
 viewURL    VARCHAR(256) COMMENT 'type=2时用到',
-clickKey   VARCHAR(16) COMMENT 'type=1时用到',
+replyId    INT COMMENT 'type=1时用到，对应t_reply_info#id',
 createTime TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
 updateTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'
 )ENGINE=InnoDB DEFAULT CHARSET=UTF8 COMMENT='自定义菜单表';

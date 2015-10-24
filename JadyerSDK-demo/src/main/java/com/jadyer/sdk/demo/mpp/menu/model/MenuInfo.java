@@ -27,7 +27,7 @@ public class MenuInfo {
 	private String type;
 	private String name;
 	private String viewURL;
-	private String clickKey;
+	private int replyId;
 	@Basic(fetch=FetchType.LAZY)
 	private Date createTime = new Date();
 	@Basic(fetch=FetchType.LAZY)
@@ -75,11 +75,11 @@ public class MenuInfo {
 	public void setViewURL(String viewURL) {
 		this.viewURL = viewURL;
 	}
-	public String getClickKey() {
-		return clickKey;
+	public int getReplyId() {
+		return replyId;
 	}
-	public void setClickKey(String clickKey) {
-		this.clickKey = clickKey;
+	public void setReplyId(int replyId) {
+		this.replyId = replyId;
 	}
 	public Date getCreateTime() {
 		return createTime;
