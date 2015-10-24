@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.jadyer.sdk.demo.common.constant.Constants;
+
 @Controller
 @RequestMapping(value="/fans")
 public class FansController{
@@ -14,7 +16,8 @@ public class FansController{
 
 	@RequestMapping("/list")
 	public String list(HttpServletRequest request){
-		request.setAttribute("fansList", fansInfoDao.findAll());
+		int uid = (Integer)request.getSession().getAttribute(Constants.UID);
+		request.setAttribute("fansList", fansInfoDao.findByUid(uid));
 		return "fansList";
 	}
 }
