@@ -65,7 +65,18 @@ public class WeixinController extends WeixinMsgControllerCustomServiceAdapter {
 
 	@Override
 	protected OutMsg processInMenuEventMsg(InMenuEventMsg inMenuEventMsg) {
-		return new OutTextMsg(inMenuEventMsg).setContent("自定义菜单事件内容为" + inMenuEventMsg.getEventKey());
+		UserInfo userInfo = userService.findByWxId(inMenuEventMsg.getToUserName());
+		//VIEW类的直接跳转过去了,CLICK类的暂定根据关键字回复(找不到关键字就转发到多客服)
+		if(InMenuEventMsg.EVENT_INMENU_CLICK.equals(inMenuEventMsg.getEvent())){
+			ReplyInfo replyInfo = replyInfoDao.findByKeyword(userInfo.getId(), inMenuEventMsg.getEventKey());
+			if(null == replyInfo){
+				return new OutCustomServiceMsg(inMenuEventMsg);
+			}else{
+				return new OutTextMsg(inMenuEventMsg).setContent(replyInfo.getContent());
+			}
+		}
+		//跳到URL时,这里也不会真的推送消息给用户
+		return new OutTextMsg(inMenuEventMsg).setContent("您正在访问<a href=\""+inMenuEventMsg.getEventKey()+"\">"+inMenuEventMsg.getEventKey()+"</a>");
 	}
 
 
@@ -114,11 +125,11 @@ public class WeixinController extends WeixinMsgControllerCustomServiceAdapter {
 //	@ResponseBody
 //	@RequestMapping(value="/createMenu")
 //	public ErrorInfo createMenu(){
-//		String accesstoken = "axJDAkVIyi5SEYXTnHbWQZypbO0O8p5cDM5CdU0gs4loKMtpB3QCSuK4S6rfPebIArXx33Lmg_U5QoSLflUIHwKQnlGSsTlqhgFk-5RT2y0";
+//		String accesstoken = "nHVQXjVPWlyvdglrU6EgGnH_MzvdltddS4HOzUJocjX-wb_NVOi-6rJjumZJayRqwHT7xx80ziBaDCXc6dqddVHheP7g6aJAxv71Lwj3Cxg";
 //		SubViewButton btn11 = new SubViewButton("我的博客", "http://blog.csdn.net/jadyer");
 //		SubViewButton btn22 = new SubViewButton("我的GitHub", "http://jadyer.tunnel.mobi/weixin/getOpenid?oauth=base&openid=openid");
-//		SubClickButton btn33 = new SubClickButton("历史上的今天", "history");
-//		SubClickButton btn44 = new SubClickButton("天气预报", "weather");
+//		SubClickButton btn33 = new SubClickButton("历史上的今天", "123abc");
+//		SubClickButton btn44 = new SubClickButton("天气预报", "456");
 //		SubClickButton btn55 = new SubClickButton("幽默笑话", "joke");
 //		SuperButton sbtn11 = new SuperButton("个人中心", new Button[]{btn11, btn22});
 //		SuperButton sbtn22 = new SuperButton("休闲驿站", new Button[]{btn33, btn44});
