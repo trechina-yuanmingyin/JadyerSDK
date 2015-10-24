@@ -41,7 +41,7 @@ public class UserController{
 
 	@RequestMapping("/info")
 	public String info(){
-		return "userInfo";
+		return "user/userInfo";
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class UserController{
 		sb.append("weixin/").append(userInfo.getUuid());
 		request.setAttribute("token", DigestUtils.md5Hex(userInfo.getUuid() + "http://blog.csdn.net/jadyer" + userInfo.getUuid()));
 		request.setAttribute("weixinURL", sb.toString());
-		return "userBind";
+		return "user/userBind";
 	}
 
 	/**
@@ -73,6 +73,6 @@ public class UserController{
 		userInfo.setParentId(_userInfo.getParentId());
 		userInfo.setUuid(_userInfo.getUuid());
 		request.getSession().setAttribute(Constants.USERINFO, userService.save(userInfo));
-		return "userBindConfirm";
+		return "user/userBindConfirm";
 	}
 }

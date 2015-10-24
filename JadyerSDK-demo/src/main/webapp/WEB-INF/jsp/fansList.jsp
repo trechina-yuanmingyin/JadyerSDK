@@ -12,6 +12,7 @@
 	<!--Table list-->
 	<table class="tab_list" width="100%">
 		<tr>
+			<th>头像</th>
 			<th>昵称</th>
 			<th>姓名</th>
 			<th>手机号</th>
@@ -21,6 +22,7 @@
 		</tr>
 		<c:forEach items="${fansList}" var="fans">
 			<tr>
+				<td><span><img alt="粉丝头像" src="${fans.headimgurl}" height="30px" width="30px"></span></td>
 				<td><span>${fans.nickname}</span></td>
 				<td><span>${fans.name}</span></td>
 				<td><span>${fans.phoneNo}</span></td>

@@ -8,8 +8,8 @@
 function validateForm(){
 	if(isEmpty($("#wxId").val())){
 		$.promptBox("请填入微信原始ID", "#ffb848");
-	}else if(isEmpty($("#wxNo").val())){
-		$.promptBox("请填入微信号", "#ffb848");
+	}else if(isEmpty($("#wxName").val())){
+		$.promptBox("请填入微信名称（测试号请填入\"某某的接口测试号\"）", "#ffb848");
 	}else if(isEmpty($("#appId").val())){
 		$.promptBox("请填入微信应用ID(appId)", "#ffb848");
 	}else if(isEmpty($("#appSecret").val())){
@@ -23,10 +23,8 @@ function validateForm(){
 }
 function submit(){
 	if(validateForm()){
-		if("${userInfo.bindStatus}" != "0"){
-			if(confirm("确定要重新绑定么？\r\n重新绑定过程中微信公众号将无法提供服务！！")){
-				$("#userBindForm").submit();
-			}
+		if("${userInfo.bindStatus}"=="0" || ("${userInfo.bindStatus}"!="0" && confirm("确定要重新绑定么？\r\n重新绑定过程中微信公众号将无法提供服务！！"))){
+			$("#userBindForm").submit();
 		}
 	}
 }
