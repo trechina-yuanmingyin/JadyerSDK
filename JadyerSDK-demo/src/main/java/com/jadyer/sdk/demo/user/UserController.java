@@ -17,6 +17,8 @@ import com.jadyer.sdk.demo.common.constant.CodeEnum;
 import com.jadyer.sdk.demo.common.constant.Constants;
 import com.jadyer.sdk.demo.user.model.MenuInfo;
 import com.jadyer.sdk.demo.user.model.UserInfo;
+import com.jadyer.sdk.mpp.model.ErrorInfo;
+import com.jadyer.sdk.mpp.util.MPPUtil;
 
 @Controller
 @RequestMapping(value="/user")
@@ -82,11 +84,36 @@ public class UserController{
 	/**
 	 * 前往微信菜单页面
 	 */
-	@RequestMapping("/tomenu")
-	public String tomenu(HttpServletRequest request){
+	@RequestMapping("/tomenu/weixin")
+	public String tomenuWeixin(HttpServletRequest request){
 		int uid = (Integer)request.getSession().getAttribute(Constants.UID);
 		List<MenuInfo> menuList = userService.findMenuList(uid);
 		request.setAttribute("menuList", menuList);
-		return "user/menu";
+		return "user/menu_weixin";
+	}
+
+	/**
+	 * 前往微信JSON菜单页面
+	 */
+	@RequestMapping("/tomenu/weixin/json")
+	public String tomenuWeixinJson(){
+		return "user/menu_weixin_json";
+	}
+
+
+	/**
+	 * 通过JSON的方式发布自定义微信菜单
+	 */
+	@ResponseBody
+	@RequestMapping("/menu/weixin/create/json")
+	public CommonResult tomenuWeixinJsonDeploy(String menuJson, HttpServletRequest request){
+		UserInfo userInfo = (UserInfo)request.getSession().getAttribute(Constants.USERINFO);
+		String accesstoken = MPPUtil.getWeixinAccessToken(userInfo.getAppId(), userInfo.getAppSecret());
+		ErrorInfo errorInfo = MPPUtil.createMenu(accesstoken, menuJson);
+		if(0 == errorInfo.getErrcode()){
+			return new CommonResult();
+		}else{
+			return new CommonResult(errorInfo.getErrcode(), errorInfo.getErrmsg());
+		}
 	}
 }
