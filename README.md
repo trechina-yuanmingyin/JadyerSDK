@@ -7,6 +7,9 @@
 4.并保证Spring能够扫描到SDK包&lt;context:component-scan base-package="com.jadyer.sdk"/&gt;<br/>
 
 # 更新日志
+[v1.0.2] 2015.10.24<br/>
+1.demo中增加后台管理模块，用于管理和发布微信功能<br/>
+
 [v1.0.1] 2015.10.20<br/>
 1.增加名为demo的Moudle用于演示微信SDK的便捷用法<br/>
 2.下一个版本准备在demo中增加一个后台管理模块<br/>
