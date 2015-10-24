@@ -46,7 +46,7 @@ function saveOrUpdate(){
 		</tr>
 		<tr>
 			<th>&nbsp;</th>
-			<td><a class="btn_o mr_20" href="javascript:saveOrUpdate();">保&nbsp;存</a></td>
+			<td><a class="btn_g mr_20" href="javascript:saveOrUpdate();">保&nbsp;存</a></td>
 		</tr>
 	</table>
 	<!--/Table input-->

@@ -40,7 +40,7 @@ function submit(){
 		<input type="hidden" name="id" value="${uid}"/>
 		<input type="hidden" name="bindStatus" value="0"/>
 		<input type="hidden" name="token" value="${token}"/>
-		<table class="tab_head tab_in tab_list2" width="100%">
+		<table class="tab_in2" width="100%">
 			<tr class="ti"><th colspan="2">详细信息</th></tr>
 			<tr><th width="15%">微信URL：</th><td>${weixinURL}</td></tr>
 			<tr><th>微信Token：</th><td>${token}</td></tr>
@@ -64,9 +64,7 @@ function submit(){
 		</table>
 		<table class="tab_head tab_in tab_list2" width="100%">
 			<tr class="ti"><th colspan="3">操作</th></tr>
-			<tr>
-				<td class="txt_l"><a class="btn_r" href="javascript:submit();">下一步</a></td>
-			</tr>
+			<tr><td class="txt_l"><a class="btn_g" href="javascript:submit();">下一步</a></td></tr>
 		</table>
 	</form>
 	<!--/Table order list-->

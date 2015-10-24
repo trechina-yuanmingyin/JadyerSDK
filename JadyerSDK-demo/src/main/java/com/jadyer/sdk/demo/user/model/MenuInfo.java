@@ -1,4 +1,4 @@
-package com.jadyer.sdk.demo.mpp.menu.model;
+package com.jadyer.sdk.demo.user.model;
 
 import java.util.Date;
 

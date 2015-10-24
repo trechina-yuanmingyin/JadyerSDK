@@ -36,7 +36,7 @@ function submit(){
 		<input type="hidden" name="category" value="2"/>
 		<input type="hidden" name="uid" value="${uid}"/>
 		<input type="hidden" name="id" value="${empty replyInfo.id ? 0 : replyInfo.id}"/>
-		<table class="tab_head tab_in tab_list2" width="100%">
+		<table class="tab_in2" width="100%">
 			<tr class="ti">
 				<th colspan="2">关键字信息</th>
 			</tr>
@@ -64,7 +64,7 @@ function submit(){
 		<table class="tab_head tab_in tab_list2" width="100%">
 			<tr class="ti"><th colspan="3">操作</th></tr>
 			<tr>
-				<td class="txt_l"><a class="btn_r" href="javascript:submit();">保存</a></td>
+				<td class="txt_l"><a class="btn_g" href="javascript:submit();">保存</a></td>
 			</tr>
 		</table>
 	</form>

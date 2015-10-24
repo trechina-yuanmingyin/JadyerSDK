@@ -1,11 +1,14 @@
 package com.jadyer.sdk.demo.user;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.jadyer.sdk.demo.user.model.MenuInfo;
 import com.jadyer.sdk.demo.user.model.UserInfo;
 
 @Service
@@ -13,6 +16,8 @@ import com.jadyer.sdk.demo.user.model.UserInfo;
 public class UserService {
 	@Resource
 	private UserInfoDao userInfoDao;
+	@Resource
+	private MenuInfoDao menuInfoDao;
 
 	@Transactional(readOnly=true)
 	public UserInfo findByUsernameAndPassword(String username, String password){
@@ -28,5 +33,17 @@ public class UserService {
 
 	public UserInfo save(UserInfo userInfo){
 		return userInfoDao.saveAndFlush(userInfo);
+	}
+
+	/**
+	 * 查询指定平台用户的微信菜单资料
+	 */
+	public List<MenuInfo> findMenuList(int uid){
+		return menuInfoDao.findMenuListByUID(uid);
+	}
+	
+	public boolean updateMenu(int uid){
+		menuInfoDao.deleteByUID(uid);
+		return false;
 	}
 }

@@ -1,5 +1,7 @@
 package com.jadyer.sdk.demo.user;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,6 +15,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import com.jadyer.sdk.demo.common.base.CommonResult;
 import com.jadyer.sdk.demo.common.constant.CodeEnum;
 import com.jadyer.sdk.demo.common.constant.Constants;
+import com.jadyer.sdk.demo.user.model.MenuInfo;
 import com.jadyer.sdk.demo.user.model.UserInfo;
 
 @Controller
@@ -74,5 +77,16 @@ public class UserController{
 		userInfo.setUuid(_userInfo.getUuid());
 		request.getSession().setAttribute(Constants.USERINFO, userService.save(userInfo));
 		return "user/userBindConfirm";
+	}
+
+	/**
+	 * 前往微信菜单页面
+	 */
+	@RequestMapping("/tomenu")
+	public String tomenu(HttpServletRequest request){
+		int uid = (Integer)request.getSession().getAttribute(Constants.UID);
+		List<MenuInfo> menuList = userService.findMenuList(uid);
+		request.setAttribute("menuList", menuList);
+		return "user/menu";
 	}
 }
