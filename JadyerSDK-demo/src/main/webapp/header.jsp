@@ -44,7 +44,6 @@
 			<a href="#"><span>平台设置</span><i></i></a>
 			<div>
 				<a href="${ctx}/user/tomenu/weixin/json"><span>微信菜单</span></a>
-				<a href="${ctx}/user/tobind"><span>微信绑定</span></a>
 				<a href="${ctx}/user/info"><span>个人资料</span></a>
 				<a href="${ctx}/user/password"><span>修改密码</span></a>
 			</div>
@@ -53,7 +52,7 @@
 </div>
 <div class="c_main_r">
 	<div class="c_topBar">
-		<p class="p1"><i></i><span class="fm2">您好：${userInfo.username}，欢迎访问半步多管理平台，现在是：<fmt:formatDate value="<%=new Date()%>" pattern="yyyy年MM月dd日 E"/></span></p>
+		<p class="p1"><i></i><span class="fm2">您好：${userInfo.username}，欢迎访问半步多平台，现在是：<fmt:formatDate value="<%=new Date()%>" pattern="yyyy年MM月dd日 E"/></span></p>
 		<p class="p2 fm2">
 			<a href="javascript:alert('暂未开放');" class="mr_20"><i class="i_man"></i><span class="va_m">修改信息</span></a>
 			<a href="${ctx}/user/logout"><i class="i_sw"></i><span class="va_m">退出</span></a>
