@@ -45,8 +45,35 @@ public class UserController{
 	}
 
 	@RequestMapping("/info")
-	public String info(){
+	public String info(HttpServletRequest request){
+		UserInfo userInfo = (UserInfo)request.getSession().getAttribute(Constants.USERINFO);
+		StringBuilder sb = new StringBuilder();
+		sb.append(request.getScheme()).append("://").append(request.getServerName());
+		if(80!=request.getServerPort() && 443!=request.getServerPort()){
+			sb.append(":").append(request.getServerPort());
+		}
+		sb.append(request.getContextPath()).append("/");
+		sb.append("weixin/").append(userInfo.getUuid());
+		request.setAttribute("token", DigestUtils.md5Hex(userInfo.getUuid() + "http://blog.csdn.net/jadyer" + userInfo.getUuid()));
+		request.setAttribute("weixinURL", sb.toString());
 		return "user/userInfo";
+	}
+
+	/**
+	 * 绑定(即录库)
+	 */
+	@ResponseBody
+	@RequestMapping("/bind")
+	public CommonResult bind(UserInfo userInfo, HttpServletRequest request){
+		UserInfo _userInfo = (UserInfo)request.getSession().getAttribute(Constants.USERINFO);
+		userInfo.setPassword(_userInfo.getPassword());
+		userInfo.setUsername(_userInfo.getUsername());
+		userInfo.setParentId(_userInfo.getParentId());
+		userInfo.setUuid(_userInfo.getUuid());
+		userInfo.setAccessToken(_userInfo.getAccessToken());
+		userInfo.setAccessTokenTime(_userInfo.getAccessTokenTime());
+		request.getSession().setAttribute(Constants.USERINFO, userService.save(userInfo));
+		return new CommonResult();
 	}
 
 	@RequestMapping("/password")
@@ -65,38 +92,6 @@ public class UserController{
 		//刷新HttpSession中的用户信息
 		request.getSession().setAttribute(Constants.USERINFO, respUserInfo);
 		return new CommonResult();
-	}
-
-	/**
-	 * 前往微信绑定页面
-	 */
-	@RequestMapping("/tobind")
-	public String tobind(HttpServletRequest request){
-		UserInfo userInfo = (UserInfo)request.getSession().getAttribute(Constants.USERINFO);
-		StringBuilder sb = new StringBuilder();
-		sb.append(request.getScheme()).append("://").append(request.getServerName());
-		if(80!=request.getServerPort() && 443!=request.getServerPort()){
-			sb.append(":").append(request.getServerPort());
-		}
-		sb.append(request.getContextPath()).append("/");
-		sb.append("weixin/").append(userInfo.getUuid());
-		request.setAttribute("token", DigestUtils.md5Hex(userInfo.getUuid() + "http://blog.csdn.net/jadyer" + userInfo.getUuid()));
-		request.setAttribute("weixinURL", sb.toString());
-		return "user/userBind";
-	}
-
-	/**
-	 * 绑定(即录库)
-	 */
-	@RequestMapping("/bind")
-	public String bind(UserInfo userInfo, HttpServletRequest request){
-		UserInfo _userInfo = (UserInfo)request.getSession().getAttribute(Constants.USERINFO);
-		userInfo.setPassword(_userInfo.getPassword());
-		userInfo.setUsername(_userInfo.getUsername());
-		userInfo.setParentId(_userInfo.getParentId());
-		userInfo.setUuid(_userInfo.getUuid());
-		request.getSession().setAttribute(Constants.USERINFO, userService.save(userInfo));
-		return "user/userBindConfirm";
 	}
 
 	/**

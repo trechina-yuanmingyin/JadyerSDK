@@ -42,7 +42,7 @@ function submit(){
 			</tr>
 			<tr>
 				<th width="15%">关键字：</th>
-				<td><input class="inpte" type="text" id="keyword" name="keyword" value="${replyInfo.keyword}" maxlength="8"/></td>
+				<td><input class="inpte" type="text" id="keyword" name="keyword" value="${replyInfo.keyword}" maxlength="16"/></td>
 			</tr>
 			<tr>
 				<th>回复类型：</th>

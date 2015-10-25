@@ -2,13 +2,13 @@
 	<!--Foot-->
 	<div class="c_foot">
 		<p class="p1">
-			<img src="${ctx}/img/2code.jpg"/>
-			<span>关注平台<br/>体验我们的智能服务<br/>扫一扫，关注平台</span>
+			<img src="${ctx}/img/qrcode.jpg" width="78px" height="78px"/>
+			<span>扫一扫<br/>关注平台<br/>体验我们的智能服务</span>
 		</p>
 		<p class="p2">
-			<span><i class="i_ph"></i><em class="va_m">客服电话：</em><em class="va_m f18">82659616</em></span><br/>
-			<span class="fm2">Copyright © 2015-9999 github.com/jadyer. All Rights Reserved.</span><br/>
-			<span class="fm2">玄玉的半步多博客版权所有</span>
+			<span><i class="i_ph"></i><em class="va_m">客服电话：</em><em class="va_m f18">QQ群号为82659616</em></span><br/>
+			<span class="fm2">Copyright © 2015-2099 https://github.com/jadyer. All Rights Reserved.</span><br/>
+			<span class="fm2">玄玉的半步多博客版权所有，点此访问博客：<a href="http://blog.csdn.net/jadyer" target="_blank">http://blog.csdn.net/jadyer</a></span>
 		</p>
 		<div class="clear"></div>
 	</div>
