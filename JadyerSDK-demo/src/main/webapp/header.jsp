@@ -38,10 +38,7 @@
 			</div>
 		</li>
 		<li ${currentMenu eq 'menu_fans' ? 'class="on"' : ''}>
-			<a href="#"><span>粉丝管理</span><i></i></a>
-			<div>
-				<a href="${ctx}/fans/list"><span>粉丝列表</span></a>
-			</div>
+			<a href="${ctx}/fans/list"><span>粉丝管理</span><i></i></a>
 		</li>
 		<li ${currentMenu eq 'menu_sys' ? 'class="on"' : ''}>
 			<a href="#"><span>平台设置</span><i></i></a>
@@ -49,6 +46,7 @@
 				<a href="${ctx}/user/tomenu/weixin/json"><span>微信菜单</span></a>
 				<a href="${ctx}/user/tobind"><span>微信绑定</span></a>
 				<a href="${ctx}/user/info"><span>个人资料</span></a>
+				<a href="${ctx}/user/password"><span>修改密码</span></a>
 			</div>
 		</li>
 	</ul>

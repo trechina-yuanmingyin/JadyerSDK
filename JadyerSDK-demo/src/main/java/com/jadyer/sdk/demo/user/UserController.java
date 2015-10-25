@@ -49,6 +49,24 @@ public class UserController{
 		return "user/userInfo";
 	}
 
+	@RequestMapping("/password")
+	public String password(){
+		return "user/password";
+	}
+
+	@ResponseBody
+	@RequestMapping("/password/update")
+	public CommonResult passwordUpdate(String oldPassword, String newPassword, HttpServletRequest request){
+		UserInfo userInfo = (UserInfo)request.getSession().getAttribute(Constants.USERINFO);
+		UserInfo respUserInfo = userService.passwordUpdate(userInfo, oldPassword, newPassword);
+		if(null == respUserInfo){
+			return new CommonResult(CodeEnum.SYSTEM_BUSY.getCode(), "原密码不正确");
+		}
+		//刷新HttpSession中的用户信息
+		request.getSession().setAttribute(Constants.USERINFO, respUserInfo);
+		return new CommonResult();
+	}
+
 	/**
 	 * 前往微信绑定页面
 	 */

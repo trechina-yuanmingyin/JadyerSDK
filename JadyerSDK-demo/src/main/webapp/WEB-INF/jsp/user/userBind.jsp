@@ -44,7 +44,7 @@ function submit(){
 			<tr class="ti"><th colspan="2">详细信息</th></tr>
 			<tr><th width="15%">微信URL：</th><td>${weixinURL}</td></tr>
 			<tr><th>微信Token：</th><td>${token}</td></tr>
-			<tr><th>微信绑定状态：</th><td>${userInfo.bindStatus eq 0 ? '未绑定' : '已绑定'}</td></tr>
+			<tr><th>微信绑定状态：</th><td>${userInfo.bindStatus eq 0 ? '<span class="cf30 fw">未绑定</span>' : '<span class="cgre fw">已绑定</span>'}</td></tr>
 			<tr><th>微信原始ID：</th><td><input class="inpte" type="text" id="wxId" name="wxId" value="${userInfo.wxId}" maxlength="32"/></td></tr>
 			<tr><th>微信号：</th><td><input class="inpte" type="text" id="wxNo" name="wxNo" value="${userInfo.wxNo}" maxlength="32"/></td></tr>
 			<tr><th>微信名称：</th><td><input class="inpte" type="text" id="wxName" name="wxName" value="${userInfo.wxName}" maxlength="32"/></td></tr>

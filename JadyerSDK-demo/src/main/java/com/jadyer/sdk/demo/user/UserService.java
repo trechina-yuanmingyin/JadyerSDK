@@ -18,14 +18,17 @@ public class UserService {
 	private UserInfoDao userInfoDao;
 	@Resource
 	private MenuInfoDao menuInfoDao;
+	
+	private String buildEncryptPassword(String password){
+		String encrypt = DigestUtils.md5Hex(password);
+		return DigestUtils.md5Hex(password.substring(0, 3) + encrypt + password + encrypt + password.substring(password.length()-3));
+	}
 
 	@Transactional(readOnly=true)
 	public UserInfo findByUsernameAndPassword(String username, String password){
-		String encrypt = DigestUtils.md5Hex(password);
-		password = DigestUtils.md5Hex(password.substring(0, 3) + encrypt + password + encrypt + password.substring(password.length()-3));
-		return userInfoDao.findByUsernameAndPassword(username, password);
+		return userInfoDao.findByUsernameAndPassword(username, buildEncryptPassword(password));
 	}
-
+	
 	@Transactional(readOnly=true)
 	public UserInfo findByWxId(String wxId){
 		return userInfoDao.findByWxId(wxId);
@@ -36,12 +39,35 @@ public class UserService {
 	}
 
 	/**
+	 * 修改密码
+	 * @param userInfo    HttpSession中的当前登录用户信息
+	 * @param oldPassword 用户输入的旧密码
+	 * @param newPassword 用户输入的新密码
+	 * @create Oct 25, 2015 2:58:33 PM
+	 * @author 玄玉<http://blog.csdn.net/jadyer>
+	 */
+	public UserInfo passwordUpdate(UserInfo userInfo, String oldPassword, String newPassword){
+		if(!userInfo.getPassword().equals(buildEncryptPassword(oldPassword))){
+			return null;
+		}
+		userInfo.setPassword(buildEncryptPassword(newPassword));
+		return userInfoDao.saveAndFlush(userInfo);
+	}
+
+	/**
 	 * 查询指定平台用户的微信菜单资料
 	 */
+	@Transactional(readOnly=true)
 	public List<MenuInfo> findMenuList(int uid){
 		return menuInfoDao.findMenuListByUID(uid);
 	}
-	
+
+	/**
+	 * 暂未使用到该方法
+	 * @create Oct 25, 2015 3:02:19 PM
+	 * @author 玄玉<http://blog.csdn.net/jadyer>
+	 */
+	@Deprecated
 	public boolean updateMenu(int uid){
 		menuInfoDao.deleteByUID(uid);
 		return false;
