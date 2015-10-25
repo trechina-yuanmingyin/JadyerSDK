@@ -71,7 +71,7 @@ function pageSubmit(pageNo){
 				<em class="va_m">跳转到</em>
 				&nbsp;<input class="inpte" type="text" maxlength="3" id="go" onchange="this.value=this.value.replace(/\D/g,'')"/>
 				&nbsp;<input type="button" class="btn" onclick="pageSubmit(-1)" value="GO">
-				<b class="va_m pl_10">第&nbsp;${page.number+1}&nbsp;页，共&nbsp;${page.totalPages}&nbsp;页，合计：${page.totalElements}条</b>
+				<b class="va_m pl_10">第&nbsp;${page.number+1}&nbsp;页，共&nbsp;${page.totalPages}&nbsp;页，共&nbsp;${page.totalElements}&nbsp;条</b>
 			</span>
 		</div>
 	</form>
