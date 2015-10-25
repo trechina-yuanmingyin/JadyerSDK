@@ -4,33 +4,6 @@
 
 <jsp:include page="/header.jsp"/>
 
-<script>
-/**
- * 输入框中的this.value=this.value.replace(/\D/g,'')可保证只能输入零或正整数
- * 输入中文等其它字符时,$("#go").val()得到的是空的值(不是null)
- * 输入负数时,$("#go").val()得到的是对应的正数,比如输入-3,$("#go").val()得到的就是3
- */
-function pageSubmit(pageNo){
-	if(-1 == pageNo){
-		pageNo = $("#go").val();
-		if(isEmpty(pageNo) || isNotNumber(pageNo)){
-			$.promptBox("请填写页数", "#ffb848");
-			return;
-		}
-		if(pageNo > ${page.totalPages}){
-			$("#go").val(${page.totalPages});
-			$.promptBox("最大页数${page.totalPages}页", "#ffb848");
-			return;
-		}
-		if(pageNo >= 1){
-			pageNo = pageNo-1;
-		}
-	}
-	$("#pageForm").attr("action", "${ctx}/fans/list?pageNo=" + pageNo);
-	$("#pageForm").submit();
-}
-</script>
-
 <div class="c_nav">
 	<div class="ti">粉丝列表</div>
 </div>
@@ -53,29 +26,14 @@ function pageSubmit(pageNo){
 				<td><span>${fans.nickname}</span></td>
 				<td><span>${fans.name}</span></td>
 				<td><span>${fans.phoneNo}</span></td>
-				<td>${fans.subscribe==0 ? '<span class="cf30 fw">未关注</span>' : '<span class="cgre fw">已关注</span>'}</td>
+				<td>${fans.subscribe eq 0 ? '<span class="cf30 fw">未关注</span>' : '<span class="cgre fw">已关注</span>'}</td>
 				<td><span>${fans.province}</span></td>
 				<td><span>${fans.city}</span></td>
 			</tr>
 		</c:forEach>
 	</table>
 	<!--/Table list-->
-	<!--Paging-->
-	<form id="pageForm" method="post">
-		<div class="paging">
-			<a href="javascript:pageSubmit(0)" title="首页" class="curr">首页</a>
-			<a href="javascript:pageSubmit(${page.number eq 0 ? 0 : page.number-1})" title="上页">上页</a>
-			<a href="javascript:pageSubmit(${page.number eq page.totalPages-1 ? page.number : page.number+1})" title="下页">下页</a>
-			<a href="javascript:pageSubmit('${page.totalPages-1}')" title="尾页">尾页</a>
-			<span class="pl_10">
-				<em class="va_m">跳转到</em>
-				&nbsp;<input class="inpte" type="text" maxlength="3" id="go" onchange="this.value=this.value.replace(/\D/g,'')"/>
-				&nbsp;<input type="button" class="btn" onclick="pageSubmit(-1)" value="GO">
-				<b class="va_m pl_10">第&nbsp;${page.number+1}&nbsp;页，共&nbsp;${page.totalPages}&nbsp;页，共&nbsp;${page.totalElements}&nbsp;条</b>
-			</span>
-		</div>
-	</form>
-	<!--/Paging-->
+	<jsp:include page="/page.jsp?requestURI=${ctx}/fans/list"/>
 </div>
 <!--/Content-->
 
