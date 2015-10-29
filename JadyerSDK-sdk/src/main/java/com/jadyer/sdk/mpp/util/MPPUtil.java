@@ -48,21 +48,70 @@ public final class MPPUtil {
 
 
 	/**
-	 * 获取用户基本信息
-	 * @see 微信服务器的应答报文是下面这样的,一般Content-Type里面编码都用charset,它竟然用encoding
-	 * @see HTTP/1.1 200 OK
-	 * @see Server: nginx/1.8.0
-	 * @see Date: Wed, 21 Oct 2015 03:56:53 GMT
-	 * @see Content-Type: application/json; encoding=utf-8
-	 * @see Content-Length: 357
-	 * @see Connection: keep-alive
-	 * @see 
-	 * @see {"subscribe":1,"openid":"o3SHot22_IqkUI7DpahNv-KBiFIs","nickname":"玄玉","sex":1,"language":"en","city":"江北","province":"重庆","country":"中国","headimgurl":"http:\/\/wx.qlogo.cn\/mmopen\/Sa1DhFzJREXnSqZKc2Y2AficBdiaaiauFNBbiakfO7fJkf8Cp3oLgJQhbgkwmlN3co2aJr9iabEKJq5jsZYup3gibaVCHD5W13XRmR\/0","subscribe_time":1445398219,"remark":"","groupid":0}]
+	 * 获取微信jsapi_ticket
+	 * @see http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html
+	 * @see {"errcode":40001,"errmsg":"invalid credential, access_token is invalid or not latest hint: [3sEnya0653vr23]"}
+	 * @see {"errcode":0,"errmsg":"ok","ticket":"sM4AOVdWfPE4DxkXGEs8VDqmMJ5Cg8sos8UXyJqPG4FpcrJtLcmFoV69dhqNmiQdoF1HjamNrYH9c8S9r4B_MA","expires_in":7200}
+	 * @return 获取失败时将抛出RuntimeException
+	 * @create Oct 29, 2015 9:45:20 PM
+	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
-	public static FansInfo getFansInfo(String accesstoken, String openid){
-		String reqURL = MPPConstants.URL_WEIXIN_GET_FANSINFO.replace(MPPConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken).replace(MPPConstants.URL_PLACEHOLDER_OPENID, openid);
+	static String getWeixinJSApiTicket(String accesstoken){
+		String reqURL = MPPConstants.URL_WEIXIN_GET_JSAPI_TICKET.replace(MPPConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken);
 		String respData = HttpUtil.post(reqURL);
-		return JSON.parseObject(respData, FansInfo.class);
+		Map<String, String> map = JSON.parseObject(respData, new TypeReference<Map<String, String>>(){});
+		if("0".equals(map.get("errcode"))){
+			return map.get("ticket");
+		}else{
+			String errmsg = MPPCodeEnum.getMessageByCode(Integer.parseInt((map.get("errcode"))));
+			if(StringUtils.isBlank(errmsg)){
+				errmsg = map.get("errmsg");
+			}
+			throw new RuntimeException("获取微信jsapi_ticket失败-->" + errmsg);
+		}
+	}
+
+
+	/**
+	 * 通过code换取微信网页授权access_token
+	 * @param appid     微信公众号AppID
+	 * @param appsecret 微信公众号AppSecret
+	 * @param code      换取access_token的有效期为5分钟的票据
+	 * @return 返回获取到的网页access_token(获取失败时的应答码也在该返回中)
+	 */
+	static OAuthAccessToken getWeixinOAuthAccessToken(String appid, String appsecret, String code){
+		String reqURL = MPPConstants.URL_WEIXIN_OAUTH2_GET_ACCESSTOKEN.replace(MPPConstants.URL_PLACEHOLDER_APPID, appid)
+																	  .replace(MPPConstants.URL_PLACEHOLDER_APPSECRET, appsecret)
+																	  .replace(MPPConstants.URL_PLACEHOLDER_CODE, code);
+		String respData = HttpUtil.post(reqURL);
+		logger.info("获取微信网页access_token,微信应答报文为-->{}", respData);
+		OAuthAccessToken oauthAccessToken = JSON.parseObject(respData, OAuthAccessToken.class);
+		if(oauthAccessToken.getErrcode() != 0){
+			String errmsg = MPPCodeEnum.getMessageByCode(oauthAccessToken.getErrcode());
+			if(StringUtils.isNotBlank(errmsg)){
+				oauthAccessToken.setErrmsg(errmsg);
+			}
+		}
+		return oauthAccessToken;
+	}
+
+
+	/**
+	 * 构建网页授权获取用户信息的获取Code地址
+	 * @param appid       微信公众号AppID
+	 * @param scope       应用授权作用域(snsapi_base或snsapi_userinfo)
+	 * @param state       重定向后会带上state参数(开发者可以填写a-zA-Z0-9的参数值,最多128字节)
+	 * @param redirectURI 授权后重定向的回调链接地址(请使用urlencode对链接进行处理)
+	 */
+	public static String buildOAuthCodeURL(String appid, String scope, String state, String redirectURI){
+		try {
+			return MPPConstants.URL_WEIXIN_OAUTH2_GET_CODE.replace(MPPConstants.URL_PLACEHOLDER_APPID, appid)
+														  .replace(MPPConstants.URL_PLACEHOLDER_SCOPE, scope)
+														  .replace(MPPConstants.URL_PLACEHOLDER_STATE, state)
+														  .replace(MPPConstants.URL_PLACEHOLDER_REDIRECT_URI, URLEncoder.encode(redirectURI, HttpUtil.DEFAULT_CHARSET));
+		} catch (UnsupportedEncodingException e) {
+			return null;
+		}
 	}
 
 
@@ -114,6 +163,25 @@ public final class MPPUtil {
 
 
 	/**
+	 * 获取用户基本信息
+	 * @see 微信服务器的应答报文是下面这样的,一般Content-Type里面编码都用charset,它竟然用encoding
+	 * @see HTTP/1.1 200 OK
+	 * @see Server: nginx/1.8.0
+	 * @see Date: Wed, 21 Oct 2015 03:56:53 GMT
+	 * @see Content-Type: application/json; encoding=utf-8
+	 * @see Content-Length: 357
+	 * @see Connection: keep-alive
+	 * @see 
+	 * @see {"subscribe":1,"openid":"o3SHot22_IqkUI7DpahNv-KBiFIs","nickname":"玄玉","sex":1,"language":"en","city":"江北","province":"重庆","country":"中国","headimgurl":"http:\/\/wx.qlogo.cn\/mmopen\/Sa1DhFzJREXnSqZKc2Y2AficBdiaaiauFNBbiakfO7fJkf8Cp3oLgJQhbgkwmlN3co2aJr9iabEKJq5jsZYup3gibaVCHD5W13XRmR\/0","subscribe_time":1445398219,"remark":"","groupid":0}]
+	 */
+	public static FansInfo getFansInfo(String accesstoken, String openid){
+		String reqURL = MPPConstants.URL_WEIXIN_GET_FANSINFO.replace(MPPConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken).replace(MPPConstants.URL_PLACEHOLDER_OPENID, openid);
+		String respData = HttpUtil.post(reqURL);
+		return JSON.parseObject(respData, FansInfo.class);
+	}
+
+
+	/**
 	 * 客服接口主动推消息
 	 * @see http://mp.weixin.qq.com/wiki/1/70a29afed17f56d537c833f89be979c9.html
 	 * @see 目前只要粉丝在48小时内与公众号发生过互动,那么均可通过该接口主动推消息给粉丝
@@ -133,48 +201,5 @@ public final class MPPUtil {
 			}
 		}
 		return errinfo;
-	}
-
-
-	/**
-	 * 构建网页授权获取用户信息的获取Code地址
-	 * @param appid       微信公众号AppID
-	 * @param scope       应用授权作用域(snsapi_base或snsapi_userinfo)
-	 * @param state       重定向后会带上state参数(开发者可以填写a-zA-Z0-9的参数值,最多128字节)
-	 * @param redirectURI 授权后重定向的回调链接地址(请使用urlencode对链接进行处理)
-	 */
-	public static String buildOAuthCodeURL(String appid, String scope, String state, String redirectURI){
-		try {
-			return MPPConstants.URL_WEIXIN_OAUTH2_GET_CODE.replace(MPPConstants.URL_PLACEHOLDER_APPID, appid)
-														  .replace(MPPConstants.URL_PLACEHOLDER_SCOPE, scope)
-														  .replace(MPPConstants.URL_PLACEHOLDER_STATE, state)
-														  .replace(MPPConstants.URL_PLACEHOLDER_REDIRECT_URI, URLEncoder.encode(redirectURI, HttpUtil.DEFAULT_CHARSET));
-		} catch (UnsupportedEncodingException e) {
-			return null;
-		}
-	}
-
-
-	/**
-	 * 通过code换取网页授权access_token
-	 * @param appid     微信公众号AppID
-	 * @param appsecret 微信公众号AppSecret
-	 * @param code      换取access_token的有效期为5分钟的票据
-	 * @return 返回获取到的网页access_token(获取失败时的应答码也在该返回中)
-	 */
-	static OAuthAccessToken getWeixinOAuthAccessToken(String appid, String appsecret, String code){
-		String reqURL = MPPConstants.URL_WEIXIN_OAUTH2_GET_ACCESSTOKEN.replace(MPPConstants.URL_PLACEHOLDER_APPID, appid)
-																	  .replace(MPPConstants.URL_PLACEHOLDER_APPSECRET, appsecret)
-																	  .replace(MPPConstants.URL_PLACEHOLDER_CODE, code);
-		String respData = HttpUtil.post(reqURL);
-		logger.info("获取微信网页access_token,微信应答报文为-->{}", respData);
-		OAuthAccessToken oauthAccessToken = JSON.parseObject(respData, OAuthAccessToken.class);
-		if(oauthAccessToken.getErrcode() != 0){
-			String errmsg = MPPCodeEnum.getMessageByCode(oauthAccessToken.getErrcode());
-			if(StringUtils.isNotBlank(errmsg)){
-				oauthAccessToken.setErrmsg(errmsg);
-			}
-		}
-		return oauthAccessToken;
 	}
 }

@@ -3,9 +3,6 @@ package com.jadyer.sdk.mpp.util;
 import java.util.Calendar;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.jadyer.sdk.mpp.model.OAuthAccessToken;
 
 /**
@@ -14,11 +11,12 @@ import com.jadyer.sdk.mpp.model.OAuthAccessToken;
  * @author 玄玉<http://blog.csdn.net/jadyer>
  */
 public class TokenHolder {
-	private static final Logger logger = LoggerFactory.getLogger(TokenHolder.class);
 	private static final String FLAG_WEIXIN_ACCESSTOKEN = "weixin_access_token";
-	private static final String FLAG_WEIXIN_ACCESSTOKEN_EXPIRETIME = FLAG_WEIXIN_ACCESSTOKEN + "expire_time";
+	private static final String FLAG_WEIXIN_JSAPI_TICKET = "weixin_jsapi_ticket";
 	private static final String FLAG_WEIXIN_OAUTH_ACCESSTOKEN = "weixin_oauth_access_token";
-	private static final String FLAG_WEIXIN_OAUTH_ACCESSTOKEN_EXPIRETIME = FLAG_WEIXIN_OAUTH_ACCESSTOKEN + "expire_time";
+	private static final String FLAG_WEIXIN_ACCESSTOKEN_EXPIRETIME = FLAG_WEIXIN_ACCESSTOKEN + "_expire_time";
+	private static final String FLAG_WEIXIN_JSAPI_TICKET_EXPIRETIME = FLAG_WEIXIN_JSAPI_TICKET + "_expire_time";
+	private static final String FLAG_WEIXIN_OAUTH_ACCESSTOKEN_EXPIRETIME = FLAG_WEIXIN_OAUTH_ACCESSTOKEN + "_expire_time";
 	private static ConcurrentHashMap<String, Object> tokenMap = new ConcurrentHashMap<String, Object>();
 
 	private TokenHolder(){}
@@ -35,7 +33,6 @@ public class TokenHolder {
 		Calendar expireTime = (Calendar)tokenMap.get(FLAG_WEIXIN_ACCESSTOKEN_EXPIRETIME);
 		expireTime.add(Calendar.MINUTE, 110);
 		if((expireTime.getTimeInMillis()-Calendar.getInstance().getTimeInMillis()) >= 0){
-			logger.info("get {} access_token from memory", appid);
 			return (String)tokenMap.get(FLAG_WEIXIN_ACCESSTOKEN);
 		}
 		String accessToken = MPPUtil.getWeixinAccessToken(appid, appsecret);
@@ -43,6 +40,7 @@ public class TokenHolder {
 		tokenMap.put(FLAG_WEIXIN_ACCESSTOKEN_EXPIRETIME, Calendar.getInstance());
 		return accessToken;
 	}
+
 
 	/**
 	 * 通过code换取网页授权access_token
@@ -58,12 +56,30 @@ public class TokenHolder {
 		Calendar expireTime = (Calendar)tokenMap.get(FLAG_WEIXIN_OAUTH_ACCESSTOKEN_EXPIRETIME);
 		expireTime.add(Calendar.MINUTE, 110);
 		if((expireTime.getTimeInMillis()-Calendar.getInstance().getTimeInMillis()) >= 0){
-			logger.info("get {} oauth_access_token from memory", appid);
 			return (OAuthAccessToken)tokenMap.get(FLAG_WEIXIN_OAUTH_ACCESSTOKEN);
 		}
 		OAuthAccessToken oauthAccessToken = MPPUtil.getWeixinOAuthAccessToken(appid, appsecret, code);
 		tokenMap.put(FLAG_WEIXIN_OAUTH_ACCESSTOKEN, oauthAccessToken);
 		tokenMap.put(FLAG_WEIXIN_OAUTH_ACCESSTOKEN_EXPIRETIME, Calendar.getInstance());
 		return oauthAccessToken;
+	}
+
+
+	/**
+	 * 获取微信jsapi_ticket
+	 * @see 这里只缓存110分钟,详细介绍见http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html
+	 * @create Oct 29, 2015 9:55:33 PM
+	 * @author 玄玉<http://blog.csdn.net/jadyer>
+	 */
+	public static String getWeixinJSApiTicket(String accesstoken){
+		Calendar expireTime = (Calendar)tokenMap.get(FLAG_WEIXIN_JSAPI_TICKET_EXPIRETIME);
+		expireTime.add(Calendar.MINUTE, 110);
+		if((expireTime.getTimeInMillis()-Calendar.getInstance().getTimeInMillis()) >= 0){
+			return (String)tokenMap.get(FLAG_WEIXIN_JSAPI_TICKET);
+		}
+		String jsapiTicket = MPPUtil.getWeixinJSApiTicket(accesstoken);
+		tokenMap.put(FLAG_WEIXIN_JSAPI_TICKET, jsapiTicket);
+		tokenMap.put(FLAG_WEIXIN_JSAPI_TICKET_EXPIRETIME, Calendar.getInstance());
+		return jsapiTicket;
 	}
 }

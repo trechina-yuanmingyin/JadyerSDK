@@ -38,4 +38,6 @@ public interface MPPConstants {
 	String URL_WEIXIN_OAUTH2_GET_CODE        = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + URL_PLACEHOLDER_APPID + "&redirect_uri=" + URL_PLACEHOLDER_REDIRECT_URI + "&response_type=code&scope=" + URL_PLACEHOLDER_SCOPE + "&state=" + URL_PLACEHOLDER_STATE + "#wechat_redirect";
 	//通过code换取网页授权access_token
 	String URL_WEIXIN_OAUTH2_GET_ACCESSTOKEN = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + URL_PLACEHOLDER_APPID + "&secret=" + URL_PLACEHOLDER_APPSECRET +"&code=" + URL_PLACEHOLDER_CODE + "&grant_type=authorization_code";
+	//获取微信jsapi_ticket
+	String URL_WEIXIN_GET_JSAPI_TICKET       = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + URL_PLACEHOLDER_ACCESSTOKEN + "&type=jsapi";
 }
