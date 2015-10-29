@@ -162,7 +162,7 @@ public final class MPPUtil {
 	 * @param code      换取access_token的有效期为5分钟的票据
 	 * @return 返回获取到的网页access_token(获取失败时的应答码也在该返回中)
 	 */
-	public static OAuthAccessToken getOAuthAccessToken(String appid, String appsecret, String code){
+	static OAuthAccessToken getWeixinOAuthAccessToken(String appid, String appsecret, String code){
 		String reqURL = MPPConstants.URL_WEIXIN_OAUTH2_GET_ACCESSTOKEN.replace(MPPConstants.URL_PLACEHOLDER_APPID, appid)
 																	  .replace(MPPConstants.URL_PLACEHOLDER_APPSECRET, appsecret)
 																	  .replace(MPPConstants.URL_PLACEHOLDER_CODE, code);
