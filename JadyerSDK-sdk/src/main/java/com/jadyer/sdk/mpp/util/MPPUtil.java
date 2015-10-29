@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Map;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +15,7 @@ import com.jadyer.sdk.mpp.constant.MPPCodeEnum;
 import com.jadyer.sdk.mpp.constant.MPPConstants;
 import com.jadyer.sdk.mpp.model.ErrorInfo;
 import com.jadyer.sdk.mpp.model.FansInfo;
-import com.jadyer.sdk.mpp.model.OAuthAccessToken;
+import com.jadyer.sdk.mpp.model.WeixinOAuthAccessToken;
 import com.jadyer.sdk.mpp.model.custom.CustomMsg;
 import com.jadyer.sdk.mpp.model.menu.Menu;
 
@@ -79,20 +80,20 @@ public final class MPPUtil {
 	 * @param code      换取access_token的有效期为5分钟的票据
 	 * @return 返回获取到的网页access_token(获取失败时的应答码也在该返回中)
 	 */
-	static OAuthAccessToken getWeixinOAuthAccessToken(String appid, String appsecret, String code){
+	static WeixinOAuthAccessToken getWeixinOAuthAccessToken(String appid, String appsecret, String code){
 		String reqURL = MPPConstants.URL_WEIXIN_OAUTH2_GET_ACCESSTOKEN.replace(MPPConstants.URL_PLACEHOLDER_APPID, appid)
 																	  .replace(MPPConstants.URL_PLACEHOLDER_APPSECRET, appsecret)
 																	  .replace(MPPConstants.URL_PLACEHOLDER_CODE, code);
 		String respData = HttpUtil.post(reqURL);
 		logger.info("获取微信网页access_token,微信应答报文为-->{}", respData);
-		OAuthAccessToken oauthAccessToken = JSON.parseObject(respData, OAuthAccessToken.class);
-		if(oauthAccessToken.getErrcode() != 0){
-			String errmsg = MPPCodeEnum.getMessageByCode(oauthAccessToken.getErrcode());
+		WeixinOAuthAccessToken weixinOauthAccessToken = JSON.parseObject(respData, WeixinOAuthAccessToken.class);
+		if(weixinOauthAccessToken.getErrcode() != 0){
+			String errmsg = MPPCodeEnum.getMessageByCode(weixinOauthAccessToken.getErrcode());
 			if(StringUtils.isNotBlank(errmsg)){
-				oauthAccessToken.setErrmsg(errmsg);
+				weixinOauthAccessToken.setErrmsg(errmsg);
 			}
 		}
-		return oauthAccessToken;
+		return weixinOauthAccessToken;
 	}
 
 
@@ -103,7 +104,7 @@ public final class MPPUtil {
 	 * @param state       重定向后会带上state参数(开发者可以填写a-zA-Z0-9的参数值,最多128字节)
 	 * @param redirectURI 授权后重定向的回调链接地址(请使用urlencode对链接进行处理)
 	 */
-	public static String buildOAuthCodeURL(String appid, String scope, String state, String redirectURI){
+	public static String buildWeixinOAuthCodeURL(String appid, String scope, String state, String redirectURI){
 		try {
 			return MPPConstants.URL_WEIXIN_OAUTH2_GET_CODE.replace(MPPConstants.URL_PLACEHOLDER_APPID, appid)
 														  .replace(MPPConstants.URL_PLACEHOLDER_SCOPE, scope)
@@ -124,7 +125,7 @@ public final class MPPUtil {
 	 * @see 4.修改菜单时(修改内容或菜单数量等)不需要删除菜单,直接调用创建接口即可,微信会自动覆盖以前创建的菜单
 	 * @see -----------------------------------------------------------------------------------------------------------
 	 */
-	public static ErrorInfo createMenu(String accesstoken, Menu menu){
+	public static ErrorInfo createWeixinMenu(String accesstoken, Menu menu){
 		String reqURL = MPPConstants.URL_WEIXIN_GET_CREATE_MENU.replace(MPPConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken);
 		String reqData = JSON.toJSONString(menu);
 		logger.info("自定义菜单创建-->待发送的JSON为{}", reqData);
@@ -146,7 +147,7 @@ public final class MPPUtil {
 	 * @see String menuJson = "{\"button\":[{\"type\":\"view\", \"name\":\"我的博客\", \"url\":\"http://blog.csdn.net/jadyer\"}, {\"type\":\"click\", \"name\":\"今日歌曲\", \"key\":\"V1001_TODAY_MUSIC\"}, {\"name\":\"个人中心\", \"sub_button\": [{\"type\":\"view\", \"name\":\"搜索\", \"url\":\"http://www.soso.com/\"}, {\"type\":\"view\", \"name\":\"视频\", \"url\":\"http://v.qq.com/\"}, {\"type\":\"click\", \"name\":\"赞一下我们\", \"key\":\"V1001_GOOD\"}]}]}";
 	 * @see String menuJson = "{\"button\":[{\"type\":\"view\", \"name\":\"我的博客\", \"url\":\"http://blog.csdn.net/jadyer\"}, {\"name\":\"个人中心\", \"sub_button\": [{\"type\":\"view\", \"name\":\"搜索\", \"url\":\"http://www.soso.com/\"}, {\"type\":\"view\", \"name\":\"视频\", \"url\":\"http://v.qq.com/\"}, {\"type\":\"click\", \"name\":\"赞一下我们\", \"key\":\"V1001_GOOD\"}]}]}";
 	 */
-	public static ErrorInfo createMenu(String accesstoken, String menuJson){
+	public static ErrorInfo createWeixinMenu(String accesstoken, String menuJson){
 		String reqURL = MPPConstants.URL_WEIXIN_GET_CREATE_MENU.replace(MPPConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken);
 		logger.info("自定义菜单创建-->待发送的JSON为{}", menuJson);
 		String respData = HttpUtil.post(reqURL, menuJson);
@@ -174,7 +175,7 @@ public final class MPPUtil {
 	 * @see 
 	 * @see {"subscribe":1,"openid":"o3SHot22_IqkUI7DpahNv-KBiFIs","nickname":"玄玉","sex":1,"language":"en","city":"江北","province":"重庆","country":"中国","headimgurl":"http:\/\/wx.qlogo.cn\/mmopen\/Sa1DhFzJREXnSqZKc2Y2AficBdiaaiauFNBbiakfO7fJkf8Cp3oLgJQhbgkwmlN3co2aJr9iabEKJq5jsZYup3gibaVCHD5W13XRmR\/0","subscribe_time":1445398219,"remark":"","groupid":0}]
 	 */
-	public static FansInfo getFansInfo(String accesstoken, String openid){
+	public static FansInfo getWeixinFansInfo(String accesstoken, String openid){
 		String reqURL = MPPConstants.URL_WEIXIN_GET_FANSINFO.replace(MPPConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken).replace(MPPConstants.URL_PLACEHOLDER_OPENID, openid);
 		String respData = HttpUtil.post(reqURL);
 		return JSON.parseObject(respData, FansInfo.class);
@@ -187,7 +188,7 @@ public final class MPPUtil {
 	 * @see 目前只要粉丝在48小时内与公众号发生过互动,那么均可通过该接口主动推消息给粉丝
 	 * @see 注意:如果需要以某个客服帐号来发消息,需要在请求JSON中加入customservice参数,这里暂未指定customservice
 	 */
-	public static ErrorInfo pushMsgToFans(String accesstoken, CustomMsg customMsg){
+	public static ErrorInfo pushMsgToWeixinFans(String accesstoken, CustomMsg customMsg){
 		String reqURL = MPPConstants.URL_WEIXIN_CUSTOM_PUSH_MESSAGE.replace(MPPConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken);
 		String reqData = JSON.toJSONString(customMsg);
 		logger.info("客服接口主动推消息-->待发送的JSON为{}", reqData);
@@ -201,5 +202,25 @@ public final class MPPUtil {
 			}
 		}
 		return errinfo;
+	}
+
+
+	/**
+	 * JS-SDK权限验证的签名
+	 * @param appid     微信公众号AppID
+	 * @param appsecret 微信公众号AppSecret
+	 * @param noncestr  随机字符串
+	 * @param timestamp 时间戳
+	 * @param url       当前网页的URL,不包含#及其后面部分
+	 * @create Oct 29, 2015 10:11:29 PM
+	 * @author 玄玉<http://blog.csdn.net/jadyer>
+	 */
+	public static String signWeixinJSSDK(String appid, String appsecret, String noncestr, String timestamp, String url){
+		StringBuilder sb = new StringBuilder();
+		sb.append("jsapi_ticket=").append(TokenHolder.getWeixinJSApiTicket(TokenHolder.getWeixinAccessToken(appid, appsecret))).append("&")
+		  .append("noncestr=").append(noncestr).append("&")
+		  .append("timestamp=").append(timestamp).append("&")
+		  .append("url=").append(url);
+		return DigestUtils.sha1Hex(sb.toString());
 	}
 }

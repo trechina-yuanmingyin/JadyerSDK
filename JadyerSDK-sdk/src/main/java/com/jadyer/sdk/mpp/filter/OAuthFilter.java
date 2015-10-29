@@ -107,7 +107,7 @@ public class OAuthFilter implements Filter {
 			String state = fullURI.replace("?", "/").replace("&", "/");
 			state = state.replace("/oauth=base", "");
 			logger.info("计算粉丝请求的资源得到state={}", state);
-			response.sendRedirect(MPPUtil.buildOAuthCodeURL(appid, MPPConstants.OAUTH_SCOPE_SNSAPI_BASE, state, this.redirecturl));
+			response.sendRedirect(MPPUtil.buildWeixinOAuthCodeURL(appid, MPPConstants.OAUTH_SCOPE_SNSAPI_BASE, state, this.redirecturl));
 		}else{
 			chain.doFilter(req, resp);
 		}

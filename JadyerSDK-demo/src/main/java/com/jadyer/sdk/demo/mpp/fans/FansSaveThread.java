@@ -38,7 +38,7 @@ public class FansSaveThread implements Runnable {
 		/**
 		 * 向微信服务器查询粉丝信息
 		 */
-		com.jadyer.sdk.mpp.model.FansInfo _fansInfo = MPPUtil.getFansInfo(accesstoken, openid);
+		com.jadyer.sdk.mpp.model.FansInfo _fansInfo = MPPUtil.getWeixinFansInfo(accesstoken, openid);
 		fansInfo.setUid(userInfo.getId());
 		fansInfo.setWxId(userInfo.getWxId());
 		fansInfo.setOpenid(openid);

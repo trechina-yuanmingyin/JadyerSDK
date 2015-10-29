@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.jadyer.sdk.mpp.filter.OAuthFilter;
-import com.jadyer.sdk.mpp.model.OAuthAccessToken;
+import com.jadyer.sdk.mpp.model.WeixinOAuthAccessToken;
 import com.jadyer.sdk.mpp.util.HttpUtil;
 import com.jadyer.sdk.mpp.util.TokenHolder;
 
@@ -38,7 +38,7 @@ public class WeixinOAuthController {
 	@RequestMapping(value="/getAccessToken/{uid}")
 	public String getAccessToken(@PathVariable String uid, String code, String state, HttpServletResponse response) throws IOException{
 		if(StringUtils.isNotBlank(code)){
-			OAuthAccessToken oauthAccessToken = TokenHolder.getWeixinOAuthAccessToken(OAuthFilter.appid, OAuthFilter.appsecret, code);
+			WeixinOAuthAccessToken oauthAccessToken = TokenHolder.getWeixinOAuthAccessToken(OAuthFilter.appid, OAuthFilter.appsecret, code);
 			if(0==oauthAccessToken.getErrcode() && StringUtils.isNotBlank(oauthAccessToken.getOpenid())){
 				/**
 				 * 还原state携带过来的粉丝请求的原URL

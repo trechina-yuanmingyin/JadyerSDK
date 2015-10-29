@@ -123,7 +123,7 @@ public class UserController{
 	public CommonResult tomenuWeixinJsonDeploy(String menuJson, HttpServletRequest request){
 		UserInfo userInfo = (UserInfo)request.getSession().getAttribute(Constants.USERINFO);
 		String accesstoken = TokenHolder.getWeixinAccessToken(userInfo.getAppId(), userInfo.getAppSecret());
-		ErrorInfo errorInfo = MPPUtil.createMenu(accesstoken, menuJson);
+		ErrorInfo errorInfo = MPPUtil.createWeixinMenu(accesstoken, menuJson);
 		if(0 == errorInfo.getErrcode()){
 			return new CommonResult();
 		}else{

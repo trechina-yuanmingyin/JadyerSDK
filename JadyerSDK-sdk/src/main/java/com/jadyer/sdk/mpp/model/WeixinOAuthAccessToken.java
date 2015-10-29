@@ -5,7 +5,7 @@ package com.jadyer.sdk.mpp.model;
  * @create Oct 19, 2015 9:32:58 PM
  * @author 玄玉<http://blog.csdn.net/jadyer>
  */
-public class OAuthAccessToken {
+public class WeixinOAuthAccessToken {
 	/**
 	 * 网页授权接口调用凭证(此access_token与基础支持的access_token不同)
 	 */
