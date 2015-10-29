@@ -14,21 +14,23 @@
 		<tr>
 			<th>头像</th>
 			<th>昵称</th>
-			<th>姓名</th>
-			<th>手机号</th>
-			<th>关注</th>
+			<th>性别</th>
+			<th>国家</th>
 			<th>省份</th>
 			<th>城市</th>
+			<th>关注</th>
+			<th>关注时间</th>
 		</tr>
 		<c:forEach items="${page.content}" var="fans">
 			<tr>
 				<td><span><img alt="粉丝头像" src="${fans.headimgurl}" height="30px" width="30px"></span></td>
 				<td><span>${fans.nickname}</span></td>
-				<td><span>${fans.name}</span></td>
-				<td><span>${fans.phoneNo}</span></td>
-				<td>${fans.subscribe eq 0 ? '<span class="cf30 fw">未关注</span>' : '<span class="cgre fw">已关注</span>'}</td>
+				<td><span>${fans.sex eq 1 ? '男' : fans.sex eq 2 ? '女' : '未知'}</span></td>
+				<td><span>${fans.country}</span></td>
 				<td><span>${fans.province}</span></td>
 				<td><span>${fans.city}</span></td>
+				<td>${fans.subscribe eq 0 ? '<span class="cf30 fw">未关注</span>' : '<span class="cgre fw">已关注</span>'}</td>
+				<td><span>${fans.subscribeTime}</span></td>
 			</tr>
 		</c:forEach>
 	</table>

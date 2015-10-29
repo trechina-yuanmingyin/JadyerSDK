@@ -19,6 +19,7 @@ import com.jadyer.sdk.demo.user.model.MenuInfo;
 import com.jadyer.sdk.demo.user.model.UserInfo;
 import com.jadyer.sdk.mpp.model.ErrorInfo;
 import com.jadyer.sdk.mpp.util.MPPUtil;
+import com.jadyer.sdk.mpp.util.TokenHolder;
 
 @Controller
 @RequestMapping(value="/user")
@@ -121,7 +122,7 @@ public class UserController{
 	@RequestMapping("/menu/weixin/create/json")
 	public CommonResult tomenuWeixinJsonDeploy(String menuJson, HttpServletRequest request){
 		UserInfo userInfo = (UserInfo)request.getSession().getAttribute(Constants.USERINFO);
-		String accesstoken = MPPUtil.getWeixinAccessToken(userInfo.getAppId(), userInfo.getAppSecret());
+		String accesstoken = TokenHolder.getWeixinAccessToken(userInfo.getAppId(), userInfo.getAppSecret());
 		ErrorInfo errorInfo = MPPUtil.createMenu(accesstoken, menuJson);
 		if(0 == errorInfo.getErrcode()){
 			return new CommonResult();

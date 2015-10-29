@@ -9,6 +9,7 @@ import com.jadyer.sdk.demo.mpp.fans.model.FansInfo;
 import com.jadyer.sdk.demo.user.UserInfoDao;
 import com.jadyer.sdk.demo.user.model.UserInfo;
 import com.jadyer.sdk.mpp.util.MPPUtil;
+import com.jadyer.sdk.mpp.util.TokenHolder;
 
 public class FansSaveThread implements Runnable {
 	private UserInfo userInfo;
@@ -30,8 +31,7 @@ public class FansSaveThread implements Runnable {
 		/**
 		 * 获取并更新accesstoken
 		 */
-		//FIXME 明后天有时间把accesstoken放到Redis里面
-		String accesstoken = MPPUtil.getWeixinAccessToken(userInfo.getAppId(), userInfo.getAppSecret());
+		String accesstoken = TokenHolder.getWeixinAccessToken(userInfo.getAppId(), userInfo.getAppSecret());
 		userInfo.setAccessToken(accesstoken);
 		userInfo.setAccessTokenTime(new Date());
 		userInfoDao.saveAndFlush(userInfo);

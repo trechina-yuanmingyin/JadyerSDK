@@ -25,11 +25,12 @@ public final class MPPUtil {
 
 	/**
 	 * 获取微信的access_token
+	 * @see 默认修饰符default即只有同包中的类才可使用
 	 * @see {"access_token":"8DF72J-d_u3XIaq22e_HUY_fe5wfdoj6awnq2wDrk5v05zf1yEuUhUdtfX7yqB5wAJ1edwGrgAyJvinZTXl2RamjsqDOIg4L1humLuj32Oo","expires_in":7200}
 	 * @see {"errcode":40125,"errmsg":"invalid appsecret, view more at http:\/\/t.cn\/RAEkdVq hint: [M5_jKa0125vr22]"}
 	 * @return 获取失败时将抛出RuntimeException
 	 */
-	public static String getWeixinAccessToken(String appid, String appsecret){
+	static String getWeixinAccessToken(String appid, String appsecret){
 		String reqURL = MPPConstants.URL_WEIXIN_GET_ACCESSTOKEN.replace(MPPConstants.URL_PLACEHOLDER_APPID, appid).replace(MPPConstants.URL_PLACEHOLDER_APPSECRET, appsecret);
 		String respData = HttpUtil.post(reqURL);
 		logger.info("获取微信access_token,微信应答报文为-->{}", respData);
