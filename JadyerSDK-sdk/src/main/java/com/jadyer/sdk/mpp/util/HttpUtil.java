@@ -211,7 +211,7 @@ public final class HttpUtil {
 			}
 			HttpResponse response = httpClient.execute(httpPost);
 			entity = response.getEntity();
-			if(null!=entity && entity.getContentType().getValue().startsWith(ContentType.APPLICATION_OCTET_STREAM.getMimeType())){
+			if(null!=entity && (entity.getContentType().getValue().startsWith(ContentType.APPLICATION_OCTET_STREAM.getMimeType())) || entity.getContentType().getValue().contains("image/jpeg")){
 				//文件下载成功
 				//respData = IOUtils.toByteArray(entity.getContent());
 				String filename = null;
