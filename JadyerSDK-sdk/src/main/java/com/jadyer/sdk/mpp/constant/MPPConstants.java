@@ -18,6 +18,7 @@ public interface MPPConstants {
 	String URL_PLACEHOLDER_SCOPE        = "{scope}";
 	String URL_PLACEHOLDER_STATE        = "{state}";
 	String URL_PLACEHOLDER_CODE         = "{code}";
+	String URL_PLACEHOLDER_MEDIAID      = "{mediaid}";
 
 	/**
 	 * 微信URL
@@ -40,4 +41,6 @@ public interface MPPConstants {
 	String URL_WEIXIN_OAUTH2_GET_ACCESSTOKEN = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + URL_PLACEHOLDER_APPID + "&secret=" + URL_PLACEHOLDER_APPSECRET +"&code=" + URL_PLACEHOLDER_CODE + "&grant_type=authorization_code";
 	//获取微信jsapi_ticket
 	String URL_WEIXIN_GET_JSAPI_TICKET       = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + URL_PLACEHOLDER_ACCESSTOKEN + "&type=jsapi";
+	//获取微信临时素材
+	String URL_WEIXIN_GET_TEMP_MEDIA_FILE    = "https://api.weixin.qq.com/cgi-bin/media/get?access_token=" + URL_PLACEHOLDER_ACCESSTOKEN + "&media_id=" + URL_PLACEHOLDER_MEDIAID;
 }

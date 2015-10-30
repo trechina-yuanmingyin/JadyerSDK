@@ -207,6 +207,8 @@ public final class MPPUtil {
 
 	/**
 	 * JS-SDK权限验证的签名
+	 * @see 注意这里使用的是noncestr,不是nonceStr
+	 * @see http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html
 	 * @param appid     微信公众号AppID
 	 * @param appsecret 微信公众号AppSecret
 	 * @param noncestr  随机字符串
@@ -222,5 +224,27 @@ public final class MPPUtil {
 		  .append("timestamp=").append(timestamp).append("&")
 		  .append("url=").append(url);
 		return DigestUtils.sha1Hex(sb.toString());
+	}
+
+
+	/**
+	 * 获取临时素材
+	 * @see http://mp.weixin.qq.com/wiki/11/07b6b76a6b6e8848e855a435d5e34a5f.html
+	 * @return 获取成功时返回文件保存在本地的路径,获取失败时将抛出RuntimeException
+	 * @create Oct 30, 2015 4:02:43 PM
+	 * @author 玄玉<http://blog.csdn.net/jadyer>
+	 */
+	public static String downloadWeixinTempMediaFile(String accesstoken, String mediaId){
+		String reqURL = MPPConstants.URL_WEIXIN_GET_TEMP_MEDIA_FILE.replace(MPPConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken).replace(MPPConstants.URL_PLACEHOLDER_MEDIAID, mediaId);
+		Map<String, Object> resultMap = HttpUtil.postWithDownload(reqURL, null);
+		if("no".equals(resultMap.get("isSuccess"))){
+			Map<String, String> errmap = JSON.parseObject((String)resultMap.get("failReason"), new TypeReference<Map<String, String>>(){});
+			String errmsg = MPPCodeEnum.getMessageByCode(Integer.parseInt((errmap.get("errcode"))));
+			if(StringUtils.isBlank(errmsg)){
+				errmsg = errmap.get("errmsg");
+			}
+			throw new RuntimeException("下载微信临时素材" + mediaId + "失败-->" + errmsg);
+		}
+		return (String)resultMap.get("fullPath");
 	}
 }

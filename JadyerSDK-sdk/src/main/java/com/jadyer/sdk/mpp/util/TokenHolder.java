@@ -31,9 +31,11 @@ public class TokenHolder {
 	 */
 	public static String getWeixinAccessToken(String appid, String appsecret){
 		Calendar expireTime = (Calendar)tokenMap.get(FLAG_WEIXIN_ACCESSTOKEN_EXPIRETIME);
-		expireTime.add(Calendar.MINUTE, 110);
-		if((expireTime.getTimeInMillis()-Calendar.getInstance().getTimeInMillis()) >= 0){
-			return (String)tokenMap.get(FLAG_WEIXIN_ACCESSTOKEN);
+		if(null != expireTime){
+			expireTime.add(Calendar.MINUTE, 110);
+			if((expireTime.getTimeInMillis()-Calendar.getInstance().getTimeInMillis()) >= 0){
+				return (String)tokenMap.get(FLAG_WEIXIN_ACCESSTOKEN);
+			}
 		}
 		String accessToken = MPPUtil.getWeixinAccessToken(appid, appsecret);
 		tokenMap.put(FLAG_WEIXIN_ACCESSTOKEN, accessToken);
@@ -50,9 +52,11 @@ public class TokenHolder {
 	 */
 	public static String getWeixinJSApiTicket(String accesstoken){
 		Calendar expireTime = (Calendar)tokenMap.get(FLAG_WEIXIN_JSAPI_TICKET_EXPIRETIME);
-		expireTime.add(Calendar.MINUTE, 110);
-		if((expireTime.getTimeInMillis()-Calendar.getInstance().getTimeInMillis()) >= 0){
-			return (String)tokenMap.get(FLAG_WEIXIN_JSAPI_TICKET);
+		if(null != expireTime){
+			expireTime.add(Calendar.MINUTE, 110);
+			if((expireTime.getTimeInMillis()-Calendar.getInstance().getTimeInMillis()) >= 0){
+				return (String)tokenMap.get(FLAG_WEIXIN_JSAPI_TICKET);
+			}
 		}
 		String jsapiTicket = MPPUtil.getWeixinJSApiTicket(accesstoken);
 		tokenMap.put(FLAG_WEIXIN_JSAPI_TICKET, jsapiTicket);
@@ -73,9 +77,11 @@ public class TokenHolder {
 	 */
 	public static WeixinOAuthAccessToken getWeixinOAuthAccessToken(String appid, String appsecret, String code){
 		Calendar expireTime = (Calendar)tokenMap.get(FLAG_WEIXIN_OAUTH_ACCESSTOKEN_EXPIRETIME);
-		expireTime.add(Calendar.MINUTE, 110);
-		if((expireTime.getTimeInMillis()-Calendar.getInstance().getTimeInMillis()) >= 0){
-			return (WeixinOAuthAccessToken)tokenMap.get(FLAG_WEIXIN_OAUTH_ACCESSTOKEN);
+		if(null != expireTime){
+			expireTime.add(Calendar.MINUTE, 110);
+			if((expireTime.getTimeInMillis()-Calendar.getInstance().getTimeInMillis()) >= 0){
+				return (WeixinOAuthAccessToken)tokenMap.get(FLAG_WEIXIN_OAUTH_ACCESSTOKEN);
+			}
 		}
 		WeixinOAuthAccessToken weixinOauthAccessToken = MPPUtil.getWeixinOAuthAccessToken(appid, appsecret, code);
 		tokenMap.put(FLAG_WEIXIN_OAUTH_ACCESSTOKEN, weixinOauthAccessToken);

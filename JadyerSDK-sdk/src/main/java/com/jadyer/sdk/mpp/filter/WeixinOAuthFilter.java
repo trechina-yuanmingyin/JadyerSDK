@@ -23,8 +23,8 @@ import com.jadyer.sdk.mpp.util.MPPUtil;
  * 微信网页授权获取用户信息
  * @see -----------------------------------------------------------------------------------------------------------
  * @see <filter>
- * @see 	<filter-name>oauthFilter</filter-name>
- * @see 	<filter-class>com.jadyer.sdk.mpp.filter.OAuthFilter</filter-class>
+ * @see 	<filter-name>WeixinOAuthFilter</filter-name>
+ * @see 	<filter-class>com.jadyer.sdk.mpp.filter.WeixinOAuthFilter</filter-class>
  * @see 	<init-param>
  * @see 		<param-name>appid</param-name>
  * @see 		<param-value>wx63ae5326e400cca2</param-value>
@@ -35,19 +35,19 @@ import com.jadyer.sdk.mpp.util.MPPUtil;
  * @see 	</init-param>
  * @see 	<init-param>
  * @see 		<param-name>redirecturl</param-name>
- * @see 		<param-value>http://jadyer.tunnel.mobi/weixin/oauth/getAccessToken/33</param-value>
+ * @see 		<param-value>http://jadyer.tunnel.mobi/weixin/helper/oauth/getAccessToken/33</param-value>
  * @see 	</init-param>
  * @see </filter>
  * @see <filter-mapping>
- * @see 	<filter-name>oauthFilter</filter-name>
+ * @see 	<filter-name>WeixinOAuthFilter</filter-name>
  * @see 	<url-pattern>/*</url-pattern>
  * @see </filter-mapping>
  * @see -----------------------------------------------------------------------------------------------------------
  * @create Oct 19, 2015 4:45:35 PM
  * @author 玄玉<http://blog.csdn.net/jadyer>
  */
-public class OAuthFilter implements Filter {
-	private static final Logger logger = LoggerFactory.getLogger(OAuthFilter.class);
+public class WeixinOAuthFilter implements Filter {
+	private static final Logger logger = LoggerFactory.getLogger(WeixinOAuthFilter.class);
 	private String redirecturl = null;
 	public static String appid = null;
 	public static String appsecret = null;

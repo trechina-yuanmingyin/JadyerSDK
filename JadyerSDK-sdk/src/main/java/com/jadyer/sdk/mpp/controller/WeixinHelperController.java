@@ -2,20 +2,25 @@ package com.jadyer.sdk.mpp.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-import com.jadyer.sdk.mpp.filter.OAuthFilter;
+import com.jadyer.sdk.mpp.filter.WeixinOAuthFilter;
 import com.jadyer.sdk.mpp.model.WeixinOAuthAccessToken;
 import com.jadyer.sdk.mpp.util.HttpUtil;
+import com.jadyer.sdk.mpp.util.MPPUtil;
 import com.jadyer.sdk.mpp.util.TokenHolder;
 
 /**
@@ -24,9 +29,9 @@ import com.jadyer.sdk.mpp.util.TokenHolder;
  * @author 玄玉<http://blog.csdn.net/jadyer>
  */
 @Controller
-@RequestMapping(value="/weixin/oauth")
-public class WeixinOAuthController {
-	private static final Logger logger = LoggerFactory.getLogger(WeixinOAuthController.class);
+@RequestMapping(value="/weixin/helper")
+public class WeixinHelperController {
+	private static final Logger logger = LoggerFactory.getLogger(WeixinHelperController.class);
 
 	/**
 	 * 获取网页access_token
@@ -35,10 +40,10 @@ public class WeixinOAuthController {
 	 * @param state 重定向到微信服务器时,由开发者服务器携带过去的参数,这里会原样带回来
 	 * @return 获取失败则返回一个友好的HTML页面,获取成功后直接跳转到用户原本请求的资源
 	 */
-	@RequestMapping(value="/getAccessToken/{uid}")
+	@RequestMapping(value="/oauth/getAccessToken/{uid}")
 	public String getAccessToken(@PathVariable String uid, String code, String state, HttpServletResponse response) throws IOException{
 		if(StringUtils.isNotBlank(code)){
-			WeixinOAuthAccessToken oauthAccessToken = TokenHolder.getWeixinOAuthAccessToken(OAuthFilter.appid, OAuthFilter.appsecret, code);
+			WeixinOAuthAccessToken oauthAccessToken = TokenHolder.getWeixinOAuthAccessToken(WeixinOAuthFilter.appid, WeixinOAuthFilter.appsecret, code);
 			if(0==oauthAccessToken.getErrcode() && StringUtils.isNotBlank(oauthAccessToken.getOpenid())){
 				/**
 				 * 还原state携带过来的粉丝请求的原URL
@@ -66,5 +71,26 @@ public class WeixinOAuthController {
 		out.flush();
 		out.close();
 		return null;
+	}
+
+
+	/**
+	 * JS-SDK权限验证的签名
+	 * @param appid     微信公众号AppID
+	 * @param appsecret 微信公众号AppSecret
+	 * @param url       当前网页的URL,不包含#及其后面部分
+	 */
+	@ResponseBody
+	@RequestMapping(value="/sign/jssdk")
+	public Map<String, String> signWeixinJSSDK(String appid, String appsecret, String url){
+		Map<String, String> resultMap = new HashMap<String, String>();
+		String noncestr = RandomStringUtils.randomNumeric(16);
+		long timestamp = (long)(System.currentTimeMillis()/1000);
+		resultMap.put("appid", appid);
+		resultMap.put("timestamp", String.valueOf(timestamp));
+		resultMap.put("noncestr", noncestr);
+		resultMap.put("signature", MPPUtil.signWeixinJSSDK(appid, appsecret, noncestr, String.valueOf(timestamp), url));
+		resultMap.put("url", url);
+		return resultMap;
 	}
 }
