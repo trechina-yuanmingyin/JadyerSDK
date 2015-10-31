@@ -77,11 +77,6 @@ public class UserController{
 		return new CommonResult();
 	}
 
-	@RequestMapping("/password")
-	public String password(){
-		return "user/password";
-	}
-
 	@ResponseBody
 	@RequestMapping("/password/update")
 	public CommonResult passwordUpdate(String oldPassword, String newPassword, HttpServletRequest request){
@@ -105,15 +100,6 @@ public class UserController{
 		request.setAttribute("menuList", menuList);
 		return "user/menu_weixin";
 	}
-
-	/**
-	 * 前往微信JSON菜单页面
-	 */
-	@RequestMapping("/tomenu/weixin/json")
-	public String tomenuWeixinJson(){
-		return "user/menu_weixin_json";
-	}
-
 
 	/**
 	 * 通过JSON的方式发布自定义微信菜单

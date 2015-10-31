@@ -79,14 +79,6 @@ public class ReplyController{
 	}
 
 	/**
-	 * 跳转到新增关键字页面
-	 */
-	@RequestMapping("/keyword/toadd")
-	public String toaddKeyword(){
-		return "reply/keyword_save";
-	}
-
-	/**
 	 * 跳转到更新关键字页面
 	 */
 	@RequestMapping("/keyword/toupdate/{id}")

@@ -12,7 +12,7 @@
 <div class="c_content">
 	<!--Title-->
 	<div class="title txt_r">
-		<a class="bgre va_m" href="${ctx}/reply/keyword/toadd">+新增关键字</a>
+		<a class="bgre va_m" href="${ctx}/view?url=reply/keyword_save">+新增关键字</a>
 	</div>
 	<!--/Title-->
 	<!--Table list-->
