@@ -1,7 +1,5 @@
 package com.jadyer.sdk.demo.user;
 
-import java.util.List;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,7 +13,6 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import com.jadyer.sdk.demo.common.base.CommonResult;
 import com.jadyer.sdk.demo.common.constant.CodeEnum;
 import com.jadyer.sdk.demo.common.constant.Constants;
-import com.jadyer.sdk.demo.user.model.MenuInfo;
 import com.jadyer.sdk.demo.user.model.UserInfo;
 import com.jadyer.sdk.mpp.model.ErrorInfo;
 import com.jadyer.sdk.mpp.util.MPPUtil;
@@ -27,6 +24,9 @@ public class UserController{
 	@Resource
 	private UserService userService;
 
+	/**
+	 * 登录
+	 */
 	@ResponseBody
 	@RequestMapping("/login/{username}/{password}")
 	public CommonResult login(@PathVariable String username, @PathVariable String password, HttpServletRequest request){
@@ -39,12 +39,20 @@ public class UserController{
 		return new CommonResult();
 	}
 
+
+	/**
+	 * 登出
+	 */
 	@RequestMapping("/logout")
 	public String logout(HttpServletRequest request){
 		request.getSession().removeAttribute(Constants.USERINFO);
 		return InternalResourceViewResolver.REDIRECT_URL_PREFIX + "/login.jsp";
 	}
 
+
+	/**
+	 * 平台用户信息
+	 */
 	@RequestMapping("/info")
 	public String info(HttpServletRequest request){
 		UserInfo userInfo = (UserInfo)request.getSession().getAttribute(Constants.USERINFO);
@@ -60,8 +68,10 @@ public class UserController{
 		return "user/userInfo";
 	}
 
+
 	/**
-	 * 绑定(即录库)
+	 * 绑定公众号
+	 * @see 即录库
 	 */
 	@ResponseBody
 	@RequestMapping("/bind")
@@ -77,6 +87,11 @@ public class UserController{
 		return new CommonResult();
 	}
 
+
+	/**
+	 * 修改密码
+	 * @see 修改成功后要刷新HttpSession中的用户信息
+	 */
 	@ResponseBody
 	@RequestMapping("/password/update")
 	public CommonResult passwordUpdate(String oldPassword, String newPassword, HttpServletRequest request){
@@ -85,28 +100,18 @@ public class UserController{
 		if(null == respUserInfo){
 			return new CommonResult(CodeEnum.SYSTEM_BUSY.getCode(), "原密码不正确");
 		}
-		//刷新HttpSession中的用户信息
 		request.getSession().setAttribute(Constants.USERINFO, respUserInfo);
 		return new CommonResult();
 	}
 
-	/**
-	 * 前往微信菜单页面
-	 */
-	@RequestMapping("/tomenu/weixin")
-	public String tomenuWeixin(HttpServletRequest request){
-		int uid = (Integer)request.getSession().getAttribute(Constants.UID);
-		List<MenuInfo> menuList = userService.findMenuList(uid);
-		request.setAttribute("menuList", menuList);
-		return "user/menu_weixin";
-	}
 
 	/**
-	 * 通过JSON的方式发布自定义微信菜单
+	 * 通过JSON的方式发布微信自定义菜单
+	 * @param menuJson 微信自定义菜单数据的JSON串
 	 */
 	@ResponseBody
-	@RequestMapping("/menu/weixin/create/json")
-	public CommonResult tomenuWeixinJsonDeploy(String menuJson, HttpServletRequest request){
+	@RequestMapping("/menu/weixin/create")
+	public CommonResult menuWeixinCreate(String menuJson, HttpServletRequest request){
 		UserInfo userInfo = (UserInfo)request.getSession().getAttribute(Constants.USERINFO);
 		String accesstoken = TokenHolder.getWeixinAccessToken(userInfo.getAppId(), userInfo.getAppSecret());
 		ErrorInfo errorInfo = MPPUtil.createWeixinMenu(accesstoken, menuJson);

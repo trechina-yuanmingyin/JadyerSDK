@@ -1,6 +1,8 @@
 ﻿window.SINGLE_TAB = "  ";
-window.ImgCollapsed = "/js/codeformat/json/Collapsed.gif";
-window.ImgExpanded = "/js/codeformat/json/Expanded.gif";
+//window.ImgExpanded = "/js/codeformat/json/Expanded.gif";
+//window.ImgCollapsed = "/js/codeformat/json/Collapsed.gif";
+window.ImgExpanded = document.getElementById("codeformatJsonC").getAttribute("data") + "/Expanded.gif";
+window.ImgCollapsed = document.getElementById("codeformatJsonC").getAttribute("data") + "/Collapsed.gif";
 window.QuoteKeys = true;
 function $id(id){ return document.getElementById(id); }
 function IsArray(obj) {

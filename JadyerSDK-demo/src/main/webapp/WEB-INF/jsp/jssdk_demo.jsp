@@ -1,27 +1,34 @@
 <%@ page pageEncoding="UTF-8"%>
-
+<%@ page import="com.jadyer.sdk.mpp.util.TokenHolder"%>
+<%
+out.println(TokenHolder.getWeixinAccessToken("wx63ae5326e400cca2", "b6a838ea12d6175c00793503500ede64"));
+out.print(TokenHolder.getWeixinJSApiTicket(TokenHolder.getWeixinAccessToken("wx63ae5326e400cca2", "b6a838ea12d6175c00793503500ede64")));
+%>
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>测试JSSDK</title>
 <script src="<%=request.getContextPath()%>/js/jquery-1.11.3.min.js"></script>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-
 <script>
 $(function(){
 	$.post("${pageContext.request.contextPath}/weixin/helper/sign/jssdk",
-		{appid:"${param.appid}", appsecret:"${param.appsecret}", url:window.location.href.split("#")[0]},
+		{appid:"wx63ae5326e400cca2", appsecret:"b6a838ea12d6175c00793503500ede64", url:window.location.href.split("#")[0]},
 		function(data){
 			wx.config({
 				debug: false,
-				appId: "${param.appid}",
+				appId: data.appid,
 				timestamp: data.timestamp,
 				nonceStr: data.noncestr,
 				signature: data.signature,
-				jsApiList: ["chooseImage", "previewImage", "uploadImage", "downloadImage"]
+				jsApiList: ["chooseImage", "uploadImage", "downloadImage"]
 			});
 		}
 	);
 });
 wx.error(function(res){
-	//wx.config失败时会在这里打印错误信息
-	alert(res.errMsg);
+	alert("wx.config失败时会在这里打印错误信息-->" + res.errMsg);
 });
 var images = {
 	localId: [],
@@ -29,9 +36,9 @@ var images = {
 };
 wx.ready(function(){
 	wx.checkJsApi({
-		jsApiList: ["chooseImage", "previewImage", "uploadImage", "downloadImage"],
+		jsApiList: ["chooseImage", "uploadImage", "downloadImage"],
 		success: function(res){
-			alert(JSON.stringify(res));
+			alert("这是接口支持性的校验结果-->" + JSON.stringify(res));
 		}
 	});
 	document.querySelector("#chooseImage").onclick = function(){
@@ -41,7 +48,7 @@ wx.ready(function(){
 			success: function(res){
 				images.localId = res.localIds;
 				alert("已选择" + res.localIds.length + "张图片");
-				$("#testimg").attr("src", images.localId);
+				$("#mediaImg").attr("src", images.localId);
 			}
 		});
 	};
@@ -60,7 +67,7 @@ wx.ready(function(){
 					i++;
 					//alert("已上传：" + i + "/" + length);
 					images.serverId.push(res.serverId);
-					$("#testid").val(images.serverId);
+					$("#mediaId").val(images.serverId);
 					if(i < length){
 						upload();
 					}
@@ -73,28 +80,23 @@ wx.ready(function(){
 		upload();
 	};
 });
-/*
-document.querySelector('#downloadImage').onclick = function () {
-  if (images.serverId.length === 0) {
-    alert('请先使用 uploadImage 上传图片');
-    return;
-  }
-  var i = 0, length = images.serverId.length;
-  images.localId = [];
-  function download() {
-    wx.downloadImage({
-      serverId: images.serverId[i],
-      success: function (res) {
-        i++;
-        alert('已下载：' + i + '/' + length);
-        images.localId.push(res.localId);
-        if (i < length) {
-          download();
-        }
-      }
-    });
-  }
-  download();
-};
-*/
 </script>
+</head>
+<%--
+<jsp:include page="/jssdk.jsp?appid=wx63ae5326e400cca2&appsecret=b6a838ea12d6175c00793503500ede64"/>
+--%>
+<body>
+	<span>拍照或从手机相册中选图接口</span>
+	<br/>
+	<button id="chooseImage">我要拍照</button>
+	<br/>
+	<br/>
+	<button id="uploadImage">我要上传</button>
+	<br/>
+	<br/>
+	得到的media_id为<input type="text" id="mediaId">
+	<br/>
+	<br/>
+	<img id="mediaImg" src="" width="160px" height="160px">
+</body>
+</html>
