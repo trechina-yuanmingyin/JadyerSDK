@@ -64,14 +64,14 @@ public class WeixinOAuthFilter implements Filter {
 
 	/**
 	 * 判断是否需要通过网页授权获取用户信息
-	 * @see 1.请求为GET请求,并且请求参数中需包含oauth=base&openid=openid两个参数
-	 * @see 2.该Filter暂时是为自定义菜单跳转URL时获取openid提供的,故验证条件较为苛刻
+	 * @see 1.请求参数需包含oauth=base&openid=openid两个参数,无论GET还是POST请求
+	 * @see 2.该Filter常用于自定义菜单跳转URL时获取粉丝的openid,故验证条件较为苛刻
 	 */
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest)req;
 		HttpServletResponse response = (HttpServletResponse)resp;
-		if("get".equals(request.getMethod().toLowerCase()) && "base".equals(request.getParameter("oauth")) && "openid".equals(request.getParameter("openid"))){
+		if("base".equals(request.getParameter("oauth")) && "openid".equals(request.getParameter("openid"))){
 			/**
 			 * 不同浏览来源的User-Agent头信息不同
 			 * @see 1.IE-11.0.9600.17843
