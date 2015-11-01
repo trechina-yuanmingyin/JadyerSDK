@@ -4,6 +4,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -23,6 +25,25 @@ public final class MPPUtil {
 	private static final Logger logger = LoggerFactory.getLogger(MPPUtil.class);
 
 	private MPPUtil(){}
+
+	/**
+	 * 判断是否为Ajax请求
+	 * @create Nov 1, 2015 1:30:55 PM
+	 * @author 玄玉<http://blog.csdn.net/jadyer>
+	 */
+	public static boolean isAjaxRequest(HttpServletRequest request){
+		String requestType = request.getHeader("X-Requested-With");
+		if(null!=requestType && "XMLHttpRequest".equals(requestType)){
+			return true;
+		}
+		requestType = request.getHeader("x-requested-with");
+		if(null!=requestType && "XMLHttpRequest".equals(requestType)){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
 
 	/**
 	 * 获取微信的access_token
@@ -209,17 +230,15 @@ public final class MPPUtil {
 	 * JS-SDK权限验证的签名
 	 * @see 注意这里使用的是noncestr,不是nonceStr
 	 * @see http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html
-	 * @param appid     微信公众号AppID
-	 * @param appsecret 微信公众号AppSecret
 	 * @param noncestr  随机字符串
 	 * @param timestamp 时间戳
 	 * @param url       当前网页的URL,不包含#及其后面部分
 	 * @create Oct 29, 2015 10:11:29 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
-	public static String signWeixinJSSDK(String appid, String appsecret, String noncestr, String timestamp, String url){
+	public static String signWeixinJSSDK(String noncestr, String timestamp, String url){
 		StringBuilder sb = new StringBuilder();
-		sb.append("jsapi_ticket=").append(TokenHolder.getWeixinJSApiTicket(TokenHolder.getWeixinAccessToken(appid, appsecret))).append("&")
+		sb.append("jsapi_ticket=").append(TokenHolder.getWeixinJSApiTicket()).append("&")
 		  .append("noncestr=").append(noncestr).append("&")
 		  .append("timestamp=").append(timestamp).append("&")
 		  .append("url=").append(url);

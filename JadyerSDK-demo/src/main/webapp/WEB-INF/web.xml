@@ -99,10 +99,10 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	
-	<!-- 微信通过网页授权获取网页access_token -->
+	<!-- 微信Filter -->
 	<filter>
-		<filter-name>WeixinOAuthFilter</filter-name>
-		<filter-class>com.jadyer.sdk.mpp.filter.WeixinOAuthFilter</filter-class>
+		<filter-name>WeixinFilter</filter-name>
+		<filter-class>com.jadyer.sdk.mpp.filter.WeixinFilter</filter-class>
 		<init-param>
 			<param-name>appid</param-name>
 			<param-value>wx63ae5326e400cca2</param-value>
@@ -117,7 +117,7 @@
 		</init-param>
 	</filter>
 	<filter-mapping>
-		<filter-name>WeixinOAuthFilter</filter-name>
+		<filter-name>WeixinFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 </web-app>

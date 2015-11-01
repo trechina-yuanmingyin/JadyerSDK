@@ -18,13 +18,15 @@ import org.slf4j.LoggerFactory;
 import com.jadyer.sdk.mpp.constant.MPPConstants;
 import com.jadyer.sdk.mpp.util.HttpUtil;
 import com.jadyer.sdk.mpp.util.MPPUtil;
+import com.jadyer.sdk.mpp.util.TokenHolder;
 
 /**
- * 微信网页授权获取用户信息
+ * 用于处理微信相关的Filter
+ * @see 暂时做两件事,一个是初始化appid和appsecret到全局TokenHolder,一个是启用微信网页授权获取用户信息
  * @see -----------------------------------------------------------------------------------------------------------
  * @see <filter>
- * @see 	<filter-name>WeixinOAuthFilter</filter-name>
- * @see 	<filter-class>com.jadyer.sdk.mpp.filter.WeixinOAuthFilter</filter-class>
+ * @see 	<filter-name>WeixinFilter</filter-name>
+ * @see 	<filter-class>com.jadyer.sdk.mpp.filter.WeixinFilter</filter-class>
  * @see 	<init-param>
  * @see 		<param-name>appid</param-name>
  * @see 		<param-value>wx63ae5326e400cca2</param-value>
@@ -39,27 +41,25 @@ import com.jadyer.sdk.mpp.util.MPPUtil;
  * @see 	</init-param>
  * @see </filter>
  * @see <filter-mapping>
- * @see 	<filter-name>WeixinOAuthFilter</filter-name>
+ * @see 	<filter-name>WeixinFilter</filter-name>
  * @see 	<url-pattern>/*</url-pattern>
  * @see </filter-mapping>
  * @see -----------------------------------------------------------------------------------------------------------
  * @create Oct 19, 2015 4:45:35 PM
  * @author 玄玉<http://blog.csdn.net/jadyer>
  */
-public class WeixinOAuthFilter implements Filter {
-	private static final Logger logger = LoggerFactory.getLogger(WeixinOAuthFilter.class);
+public class WeixinFilter implements Filter {
+	private static final Logger logger = LoggerFactory.getLogger(WeixinFilter.class);
 	private String redirecturl = null;
-	public static String appid = null;
-	public static String appsecret = null;
 
 	@Override
 	public void destroy() {}
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-		appid = filterConfig.getInitParameter("appid");
-		appsecret = filterConfig.getInitParameter("appsecret");
 		this.redirecturl = filterConfig.getInitParameter("redirecturl");
+		TokenHolder.setWeixinAppid(filterConfig.getInitParameter("appid"));
+		TokenHolder.setWeixinAppsecret(filterConfig.getInitParameter("appsecret"));
 	}
 
 	/**
@@ -72,8 +72,8 @@ public class WeixinOAuthFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest)req;
 		HttpServletResponse response = (HttpServletResponse)resp;
 		if("base".equals(request.getParameter("oauth")) && "openid".equals(request.getParameter("openid"))){
-			if(this.isAjaxRequest(request)){
-				throw new RuntimeException("请不要通过Ajax来获取粉丝信息");
+			if(MPPUtil.isAjaxRequest(request)){
+				throw new RuntimeException("请不要通过Ajax获取粉丝信息");
 			}
 			/**
 			 * 不同浏览来源的User-Agent头信息不同
@@ -96,7 +96,7 @@ public class WeixinOAuthFilter implements Filter {
 				response.setHeader("Pragma", "no-cache");
 				response.setDateHeader("Expires", 0);
 				PrintWriter out = response.getWriter();
-				out.print("请于iPhone或Android手机微信端访问");
+				out.print("请于iPhone或Android微信端访问");
 				out.flush();
 				out.close();
 				return;
@@ -110,28 +110,9 @@ public class WeixinOAuthFilter implements Filter {
 			String state = fullURI.replace("?", "/").replace("&", "/");
 			state = state.replace("/oauth=base", "");
 			logger.info("计算粉丝请求的资源得到state={}", state);
-			response.sendRedirect(MPPUtil.buildWeixinOAuthCodeURL(appid, MPPConstants.OAUTH_SCOPE_SNSAPI_BASE, state, this.redirecturl));
+			response.sendRedirect(MPPUtil.buildWeixinOAuthCodeURL(TokenHolder.getWeixinAppid(), MPPConstants.OAUTH_SCOPE_SNSAPI_BASE, state, this.redirecturl));
 		}else{
 			chain.doFilter(req, resp);
-		}
-	}
-
-
-	/**
-	 * 判断是否为Ajax请求
-	 * @create Nov 1, 2015 1:30:55 PM
-	 * @author 玄玉<http://blog.csdn.net/jadyer>
-	 */
-	private boolean isAjaxRequest(HttpServletRequest request){
-		String requestType = request.getHeader("X-Requested-With");
-		if(null!=requestType && "XMLHttpRequest".equals(requestType)){
-			return true;
-		}
-		requestType = request.getHeader("x-requested-with");
-		if(null!=requestType && "XMLHttpRequest".equals(requestType)){
-			return true;
-		}else{
-			return false;
 		}
 	}
 }

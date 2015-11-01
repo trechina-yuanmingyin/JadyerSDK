@@ -111,10 +111,8 @@ public class UserController{
 	 */
 	@ResponseBody
 	@RequestMapping("/menu/weixin/create")
-	public CommonResult menuWeixinCreate(String menuJson, HttpServletRequest request){
-		UserInfo userInfo = (UserInfo)request.getSession().getAttribute(Constants.USERINFO);
-		String accesstoken = TokenHolder.getWeixinAccessToken(userInfo.getAppId(), userInfo.getAppSecret());
-		ErrorInfo errorInfo = MPPUtil.createWeixinMenu(accesstoken, menuJson);
+	public CommonResult menuWeixinCreate(String menuJson){
+		ErrorInfo errorInfo = MPPUtil.createWeixinMenu(TokenHolder.getWeixinAccessToken(), menuJson);
 		if(0 == errorInfo.getErrcode()){
 			return new CommonResult();
 		}else{

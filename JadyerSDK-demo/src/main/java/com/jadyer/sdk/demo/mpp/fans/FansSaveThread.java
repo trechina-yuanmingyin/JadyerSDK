@@ -31,7 +31,7 @@ public class FansSaveThread implements Runnable {
 		/**
 		 * 获取并更新accesstoken
 		 */
-		String accesstoken = TokenHolder.getWeixinAccessToken(userInfo.getAppId(), userInfo.getAppSecret());
+		String accesstoken = TokenHolder.getWeixinAccessToken();
 		userInfo.setAccessToken(accesstoken);
 		userInfo.setAccessTokenTime(new Date());
 		userInfoDao.saveAndFlush(userInfo);

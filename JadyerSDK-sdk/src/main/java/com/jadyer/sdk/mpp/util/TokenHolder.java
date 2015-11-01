@@ -3,14 +3,19 @@ package com.jadyer.sdk.mpp.util;
 import java.util.Calendar;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.jadyer.sdk.mpp.model.WeixinOAuthAccessToken;
 
 /**
  * 微信或QQ公众平台Token持有器
+ * @see appid和appsecret是与Token息息相关的,故一并缓存于此处
  * @create Oct 29, 2015 8:11:50 PM
  * @author 玄玉<http://blog.csdn.net/jadyer>
  */
 public class TokenHolder {
+	private static final String WEIXIN_APPID = "weixin_appid";
+	private static final String WEIXIN_APPSECRET = "weixin_appsecret";
 	private static final String FLAG_WEIXIN_ACCESSTOKEN = "weixin_access_token";
 	private static final String FLAG_WEIXIN_JSAPI_TICKET = "weixin_jsapi_ticket";
 	private static final String FLAG_WEIXIN_OAUTH_ACCESSTOKEN = "weixin_oauth_access_token";
@@ -22,14 +27,64 @@ public class TokenHolder {
 	private TokenHolder(){}
 
 	/**
+	 * 设置微信appid
+	 * @return 返回已设置的微信appid
+	 * @create Nov 1, 2015 2:17:33 PM
+	 * @author 玄玉<http://blog.csdn.net/jadyer>
+	 */
+	public static String setWeixinAppid(String appid){
+		tokenMap.put(WEIXIN_APPID, appid);
+		return getWeixinAppid();
+	}
+
+
+	/**
+	 * 获取已设置的微信appid
+	 * @create Nov 1, 2015 2:20:43 PM
+	 * @author 玄玉<http://blog.csdn.net/jadyer>
+	 */
+	public static String getWeixinAppid(){
+		String appid = (String)tokenMap.get(WEIXIN_APPID);
+		if(StringUtils.isBlank(appid)){
+			throw new IllegalArgumentException("未设置微信appid,请于web.xml中配置com.jadyer.sdk.mpp.filter.WeixinFilter");
+		}
+		return appid;
+	}
+
+
+	/**
+	 * 设置微信appsecret
+	 * @return 返回已设置的微信appsecret
+	 * @create Nov 1, 2015 2:18:39 PM
+	 * @author 玄玉<http://blog.csdn.net/jadyer>
+	 */
+	public static String setWeixinAppsecret(String appsecret){
+		tokenMap.put(WEIXIN_APPSECRET, appsecret);
+		return getWeixinAppsecret();
+	}
+
+
+	/**
+	 * 获取已设置的微信appsecret
+	 * @create Nov 1, 2015 2:21:23 PM
+	 * @author 玄玉<http://blog.csdn.net/jadyer>
+	 */
+	public static String getWeixinAppsecret(){
+		String appsecret = (String)tokenMap.get(WEIXIN_APPSECRET);
+		if(StringUtils.isBlank(appsecret)){
+			throw new IllegalArgumentException("未设置微信appsecret,请于web.xml中配置com.jadyer.sdk.mpp.filter.WeixinFilter");
+		}
+		return appsecret;
+	}
+
+
+	/**
 	 * 获取微信access_token
 	 * @see 这里只缓存110分钟,详细介绍见http://mp.weixin.qq.com/wiki/11/0e4b294685f817b95cbed85ba5e82b8f.html
-	 * @param appid     微信公众号AppID
-	 * @param appsecret 微信公众号AppSecret
 	 * @create Oct 29, 2015 8:13:24 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
-	public static String getWeixinAccessToken(String appid, String appsecret){
+	public static String getWeixinAccessToken(){
 		Calendar expireTime = (Calendar)tokenMap.get(FLAG_WEIXIN_ACCESSTOKEN_EXPIRETIME);
 		if(null != expireTime){
 			expireTime.add(Calendar.MINUTE, 110);
@@ -37,7 +92,7 @@ public class TokenHolder {
 				return (String)tokenMap.get(FLAG_WEIXIN_ACCESSTOKEN);
 			}
 		}
-		String accessToken = MPPUtil.getWeixinAccessToken(appid, appsecret);
+		String accessToken = MPPUtil.getWeixinAccessToken(getWeixinAppid(), getWeixinAppsecret());
 		tokenMap.put(FLAG_WEIXIN_ACCESSTOKEN, accessToken);
 		tokenMap.put(FLAG_WEIXIN_ACCESSTOKEN_EXPIRETIME, Calendar.getInstance());
 		return accessToken;
@@ -50,7 +105,7 @@ public class TokenHolder {
 	 * @create Oct 29, 2015 9:55:33 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
-	public static String getWeixinJSApiTicket(String accesstoken){
+	public static String getWeixinJSApiTicket(){
 		Calendar expireTime = (Calendar)tokenMap.get(FLAG_WEIXIN_JSAPI_TICKET_EXPIRETIME);
 		if(null != expireTime){
 			expireTime.add(Calendar.MINUTE, 110);
@@ -58,7 +113,7 @@ public class TokenHolder {
 				return (String)tokenMap.get(FLAG_WEIXIN_JSAPI_TICKET);
 			}
 		}
-		String jsapiTicket = MPPUtil.getWeixinJSApiTicket(accesstoken);
+		String jsapiTicket = MPPUtil.getWeixinJSApiTicket(getWeixinAccessToken());
 		tokenMap.put(FLAG_WEIXIN_JSAPI_TICKET, jsapiTicket);
 		tokenMap.put(FLAG_WEIXIN_JSAPI_TICKET_EXPIRETIME, Calendar.getInstance());
 		return jsapiTicket;
@@ -68,14 +123,12 @@ public class TokenHolder {
 	/**
 	 * 通过code换取网页授权access_token
 	 * @see 这里只缓存110分钟,详细介绍见http://mp.weixin.qq.com/wiki/17/c0f37d5704f0b64713d5d2c37b468d75.html
-	 * @param appid     微信公众号AppID
-	 * @param appsecret 微信公众号AppSecret
 	 * @param code      换取access_token的有效期为5分钟的票据
 	 * @return 返回获取到的网页access_token(获取失败时的应答码也在该返回中)
 	 * @create Oct 29, 2015 9:32:01 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
-	public static WeixinOAuthAccessToken getWeixinOAuthAccessToken(String appid, String appsecret, String code){
+	public static WeixinOAuthAccessToken getWeixinOAuthAccessToken(String code){
 		Calendar expireTime = (Calendar)tokenMap.get(FLAG_WEIXIN_OAUTH_ACCESSTOKEN_EXPIRETIME);
 		if(null != expireTime){
 			expireTime.add(Calendar.MINUTE, 110);
@@ -83,7 +136,7 @@ public class TokenHolder {
 				return (WeixinOAuthAccessToken)tokenMap.get(FLAG_WEIXIN_OAUTH_ACCESSTOKEN);
 			}
 		}
-		WeixinOAuthAccessToken weixinOauthAccessToken = MPPUtil.getWeixinOAuthAccessToken(appid, appsecret, code);
+		WeixinOAuthAccessToken weixinOauthAccessToken = MPPUtil.getWeixinOAuthAccessToken(getWeixinAppid(), getWeixinAppsecret(), code);
 		tokenMap.put(FLAG_WEIXIN_OAUTH_ACCESSTOKEN, weixinOauthAccessToken);
 		tokenMap.put(FLAG_WEIXIN_OAUTH_ACCESSTOKEN_EXPIRETIME, Calendar.getInstance());
 		return weixinOauthAccessToken;
