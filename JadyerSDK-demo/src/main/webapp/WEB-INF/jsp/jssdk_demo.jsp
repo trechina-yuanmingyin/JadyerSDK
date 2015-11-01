@@ -1,20 +1,20 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ page import="com.jadyer.sdk.mpp.util.TokenHolder"%>
 <%
-out.println(TokenHolder.getWeixinAccessToken("wx63ae5326e400cca2", "b6a838ea12d6175c00793503500ede64"));
-out.print(TokenHolder.getWeixinJSApiTicket(TokenHolder.getWeixinAccessToken("wx63ae5326e400cca2", "b6a838ea12d6175c00793503500ede64")));
+out.println(TokenHolder.getWeixinAccessToken());
+out.print(TokenHolder.getWeixinJSApiTicket());
 %>
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>测试JSSDK</title>
+<title>JSSDKDemo</title>
 <script src="<%=request.getContextPath()%>/js/jquery-1.11.3.min.js"></script>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script>
 $(function(){
 	$.post("${pageContext.request.contextPath}/weixin/helper/sign/jssdk",
-		{appid:"wx63ae5326e400cca2", appsecret:"b6a838ea12d6175c00793503500ede64", url:window.location.href.split("#")[0]},
+		{url:window.location.href.split("#")[0]},
 		function(data){
 			wx.config({
 				debug: false,
@@ -82,9 +82,6 @@ wx.ready(function(){
 });
 </script>
 </head>
-<%--
-<jsp:include page="/jssdk.jsp?appid=wx63ae5326e400cca2&appsecret=b6a838ea12d6175c00793503500ede64"/>
---%>
 <body>
 	<span>拍照或从手机相册中选图接口</span>
 	<br/>

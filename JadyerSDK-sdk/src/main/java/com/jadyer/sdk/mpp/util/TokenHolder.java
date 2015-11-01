@@ -9,7 +9,8 @@ import com.jadyer.sdk.mpp.model.WeixinOAuthAccessToken;
 
 /**
  * 微信或QQ公众平台Token持有器
- * @see appid和appsecret是与Token息息相关的,故一并缓存于此处
+ * @see 1.appid和appsecret是与Token息息相关的,故一并缓存于此处
+ * @see 2.flag常量均加了appid是考虑到微信管理平台更换绑定的公众号时,获取到access_token是旧的,从而影响自定义菜单发布
  * @create Oct 29, 2015 8:11:50 PM
  * @author 玄玉<http://blog.csdn.net/jadyer>
  */
@@ -46,7 +47,7 @@ public class TokenHolder {
 	public static String getWeixinAppid(){
 		String appid = (String)tokenMap.get(WEIXIN_APPID);
 		if(StringUtils.isBlank(appid)){
-			throw new IllegalArgumentException("未设置微信appid,请于web.xml中配置com.jadyer.sdk.mpp.filter.WeixinFilter");
+			throw new IllegalArgumentException("未设置微信appid");
 		}
 		return appid;
 	}
@@ -72,7 +73,7 @@ public class TokenHolder {
 	public static String getWeixinAppsecret(){
 		String appsecret = (String)tokenMap.get(WEIXIN_APPSECRET);
 		if(StringUtils.isBlank(appsecret)){
-			throw new IllegalArgumentException("未设置微信appsecret,请于web.xml中配置com.jadyer.sdk.mpp.filter.WeixinFilter");
+			throw new IllegalArgumentException("未设置微信appsecret");
 		}
 		return appsecret;
 	}
@@ -85,16 +86,16 @@ public class TokenHolder {
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
 	public static String getWeixinAccessToken(){
-		Calendar expireTime = (Calendar)tokenMap.get(FLAG_WEIXIN_ACCESSTOKEN_EXPIRETIME);
+		Calendar expireTime = (Calendar)tokenMap.get(FLAG_WEIXIN_ACCESSTOKEN_EXPIRETIME + getWeixinAppid());
 		if(null != expireTime){
 			expireTime.add(Calendar.MINUTE, 110);
 			if((expireTime.getTimeInMillis()-Calendar.getInstance().getTimeInMillis()) >= 0){
-				return (String)tokenMap.get(FLAG_WEIXIN_ACCESSTOKEN);
+				return (String)tokenMap.get(FLAG_WEIXIN_ACCESSTOKEN + getWeixinAppid());
 			}
 		}
 		String accessToken = MPPUtil.getWeixinAccessToken(getWeixinAppid(), getWeixinAppsecret());
-		tokenMap.put(FLAG_WEIXIN_ACCESSTOKEN, accessToken);
-		tokenMap.put(FLAG_WEIXIN_ACCESSTOKEN_EXPIRETIME, Calendar.getInstance());
+		tokenMap.put(FLAG_WEIXIN_ACCESSTOKEN + getWeixinAppid(), accessToken);
+		tokenMap.put(FLAG_WEIXIN_ACCESSTOKEN_EXPIRETIME + getWeixinAppid(), Calendar.getInstance());
 		return accessToken;
 	}
 
@@ -106,16 +107,16 @@ public class TokenHolder {
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
 	public static String getWeixinJSApiTicket(){
-		Calendar expireTime = (Calendar)tokenMap.get(FLAG_WEIXIN_JSAPI_TICKET_EXPIRETIME);
+		Calendar expireTime = (Calendar)tokenMap.get(FLAG_WEIXIN_JSAPI_TICKET_EXPIRETIME + getWeixinAppid());
 		if(null != expireTime){
 			expireTime.add(Calendar.MINUTE, 110);
 			if((expireTime.getTimeInMillis()-Calendar.getInstance().getTimeInMillis()) >= 0){
-				return (String)tokenMap.get(FLAG_WEIXIN_JSAPI_TICKET);
+				return (String)tokenMap.get(FLAG_WEIXIN_JSAPI_TICKET + getWeixinAppid());
 			}
 		}
 		String jsapiTicket = MPPUtil.getWeixinJSApiTicket(getWeixinAccessToken());
-		tokenMap.put(FLAG_WEIXIN_JSAPI_TICKET, jsapiTicket);
-		tokenMap.put(FLAG_WEIXIN_JSAPI_TICKET_EXPIRETIME, Calendar.getInstance());
+		tokenMap.put(FLAG_WEIXIN_JSAPI_TICKET + getWeixinAppid(), jsapiTicket);
+		tokenMap.put(FLAG_WEIXIN_JSAPI_TICKET_EXPIRETIME + getWeixinAppid(), Calendar.getInstance());
 		return jsapiTicket;
 	}
 
@@ -129,16 +130,16 @@ public class TokenHolder {
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
 	public static WeixinOAuthAccessToken getWeixinOAuthAccessToken(String code){
-		Calendar expireTime = (Calendar)tokenMap.get(FLAG_WEIXIN_OAUTH_ACCESSTOKEN_EXPIRETIME);
+		Calendar expireTime = (Calendar)tokenMap.get(FLAG_WEIXIN_OAUTH_ACCESSTOKEN_EXPIRETIME + getWeixinAppid());
 		if(null != expireTime){
 			expireTime.add(Calendar.MINUTE, 110);
 			if((expireTime.getTimeInMillis()-Calendar.getInstance().getTimeInMillis()) >= 0){
-				return (WeixinOAuthAccessToken)tokenMap.get(FLAG_WEIXIN_OAUTH_ACCESSTOKEN);
+				return (WeixinOAuthAccessToken)tokenMap.get(FLAG_WEIXIN_OAUTH_ACCESSTOKEN + getWeixinAppid());
 			}
 		}
 		WeixinOAuthAccessToken weixinOauthAccessToken = MPPUtil.getWeixinOAuthAccessToken(getWeixinAppid(), getWeixinAppsecret(), code);
-		tokenMap.put(FLAG_WEIXIN_OAUTH_ACCESSTOKEN, weixinOauthAccessToken);
-		tokenMap.put(FLAG_WEIXIN_OAUTH_ACCESSTOKEN_EXPIRETIME, Calendar.getInstance());
+		tokenMap.put(FLAG_WEIXIN_OAUTH_ACCESSTOKEN + getWeixinAppid(), weixinOauthAccessToken);
+		tokenMap.put(FLAG_WEIXIN_OAUTH_ACCESSTOKEN_EXPIRETIME + getWeixinAppid(), Calendar.getInstance());
 		return weixinOauthAccessToken;
 	}
 }

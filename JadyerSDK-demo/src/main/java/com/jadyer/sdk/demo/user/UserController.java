@@ -65,6 +65,12 @@ public class UserController{
 		sb.append("weixin/").append(userInfo.getUuid());
 		request.setAttribute("token", DigestUtils.md5Hex(userInfo.getUuid() + "http://blog.csdn.net/jadyer" + userInfo.getUuid()));
 		request.setAttribute("weixinURL", sb.toString());
+		/**
+		 * 微信管理平台不需要配置WeixinFilter,这是因为它可以更换绑定的公众号,这样即便配置WeixinFilter也是无意义的
+		 * 但也不能不初始化微信appid和appsecret,否则无法发布自定义菜单或主动推消息给粉丝等等
+		 */
+		TokenHolder.setWeixinAppid(userInfo.getAppId());
+		TokenHolder.setWeixinAppsecret(userInfo.getAppSecret());
 		return "user/userInfo";
 	}
 
@@ -84,6 +90,9 @@ public class UserController{
 		userInfo.setAccessToken(_userInfo.getAccessToken());
 		userInfo.setAccessTokenTime(_userInfo.getAccessTokenTime());
 		request.getSession().setAttribute(Constants.USERINFO, userService.save(userInfo));
+		//更换绑定的公众号,也要同步更新微信appid和appsecret
+		TokenHolder.setWeixinAppid(userInfo.getAppId());
+		TokenHolder.setWeixinAppsecret(userInfo.getAppSecret());
 		return new CommonResult();
 	}
 

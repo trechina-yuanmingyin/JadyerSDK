@@ -35,8 +35,8 @@ public class WeixinHelperController {
 	/**
 	 * 获取网页access_token
 	 * @param uid   预留字段,以便扩展为多用户支持
-	 * @param code  微信服务器发放的有效期为5分钟的用于换取换取网页access_token的code
-	 * @param state 重定向到微信服务器时,由开发者服务器携带过去的参数,这里会原样带回来
+	 * @param code  微信服务器发放的,有效期为5分钟的,用于换取网页access_token的code
+	 * @param state 重定向到微信服务器时,由开发者服务器携带过去的参数,这里会原样带回
 	 * @return 获取失败则返回一个友好的HTML页面,获取成功后直接跳转到用户原本请求的资源
 	 */
 	@RequestMapping(value="/oauth/getAccessToken/{uid}")

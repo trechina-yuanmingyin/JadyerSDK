@@ -31,14 +31,13 @@ public class FansSaveThread implements Runnable {
 		/**
 		 * 获取并更新accesstoken
 		 */
-		String accesstoken = TokenHolder.getWeixinAccessToken();
-		userInfo.setAccessToken(accesstoken);
+		userInfo.setAccessToken(TokenHolder.getWeixinAccessToken());
 		userInfo.setAccessTokenTime(new Date());
 		userInfoDao.saveAndFlush(userInfo);
 		/**
 		 * 向微信服务器查询粉丝信息
 		 */
-		com.jadyer.sdk.mpp.model.FansInfo _fansInfo = MPPUtil.getWeixinFansInfo(accesstoken, openid);
+		com.jadyer.sdk.mpp.model.FansInfo _fansInfo = MPPUtil.getWeixinFansInfo(TokenHolder.getWeixinAccessToken(), openid);
 		fansInfo.setUid(userInfo.getId());
 		fansInfo.setWxId(userInfo.getWxId());
 		fansInfo.setOpenid(openid);
