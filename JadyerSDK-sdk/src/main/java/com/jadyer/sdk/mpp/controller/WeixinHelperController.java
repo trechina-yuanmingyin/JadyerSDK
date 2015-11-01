@@ -24,7 +24,7 @@ import com.jadyer.sdk.mpp.util.MPPUtil;
 import com.jadyer.sdk.mpp.util.TokenHolder;
 
 /**
- * 接收微信服务器回调
+ * 接收微信服务器回调以及其它的辅助功能
  * @create Oct 19, 2015 8:30:44 PM
  * @author 玄玉<http://blog.csdn.net/jadyer>
  */

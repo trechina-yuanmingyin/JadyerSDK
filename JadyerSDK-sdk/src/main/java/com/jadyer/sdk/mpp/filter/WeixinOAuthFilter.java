@@ -63,7 +63,7 @@ public class WeixinOAuthFilter implements Filter {
 	}
 
 	/**
-	 * 判断是否需要通过网页授权获取用户信息
+	 * 判断是否需要通过网页授权获取粉丝信息
 	 * @see 1.请求参数需包含oauth=base&openid=openid两个参数,无论GET还是POST请求
 	 * @see 2.该Filter常用于自定义菜单跳转URL时获取粉丝的openid,故验证条件较为苛刻
 	 */
@@ -72,6 +72,9 @@ public class WeixinOAuthFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest)req;
 		HttpServletResponse response = (HttpServletResponse)resp;
 		if("base".equals(request.getParameter("oauth")) && "openid".equals(request.getParameter("openid"))){
+			if(this.isAjaxRequest(request)){
+				throw new RuntimeException("请不要通过Ajax来获取粉丝信息");
+			}
 			/**
 			 * 不同浏览来源的User-Agent头信息不同
 			 * @see 1.IE-11.0.9600.17843
@@ -110,6 +113,25 @@ public class WeixinOAuthFilter implements Filter {
 			response.sendRedirect(MPPUtil.buildWeixinOAuthCodeURL(appid, MPPConstants.OAUTH_SCOPE_SNSAPI_BASE, state, this.redirecturl));
 		}else{
 			chain.doFilter(req, resp);
+		}
+	}
+
+
+	/**
+	 * 判断是否为Ajax请求
+	 * @create Nov 1, 2015 1:30:55 PM
+	 * @author 玄玉<http://blog.csdn.net/jadyer>
+	 */
+	private boolean isAjaxRequest(HttpServletRequest request){
+		String requestType = request.getHeader("X-Requested-With");
+		if(null!=requestType && "XMLHttpRequest".equals(requestType)){
+			return true;
+		}
+		requestType = request.getHeader("x-requested-with");
+		if(null!=requestType && "XMLHttpRequest".equals(requestType)){
+			return true;
+		}else{
+			return false;
 		}
 	}
 }
