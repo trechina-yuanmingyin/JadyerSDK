@@ -75,8 +75,6 @@ public class WeixinHelperController {
 
 	/**
 	 * JS-SDK权限验证的签名
-	 * @param appid     微信公众号AppID
-	 * @param appsecret 微信公众号AppSecret
 	 * @param url       当前网页的URL,不包含#及其后面部分
 	 */
 	@ResponseBody
