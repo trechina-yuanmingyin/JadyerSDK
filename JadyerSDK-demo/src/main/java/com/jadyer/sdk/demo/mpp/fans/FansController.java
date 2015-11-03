@@ -29,7 +29,6 @@ public class FansController{
 	/**
 	 * 分页查询粉丝信息
 	 * @param page zero-based page index
-	 * @param size the size of the page to be returned
 	 */
 	@RequestMapping("/list")
 	public String listViaPage(String pageNo, HttpServletRequest request){

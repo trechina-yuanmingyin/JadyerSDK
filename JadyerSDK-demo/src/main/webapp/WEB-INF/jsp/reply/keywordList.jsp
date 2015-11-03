@@ -5,6 +5,20 @@
 
 <jsp:include page="/header.jsp"/>
 
+<script>
+function deleteKeyword(id){
+	if(confirm("确定删除此关键字么？\r\n删除后其对应的文本回复或图文回复都将失效！！")){
+		$.get("${ctx}/reply/keyword/delete/"+id,function(data){
+			if(1000==data.code){
+				location.reload();
+			}else{
+				$.promptBox(data.message, "#ffb848");
+			}
+		});
+	}
+}
+</script>
+
 <div class="c_nav">
 	<div class="ti">关键字回复</div>
 </div>
@@ -23,25 +37,30 @@
 			<th>回复内容</th>
 			<th>操作</th>
 		</tr>
-		<c:forEach items="${replyInfoList}" var="reply">
+		<c:forEach items="${page.content}" var="reply">
 			<tr>
 				<td><span>${reply.keyword}</span></td>
 				<td><span>${reply.type eq 0 ? '文本' : reply.type eq 1?'图文' : reply.type eq 2?'图片' : reply.type eq 3?'活动' : reply.type eq 4?'转发到多客服':'未知'}</span></td>
 				<td>
 					<span>
-						<c:if test="${fn:length(reply.content)>16}">
-							${fn:substring(reply.content,0,16)}...
+						<c:if test="${fn:length(reply.content) gt 32}">
+							${fn:substring(reply.content,0,32)}...
 						</c:if>
-						<c:if test="${fn:length(reply.content)<=16}">
+						<c:if test="${fn:length(reply.content) le 32}">
 							${reply.content}
 						</c:if>
 					</span>
 				</td>
-				<td><a class="c09f mr_15" href="${ctx}/view?url=reply/keyword&id=${reply.id}">查看</a><a class="c09f" href="${ctx}/view?url=reply/keyword&do=update&id=${reply.id}">编辑</a></td>
+				<td>
+					<a class="c09f mr_15" href="${ctx}/view?url=reply/keyword&id=${reply.id}">查看</a>
+					<a class="c09f mr_15" href="${ctx}/view?url=reply/keyword&do=update&id=${reply.id}">编辑</a>
+					<a class="c09f" href="javascript:deleteKeyword('${reply.id}');">删除</a>
+				</td>
 			</tr>
 		</c:forEach>
 	</table>
 	<!--/Table list-->
+	<jsp:include page="/page.jsp?requestURI=${ctx}/reply/keyword/list"/>
 </div>
 <!--/Content-->
 

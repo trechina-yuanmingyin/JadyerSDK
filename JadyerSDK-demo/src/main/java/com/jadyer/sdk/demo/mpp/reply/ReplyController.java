@@ -3,8 +3,19 @@ package com.jadyer.sdk.demo.mpp.reply;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,14 +72,42 @@ public class ReplyController{
 	}
 
 
+//	/**
+//	 * 查询关键字回复列表
+//	 */
+//	@RequestMapping("/keyword/list")
+//	public String listKeyword(HttpServletRequest request){
+//		int uid = (Integer)request.getSession().getAttribute(Constants.UID);
+//		List<ReplyInfo> replyInfoList = replyInfoDao.findByCategory(uid, "2");
+//		request.setAttribute("replyInfoList", replyInfoList);
+//		return "reply/keywordList";
+//	}
+
+
 	/**
-	 * 查询关键字回复列表
+	 * 分页查询关键字回复列表
+	 * @param page zero-based page index
 	 */
 	@RequestMapping("/keyword/list")
-	public String listKeyword(HttpServletRequest request){
-		int uid = (Integer)request.getSession().getAttribute(Constants.UID);
-		List<ReplyInfo> replyInfoList = replyInfoDao.findByCategory(uid, "2");
-		request.setAttribute("replyInfoList", replyInfoList);
+	public String listViaPage(String pageNo, HttpServletRequest request){
+		final int uid = (Integer)request.getSession().getAttribute(Constants.UID);
+		//排序
+		Sort sort = new Sort(Sort.Direction.DESC, "id");
+		//分页条件
+		Pageable pageable = new PageRequest(StringUtils.isBlank(pageNo)?0:Integer.parseInt(pageNo), Constants.PAGE_SIZE, sort);
+		//组合查询条件
+		Specification<ReplyInfo> spec = new Specification<ReplyInfo>(){
+			@Override
+			public Predicate toPredicate(Root<ReplyInfo> root, CriteriaQuery<?> query, CriteriaBuilder builder){
+				Path<Integer> _uid = root.get("uid");
+				Path<Integer> _category = root.get("category");
+				query.where(builder.equal(_uid, uid)).where(builder.equal(_category, "2"));
+				return null;
+			}
+		};
+		//执行
+		Page<ReplyInfo> keywordPage = replyInfoDao.findAll(spec, pageable);
+		request.setAttribute("page", keywordPage);
 		return "reply/keywordList";
 	}
 
@@ -80,6 +119,17 @@ public class ReplyController{
 	@RequestMapping("/keyword/get/{id}")
 	public CommonResult getKeyword(@PathVariable int id){
 		return new CommonResult(replyInfoDao.findOne(id));
+	}
+
+
+	/**
+	 * delete关键字
+	 */
+	@ResponseBody
+	@RequestMapping("/keyword/delete/{id}")
+	public CommonResult deleteKeyword(@PathVariable int id){
+		replyInfoDao.delete(id);
+		return new CommonResult();
 	}
 
 

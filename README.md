@@ -7,8 +7,8 @@
 4.并保证Spring能够扫描到SDK包&lt;context:component-scan base-package="com.jadyer.sdk"/&gt;<br/>
 
 # 集成方式
-1.如果微信H5客户端和后台管理的服务端是一个应用，那就不需要在web.xml中配置WeixinFilter<br/>
-2.如果二者是分离的（即目前流行的前后端分离），则前端需要在web.xml中配置WeixinFilter，后端不需要<br/>
+1.若微信H5客户端和后台管理的服务端是一个应用，那就不需要在web.xml中配置WeixinFilter<br/>
+2.若二者分离（即目前流行的前后端分离），则前端需要在web.xml中配置WeixinFilter，后端不需要<br/>
 3.上面提到的后端，对应的就是JadyerSDK-demo的Module<br/>
 
 # 更新日志

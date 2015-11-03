@@ -3,11 +3,12 @@ package com.jadyer.sdk.demo.mpp.reply;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 import com.jadyer.sdk.demo.mpp.reply.model.ReplyInfo;
 
-public interface ReplyInfoDao extends JpaRepository<ReplyInfo, Integer> {
+public interface ReplyInfoDao extends JpaRepository<ReplyInfo, Integer>, JpaSpecificationExecutor<ReplyInfo> {
 	/**
 	 * 根据分类查询回复内容
 	 * @param uid      平台用户ID
