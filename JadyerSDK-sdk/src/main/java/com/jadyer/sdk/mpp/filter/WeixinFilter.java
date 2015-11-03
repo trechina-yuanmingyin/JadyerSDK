@@ -36,8 +36,12 @@ import com.jadyer.sdk.mpp.util.TokenHolder;
  * @see 		<param-value>b6a838ea12d6175c00793503500ede64</param-value>
  * @see 	</init-param>
  * @see 	<init-param>
+ * @see 		<param-name>dataurl</param-name>
+ * @see 		<param-value>http://jadyer.tunnel.mobi/mpp/weixin/helper</param-value>
+ * @see 	</init-param>
+ * @see 	<init-param>
  * @see 		<param-name>redirecturl</param-name>
- * @see 		<param-value>http://jadyer.tunnel.mobi/weixin/helper/oauth/getAccessToken/33</param-value>
+ * @see 		<param-value>http://jadyer.tunnel.mobi/portal/weixin/helper/oauth/getAccessToken/33</param-value>
  * @see 	</init-param>
  * @see </filter>
  * @see <filter-mapping>
@@ -59,6 +63,7 @@ public class WeixinFilter implements Filter {
 	public void init(FilterConfig filterConfig) throws ServletException {
 		this.redirecturl = filterConfig.getInitParameter("redirecturl");
 		TokenHolder.setWeixinAppid(filterConfig.getInitParameter("appid"));
+		TokenHolder.setWeixinDataURL(filterConfig.getInitParameter("dataurl"));
 		TokenHolder.setWeixinAppsecret(filterConfig.getInitParameter("appsecret"));
 	}
 

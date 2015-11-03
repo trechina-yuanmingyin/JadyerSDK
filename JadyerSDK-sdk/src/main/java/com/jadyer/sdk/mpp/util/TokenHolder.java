@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.alibaba.fastjson.JSON;
 import com.jadyer.sdk.mpp.model.WeixinOAuthAccessToken;
 
 /**
@@ -15,6 +16,7 @@ import com.jadyer.sdk.mpp.model.WeixinOAuthAccessToken;
  * @author 玄玉<http://blog.csdn.net/jadyer>
  */
 public class TokenHolder {
+	private static final String WEIXIN_DATA_URL = "weixin_data_url";
 	private static final String WEIXIN_APPID = "weixin_appid";
 	private static final String WEIXIN_APPSECRET = "weixin_appsecret";
 	private static final String FLAG_WEIXIN_ACCESSTOKEN = "weixin_access_token";
@@ -26,6 +28,30 @@ public class TokenHolder {
 	private static ConcurrentHashMap<String, Object> tokenMap = new ConcurrentHashMap<String, Object>();
 
 	private TokenHolder(){}
+
+	/**
+	 * 设置微信access_token等数据来源的url
+	 * @see 未设置表明是从微信服务器获取,设置后则表明从该URL处取
+	 * @see 如果传URL,则它的值必须是这样的http://jadyer.tunnel.mobi/weixin/helper,其中/weixin/helper是固定不可变的
+	 * @return 返回已设置的url
+	 * @create Nov 3, 2015 2:19:04 PM
+	 * @author 玄玉<http://blog.csdn.net/jadyer>
+	 */
+	public static String setWeixinDataURL(String url){
+		tokenMap.put(WEIXIN_DATA_URL, url);
+		return getWeixinDataURL();
+	}
+
+
+	/**
+	 * 获取已设置的微信access_token等数据来源的url
+	 * @create Nov 3, 2015 2:20:30 PM
+	 * @author 玄玉<http://blog.csdn.net/jadyer>
+	 */
+	public static String getWeixinDataURL(){
+		return (String)tokenMap.get(WEIXIN_DATA_URL);
+	}
+
 
 	/**
 	 * 设置微信appid
@@ -86,6 +112,9 @@ public class TokenHolder {
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
 	public static String getWeixinAccessToken(){
+		if(StringUtils.isNotBlank(getWeixinDataURL())){
+			return HttpUtil.post(getWeixinDataURL() + "/get/accessToken");
+		}
 		Calendar expireTime = (Calendar)tokenMap.get(FLAG_WEIXIN_ACCESSTOKEN_EXPIRETIME + getWeixinAppid());
 		if(null != expireTime){
 			expireTime.add(Calendar.MINUTE, 110);
@@ -107,6 +136,9 @@ public class TokenHolder {
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
 	public static String getWeixinJSApiTicket(){
+		if(StringUtils.isNotBlank(getWeixinDataURL())){
+			return HttpUtil.post(getWeixinDataURL() + "/get/jsapiTicket");
+		}
 		Calendar expireTime = (Calendar)tokenMap.get(FLAG_WEIXIN_JSAPI_TICKET_EXPIRETIME + getWeixinAppid());
 		if(null != expireTime){
 			expireTime.add(Calendar.MINUTE, 110);
@@ -130,6 +162,10 @@ public class TokenHolder {
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
 	public static WeixinOAuthAccessToken getWeixinOAuthAccessToken(String code){
+		if(StringUtils.isNotBlank(getWeixinDataURL())){
+			String resultJson = HttpUtil.post(getWeixinDataURL() + "/get/oauthAccessToken");
+			return JSON.parseObject(resultJson, WeixinOAuthAccessToken.class);
+		}
 		Calendar expireTime = (Calendar)tokenMap.get(FLAG_WEIXIN_OAUTH_ACCESSTOKEN_EXPIRETIME + getWeixinAppid());
 		if(null != expireTime){
 			expireTime.add(Calendar.MINUTE, 110);

@@ -11,6 +11,8 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -75,11 +77,11 @@ public class WeixinHelperController {
 
 	/**
 	 * JS-SDK权限验证的签名
-	 * @param url       当前网页的URL,不包含#及其后面部分
+	 * @param url 当前网页的URL,不包含#及其后面部分
 	 */
 	@ResponseBody
 	@RequestMapping(value="/sign/jssdk")
-	public Map<String, String> signWeixinJSSDK(String url){
+	public Map<String, String> signJSSDK(String url){
 		Map<String, String> resultMap = new HashMap<String, String>();
 		String noncestr = RandomStringUtils.randomNumeric(16);
 		long timestamp = (long)(System.currentTimeMillis()/1000);
@@ -89,5 +91,40 @@ public class WeixinHelperController {
 		resultMap.put("signature", MPPUtil.signWeixinJSSDK(noncestr, String.valueOf(timestamp), url));
 		resultMap.put("url", url);
 		return resultMap;
+	}
+
+
+	/**
+	 * 通过另一个节点获取微信access_token
+	 * @see 之所以提供这个方法是有一个情景:同一个微信SDK给两个应用使用,而这俩应用都会用到并刷新微信access_token
+	 * @create Nov 3, 2015 2:11:44 PM
+	 * @author 玄玉<http://blog.csdn.net/jadyer>
+	 */
+	@RequestMapping(value="/get/accessToken")
+	public ResponseEntity<String> getAccessTokenViaClust(){
+		return new ResponseEntity<String>(TokenHolder.getWeixinAccessToken(), HttpStatus.OK);
+	}
+
+
+	/**
+	 * 通过另一个节点获取微信jsapi_ticket
+	 * @create Nov 3, 2015 2:30:38 PM
+	 * @author 玄玉<http://blog.csdn.net/jadyer>
+	 */
+	@RequestMapping(value="/get/jsapiTicket")
+	public ResponseEntity<String> getJSApiTicketViaClust(){
+		return new ResponseEntity<String>(TokenHolder.getWeixinJSApiTicket(), HttpStatus.OK);
+	}
+
+
+	/**
+	 * 通过另一个节点获取微信oauth_access_token
+	 * @create Nov 3, 2015 2:33:10 PM
+	 * @author 玄玉<http://blog.csdn.net/jadyer>
+	 */
+	@ResponseBody
+	@RequestMapping(value="/get/oauthAccessToken")
+	public WeixinOAuthAccessToken getOAuthAccessTokenViaClust(String code){
+		return TokenHolder.getWeixinOAuthAccessToken(code);
 	}
 }

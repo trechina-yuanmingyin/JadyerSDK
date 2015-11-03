@@ -4,6 +4,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,8 +70,12 @@ public class UserController{
 		 * 微信管理平台不需要配置WeixinFilter,这是因为它可以更换绑定的公众号,这样即便配置WeixinFilter也是无意义的
 		 * 但也不能不初始化微信appid和appsecret,否则无法发布自定义菜单或主动推消息给粉丝等等
 		 */
-		TokenHolder.setWeixinAppid(userInfo.getAppId());
-		TokenHolder.setWeixinAppsecret(userInfo.getAppSecret());
+		if(StringUtils.isNotBlank(userInfo.getAppId())){
+			TokenHolder.setWeixinAppid(userInfo.getAppId());
+		}
+		if(StringUtils.isNotBlank(userInfo.getAppSecret())){
+			TokenHolder.setWeixinAppsecret(userInfo.getAppSecret());
+		}
 		return "user/userInfo";
 	}
 
