@@ -21,6 +21,20 @@ public class ReplyController{
 	private ReplyInfoDao replyInfoDao;
 
 	/**
+	 * 查询通用的回复内容
+	 */
+	@RequestMapping("/common/get")
+	public String getCommon(HttpServletRequest request){
+		int uid = (Integer)request.getSession().getAttribute(Constants.UID);
+		List<ReplyInfo> replyInfoList = replyInfoDao.findByCategory(uid, "0");
+		if(!replyInfoList.isEmpty()){
+			request.setAttribute("replyInfo", replyInfoList.get(0));
+		}
+		return "reply/common";
+	}
+
+
+	/**
 	 * 查询关注后回复的内容
 	 */
 	@RequestMapping("/follow/get")
@@ -32,6 +46,7 @@ public class ReplyController{
 		}
 		return "reply/follow";
 	}
+
 
 	/**
 	 * 更新关注后回复的内容
@@ -45,18 +60,6 @@ public class ReplyController{
 		return new CommonResult(replyInfoDao.saveAndFlush(replyInfo));
 	}
 
-	/**
-	 * 查询通用的回复内容
-	 */
-	@RequestMapping("/common/get")
-	public String getCommon(HttpServletRequest request){
-		int uid = (Integer)request.getSession().getAttribute(Constants.UID);
-		List<ReplyInfo> replyInfoList = replyInfoDao.findByCategory(uid, "0");
-		if(!replyInfoList.isEmpty()){
-			request.setAttribute("replyInfo", replyInfoList.get(0));
-		}
-		return "reply/common";
-	}
 
 	/**
 	 * 查询关键字回复列表
@@ -66,33 +69,27 @@ public class ReplyController{
 		int uid = (Integer)request.getSession().getAttribute(Constants.UID);
 		List<ReplyInfo> replyInfoList = replyInfoDao.findByCategory(uid, "2");
 		request.setAttribute("replyInfoList", replyInfoList);
-		return "reply/keyword";
+		return "reply/keywordList";
 	}
-	
+
+
 	/**
 	 * 查询关键字回复的内容
 	 */
+	@ResponseBody
 	@RequestMapping("/keyword/get/{id}")
-	public String getKeyword(@PathVariable int id, HttpServletRequest request){
-		request.setAttribute("reply", replyInfoDao.findOne(id));
-		return "reply/keyword_get";
+	public CommonResult getKeyword(@PathVariable int id){
+		return new CommonResult(replyInfoDao.findOne(id));
 	}
 
-	/**
-	 * 跳转到更新关键字页面
-	 */
-	@RequestMapping("/keyword/toupdate/{id}")
-	public String updateKeyword(@PathVariable int id, HttpServletRequest request){
-		request.setAttribute("replyInfo", replyInfoDao.findOne(id));
-		return "reply/keyword_save";
-	}
 
 	/**
 	 * saveOrUpdate关键字
 	 */
+	@ResponseBody
 	@RequestMapping("/keyword/save")
-	public String saveKeyword(ReplyInfo replyInfo, HttpServletRequest request){
+	public CommonResult saveKeyword(ReplyInfo replyInfo){
 		replyInfoDao.saveAndFlush(replyInfo);
-		return this.listKeyword(request);
+		return new CommonResult();
 	}
 }
