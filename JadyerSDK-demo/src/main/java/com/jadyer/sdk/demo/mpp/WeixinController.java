@@ -37,7 +37,11 @@ public class WeixinController extends WeixinMsgControllerCustomServiceAdapter {
 
 	@Override
 	protected OutMsg processInTextMsg(InTextMsg inTextMsg) {
+		//防伪
 		UserInfo userInfo = userService.findByWxId(inTextMsg.getToUserName());
+		if(null == userInfo){
+			return new OutTextMsg(inTextMsg).setContent("系统繁忙，该公众号未绑定到第三方平台。");
+		}
 		//没绑定就提示绑定
 		if("0".equals(userInfo.getBindStatus()) && !Constants.WEIXIN_BIND_TEXT.equals(inTextMsg.getContent())){
 			return new OutTextMsg(inTextMsg).setContent("账户未绑定\r请发送\"" + Constants.WEIXIN_BIND_TEXT + "\"绑定");
@@ -65,7 +69,11 @@ public class WeixinController extends WeixinMsgControllerCustomServiceAdapter {
 
 	@Override
 	protected OutMsg processInMenuEventMsg(InMenuEventMsg inMenuEventMsg) {
+		//防伪
 		UserInfo userInfo = userService.findByWxId(inMenuEventMsg.getToUserName());
+		if(null == userInfo){
+			return new OutTextMsg(inMenuEventMsg).setContent("系统繁忙，该公众号未绑定到第三方平台。");
+		}
 		//VIEW类的直接跳转过去了,CLICK类的暂定根据关键字回复(找不到关键字就转发到多客服)
 		if(InMenuEventMsg.EVENT_INMENU_CLICK.equals(inMenuEventMsg.getEvent())){
 			ReplyInfo replyInfo = replyInfoDao.findByKeyword(userInfo.getId(), inMenuEventMsg.getEventKey());
@@ -82,7 +90,11 @@ public class WeixinController extends WeixinMsgControllerCustomServiceAdapter {
 
 	@Override
 	protected OutMsg processInFollowEventMsg(InFollowEventMsg inFollowEventMsg) {
+		//防伪
 		UserInfo userInfo = userService.findByWxId(inFollowEventMsg.getToUserName());
+		if(null == userInfo){
+			return new OutTextMsg(inFollowEventMsg).setContent("系统繁忙，该公众号未绑定到第三方平台。");
+		}
 		List<ReplyInfo> replyInfoList = replyInfoDao.findByCategory(userInfo.getId(), "1");
 		if(InFollowEventMsg.EVENT_INFOLLOW_SUBSCRIBE.equals(inFollowEventMsg.getEvent())){
 			//记录粉丝关注情况
