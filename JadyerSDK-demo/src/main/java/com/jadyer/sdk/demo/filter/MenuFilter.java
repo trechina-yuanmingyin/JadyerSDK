@@ -37,6 +37,15 @@ public class MenuFilter implements Filter {
 		if(request.getServletPath().startsWith("/reply")){
 			request.getSession().setAttribute(Constants.MENU_VIEW_CURRENT, Constants.MENU_REPLY);
 		}
+		if(request.getServletPath().startsWith("/view")){
+			String url = request.getParameter("url");
+			if(url.startsWith("user")){
+				request.getSession().setAttribute(Constants.MENU_VIEW_CURRENT, Constants.MENU_SYS);
+			}
+			if(url.startsWith("reply")){
+				request.getSession().setAttribute(Constants.MENU_VIEW_CURRENT, Constants.MENU_REPLY);
+			}
+		}
 		chain.doFilter(req, resp);
 	}
 }

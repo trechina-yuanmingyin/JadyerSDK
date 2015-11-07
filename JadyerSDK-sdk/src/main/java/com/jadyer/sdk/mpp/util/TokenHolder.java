@@ -1,6 +1,5 @@
 package com.jadyer.sdk.mpp.util;
 
-import java.util.Calendar;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.StringUtils;
@@ -107,7 +106,7 @@ public class TokenHolder {
 
 	/**
 	 * 获取微信access_token
-	 * @see 这里只缓存110分钟,详细介绍见http://mp.weixin.qq.com/wiki/11/0e4b294685f817b95cbed85ba5e82b8f.html
+	 * @see 这里只缓存7000s,详细介绍见http://mp.weixin.qq.com/wiki/11/0e4b294685f817b95cbed85ba5e82b8f.html
 	 * @create Oct 29, 2015 8:13:24 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
@@ -115,23 +114,30 @@ public class TokenHolder {
 		if(StringUtils.isNotBlank(getWeixinDataURL())){
 			return HttpUtil.post(getWeixinDataURL() + "/get/accessToken");
 		}
-		Calendar expireTime = (Calendar)tokenMap.get(FLAG_WEIXIN_ACCESSTOKEN_EXPIRETIME + getWeixinAppid());
-		if(null != expireTime){
-			expireTime.add(Calendar.MINUTE, 110);
-			if((expireTime.getTimeInMillis()-Calendar.getInstance().getTimeInMillis()) >= 0){
-				return (String)tokenMap.get(FLAG_WEIXIN_ACCESSTOKEN + getWeixinAppid());
-			}
+//		Calendar expireTime = (Calendar)tokenMap.get(FLAG_WEIXIN_ACCESSTOKEN_EXPIRETIME + getWeixinAppid());
+//		if(null != expireTime){
+//			expireTime.add(Calendar.MINUTE, 110);
+//			if((expireTime.getTimeInMillis()-Calendar.getInstance().getTimeInMillis()) >= 0){
+//				return (String)tokenMap.get(FLAG_WEIXIN_ACCESSTOKEN + getWeixinAppid());
+//			}
+//		}
+//		String accessToken = MPPUtil.getWeixinAccessToken(getWeixinAppid(), getWeixinAppsecret());
+//		tokenMap.put(FLAG_WEIXIN_ACCESSTOKEN + getWeixinAppid(), accessToken);
+//		tokenMap.put(FLAG_WEIXIN_ACCESSTOKEN_EXPIRETIME + getWeixinAppid(), Calendar.getInstance());
+		long expireTime = (Long)tokenMap.get(FLAG_WEIXIN_ACCESSTOKEN_EXPIRETIME + getWeixinAppid());
+		if(expireTime >= System.currentTimeMillis()){
+			return (String)tokenMap.get(FLAG_WEIXIN_ACCESSTOKEN + getWeixinAppid());
 		}
 		String accessToken = MPPUtil.getWeixinAccessToken(getWeixinAppid(), getWeixinAppsecret());
 		tokenMap.put(FLAG_WEIXIN_ACCESSTOKEN + getWeixinAppid(), accessToken);
-		tokenMap.put(FLAG_WEIXIN_ACCESSTOKEN_EXPIRETIME + getWeixinAppid(), Calendar.getInstance());
+		tokenMap.put(FLAG_WEIXIN_ACCESSTOKEN_EXPIRETIME + getWeixinAppid(), System.currentTimeMillis()+7000*1000);
 		return accessToken;
 	}
 
 
 	/**
 	 * 获取微信jsapi_ticket
-	 * @see 这里只缓存110分钟,详细介绍见http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html
+	 * @see 这里只缓存7000s,详细介绍见http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html
 	 * @create Oct 29, 2015 9:55:33 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
@@ -139,24 +145,21 @@ public class TokenHolder {
 		if(StringUtils.isNotBlank(getWeixinDataURL())){
 			return HttpUtil.post(getWeixinDataURL() + "/get/jsapiTicket");
 		}
-		Calendar expireTime = (Calendar)tokenMap.get(FLAG_WEIXIN_JSAPI_TICKET_EXPIRETIME + getWeixinAppid());
-		if(null != expireTime){
-			expireTime.add(Calendar.MINUTE, 110);
-			if((expireTime.getTimeInMillis()-Calendar.getInstance().getTimeInMillis()) >= 0){
-				return (String)tokenMap.get(FLAG_WEIXIN_JSAPI_TICKET + getWeixinAppid());
-			}
+		long expireTime = (Long)tokenMap.get(FLAG_WEIXIN_JSAPI_TICKET_EXPIRETIME + getWeixinAppid());
+		if(expireTime >= System.currentTimeMillis()){
+			return (String)tokenMap.get(FLAG_WEIXIN_JSAPI_TICKET + getWeixinAppid());
 		}
 		String jsapiTicket = MPPUtil.getWeixinJSApiTicket(getWeixinAccessToken());
 		tokenMap.put(FLAG_WEIXIN_JSAPI_TICKET + getWeixinAppid(), jsapiTicket);
-		tokenMap.put(FLAG_WEIXIN_JSAPI_TICKET_EXPIRETIME + getWeixinAppid(), Calendar.getInstance());
+		tokenMap.put(FLAG_WEIXIN_JSAPI_TICKET_EXPIRETIME + getWeixinAppid(), System.currentTimeMillis()+7000*1000);
 		return jsapiTicket;
 	}
 
 
 	/**
 	 * 通过code换取网页授权access_token
-	 * @see 这里只缓存110分钟,详细介绍见http://mp.weixin.qq.com/wiki/17/c0f37d5704f0b64713d5d2c37b468d75.html
-	 * @param code      换取access_token的有效期为5分钟的票据
+	 * @see 这里只缓存7000s,详细介绍见http://mp.weixin.qq.com/wiki/17/c0f37d5704f0b64713d5d2c37b468d75.html
+	 * @param code 换取access_token的有效期为5分钟的票据
 	 * @return 返回获取到的网页access_token(获取失败时的应答码也在该返回中)
 	 * @create Oct 29, 2015 9:32:01 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
@@ -166,16 +169,13 @@ public class TokenHolder {
 			String resultJson = HttpUtil.post(getWeixinDataURL() + "/get/oauthAccessToken");
 			return JSON.parseObject(resultJson, WeixinOAuthAccessToken.class);
 		}
-		Calendar expireTime = (Calendar)tokenMap.get(FLAG_WEIXIN_OAUTH_ACCESSTOKEN_EXPIRETIME + getWeixinAppid());
-		if(null != expireTime){
-			expireTime.add(Calendar.MINUTE, 110);
-			if((expireTime.getTimeInMillis()-Calendar.getInstance().getTimeInMillis()) >= 0){
-				return (WeixinOAuthAccessToken)tokenMap.get(FLAG_WEIXIN_OAUTH_ACCESSTOKEN + getWeixinAppid());
-			}
+		long expireTime = (Long)tokenMap.get(FLAG_WEIXIN_OAUTH_ACCESSTOKEN_EXPIRETIME + getWeixinAppid());
+		if(expireTime >= System.currentTimeMillis()){
+			return (WeixinOAuthAccessToken)tokenMap.get(FLAG_WEIXIN_OAUTH_ACCESSTOKEN + getWeixinAppid());
 		}
 		WeixinOAuthAccessToken weixinOauthAccessToken = MPPUtil.getWeixinOAuthAccessToken(getWeixinAppid(), getWeixinAppsecret(), code);
 		tokenMap.put(FLAG_WEIXIN_OAUTH_ACCESSTOKEN + getWeixinAppid(), weixinOauthAccessToken);
-		tokenMap.put(FLAG_WEIXIN_OAUTH_ACCESSTOKEN_EXPIRETIME + getWeixinAppid(), Calendar.getInstance());
+		tokenMap.put(FLAG_WEIXIN_OAUTH_ACCESSTOKEN_EXPIRETIME + getWeixinAppid(), System.currentTimeMillis()+7000*1000);
 		return weixinOauthAccessToken;
 	}
 }
