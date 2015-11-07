@@ -57,6 +57,11 @@ public class UserController{
 	@RequestMapping("/info")
 	public String info(HttpServletRequest request){
 		UserInfo userInfo = (UserInfo)request.getSession().getAttribute(Constants.USERINFO);
+		//每次都取最新的
+		userInfo = userService.findOne(userInfo.getId());
+		//再更新HttpSession
+		request.getSession().setAttribute(Constants.USERINFO, userInfo);
+		//拼造开发者服务器的URL和Token
 		StringBuilder sb = new StringBuilder();
 		sb.append(request.getScheme()).append("://").append(request.getServerName());
 		if(80!=request.getServerPort() && 443!=request.getServerPort()){

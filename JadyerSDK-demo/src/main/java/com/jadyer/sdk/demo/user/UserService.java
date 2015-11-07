@@ -28,7 +28,12 @@ public class UserService {
 	public UserInfo findByUsernameAndPassword(String username, String password){
 		return userInfoDao.findByUsernameAndPassword(username, buildEncryptPassword(password));
 	}
-	
+
+	@Transactional(readOnly=true)
+	public UserInfo findOne(int id){
+		return userInfoDao.findOne(id);
+	}
+
 	@Transactional(readOnly=true)
 	public UserInfo findByWxId(String wxId){
 		return userInfoDao.findByWxId(wxId);

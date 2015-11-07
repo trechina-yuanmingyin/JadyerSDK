@@ -8,7 +8,7 @@
 		<version>1.0.3</version>
 	</parent>
 	<artifactId>JadyerSDK-sdk</artifactId>
-	<description>mvn deploy:deploy-file -DgroupId=com.jadyer.sdk -DartifactId=JadyerSDK-sdk -Dversion=1.0.2 -Dpackaging=jar -Dfile=JadyerSDK-sdk-1.0.2.jar -Durl=http://192.168.2.41:8081/nexus/content/repositories/releases -DrepositoryId=releases</description>
+	<description>mvn deploy:deploy-file -DgroupId=com.jadyer.sdk -DartifactId=JadyerSDK-sdk -Dversion=1.0.3 -Dpackaging=jar -Dfile=JadyerSDK-sdk-1.0.3.jar -Durl=http://192.168.2.41:8081/nexus/content/repositories/releases -DrepositoryId=releases</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
