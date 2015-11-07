@@ -124,8 +124,8 @@ public class TokenHolder {
 //		String accessToken = MPPUtil.getWeixinAccessToken(getWeixinAppid(), getWeixinAppsecret());
 //		tokenMap.put(FLAG_WEIXIN_ACCESSTOKEN + getWeixinAppid(), accessToken);
 //		tokenMap.put(FLAG_WEIXIN_ACCESSTOKEN_EXPIRETIME + getWeixinAppid(), Calendar.getInstance());
-		long expireTime = (Long)tokenMap.get(FLAG_WEIXIN_ACCESSTOKEN_EXPIRETIME + getWeixinAppid());
-		if(expireTime >= System.currentTimeMillis()){
+		Long expireTime = (Long)tokenMap.get(FLAG_WEIXIN_ACCESSTOKEN_EXPIRETIME + getWeixinAppid());
+		if(null!=expireTime && expireTime>=System.currentTimeMillis()){
 			return (String)tokenMap.get(FLAG_WEIXIN_ACCESSTOKEN + getWeixinAppid());
 		}
 		String accessToken = MPPUtil.getWeixinAccessToken(getWeixinAppid(), getWeixinAppsecret());
@@ -145,8 +145,8 @@ public class TokenHolder {
 		if(StringUtils.isNotBlank(getWeixinDataURL())){
 			return HttpUtil.post(getWeixinDataURL() + "/get/jsapiTicket");
 		}
-		long expireTime = (Long)tokenMap.get(FLAG_WEIXIN_JSAPI_TICKET_EXPIRETIME + getWeixinAppid());
-		if(expireTime >= System.currentTimeMillis()){
+		Long expireTime = (Long)tokenMap.get(FLAG_WEIXIN_JSAPI_TICKET_EXPIRETIME + getWeixinAppid());
+		if(null!=expireTime && expireTime>=System.currentTimeMillis()){
 			return (String)tokenMap.get(FLAG_WEIXIN_JSAPI_TICKET + getWeixinAppid());
 		}
 		String jsapiTicket = MPPUtil.getWeixinJSApiTicket(getWeixinAccessToken());
@@ -169,8 +169,8 @@ public class TokenHolder {
 			String resultJson = HttpUtil.post(getWeixinDataURL() + "/get/oauthAccessToken");
 			return JSON.parseObject(resultJson, WeixinOAuthAccessToken.class);
 		}
-		long expireTime = (Long)tokenMap.get(FLAG_WEIXIN_OAUTH_ACCESSTOKEN_EXPIRETIME + getWeixinAppid());
-		if(expireTime >= System.currentTimeMillis()){
+		Long expireTime = (Long)tokenMap.get(FLAG_WEIXIN_OAUTH_ACCESSTOKEN_EXPIRETIME + getWeixinAppid());
+		if(null!=expireTime && expireTime>=System.currentTimeMillis()){
 			return (WeixinOAuthAccessToken)tokenMap.get(FLAG_WEIXIN_OAUTH_ACCESSTOKEN + getWeixinAppid());
 		}
 		WeixinOAuthAccessToken weixinOauthAccessToken = MPPUtil.getWeixinOAuthAccessToken(getWeixinAppid(), getWeixinAppsecret(), code);
