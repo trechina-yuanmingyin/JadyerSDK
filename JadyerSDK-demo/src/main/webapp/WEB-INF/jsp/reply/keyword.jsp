@@ -6,15 +6,15 @@
 
 <script>
 $(function(){
-	if("update"=="${do}" || "add"=="${do}"){
+	if("update"=="${o}" || "add"=="${o}"){
 		$("#getDiv").hide();
 		$("#updateDiv").show();
 	}
-	if(""=="${do}" || "update"=="${do}"){
+	if(""=="${o}" || "update"=="${o}"){
 		$.get("${ctx}/reply/keyword/get/${id}",
 			function(data){
 				if(1000 == data.code){
-					if("update" == "${do}"){
+					if("update" == "${o}"){
 						$("#type").find("option[value=" + data.data.type + "]").prop("selected", true);
 						$("#keyword").val(data.data.keyword);
 						$("#content").val(data.data.content);

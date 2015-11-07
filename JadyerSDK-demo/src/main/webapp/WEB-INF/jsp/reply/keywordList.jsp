@@ -26,7 +26,7 @@ function deleteKeyword(id){
 <div class="c_content">
 	<!--Title-->
 	<div class="title txt_r">
-		<a class="bgre va_m" href="${ctx}/view?url=reply/keyword&do=add">+新增关键字</a>
+		<a class="bgre va_m" href="${ctx}/view?url=reply/keyword&o=add">+新增关键字</a>
 	</div>
 	<!--/Title-->
 	<!--Table list-->
@@ -53,7 +53,7 @@ function deleteKeyword(id){
 				</td>
 				<td>
 					<a class="c09f mr_15" href="${ctx}/view?url=reply/keyword&id=${reply.id}">查看</a>
-					<a class="c09f mr_15" href="${ctx}/view?url=reply/keyword&do=update&id=${reply.id}">编辑</a>
+					<a class="c09f mr_15" href="${ctx}/view?url=reply/keyword&o=update&id=${reply.id}">编辑</a>
 					<a class="c09f" href="javascript:deleteKeyword('${reply.id}');">删除</a>
 				</td>
 			</tr>
