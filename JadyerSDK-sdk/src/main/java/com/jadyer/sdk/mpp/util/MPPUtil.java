@@ -81,6 +81,7 @@ public final class MPPUtil {
 	static String getWeixinJSApiTicket(String accesstoken){
 		String reqURL = MPPConstants.URL_WEIXIN_GET_JSAPI_TICKET.replace(MPPConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken);
 		String respData = HttpUtil.post(reqURL);
+		logger.info("获取微信jsapi_ticket,微信应答报文为-->{}", respData);
 		Map<String, String> map = JSON.parseObject(respData, new TypeReference<Map<String, String>>(){});
 		if("0".equals(map.get("errcode"))){
 			return map.get("ticket");
@@ -255,7 +256,7 @@ public final class MPPUtil {
 	 */
 	public static String downloadWeixinTempMediaFile(String accesstoken, String mediaId){
 		String reqURL = MPPConstants.URL_WEIXIN_GET_TEMP_MEDIA_FILE.replace(MPPConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken).replace(MPPConstants.URL_PLACEHOLDER_MEDIAID, mediaId);
-		Map<String, Object> resultMap = HttpUtil.postWithDownload(reqURL, null);
+		Map<String, String> resultMap = HttpUtil.postWithDownload(reqURL, null);
 		if("no".equals(resultMap.get("isSuccess"))){
 			Map<String, String> errmap = JSON.parseObject((String)resultMap.get("failReason"), new TypeReference<Map<String, String>>(){});
 			String errmsg = MPPCodeEnum.getMessageByCode(Integer.parseInt((errmap.get("errcode"))));
@@ -264,6 +265,6 @@ public final class MPPUtil {
 			}
 			throw new RuntimeException("下载微信临时素材" + mediaId + "失败-->" + errmsg);
 		}
-		return (String)resultMap.get("fullPath");
+		return resultMap.get("fullPath");
 	}
 }

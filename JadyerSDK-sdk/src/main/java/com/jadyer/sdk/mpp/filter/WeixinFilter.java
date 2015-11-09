@@ -22,21 +22,12 @@ import com.jadyer.sdk.mpp.util.TokenHolder;
 
 /**
  * 用于处理微信相关的Filter
- * @see 暂时做两件事,一个是初始化appid和appsecret到全局TokenHolder,一个是启用微信网页授权获取用户信息
  * @see -----------------------------------------------------------------------------------------------------------
  * @see <filter>
  * @see 	<filter-name>WeixinFilter</filter-name>
  * @see 	<filter-class>com.jadyer.sdk.mpp.filter.WeixinFilter</filter-class>
  * @see 	<init-param>
- * @see 		<param-name>appid</param-name>
- * @see 		<param-value>wx63ae5326e400cca2</param-value>
- * @see 	</init-param>
- * @see 	<init-param>
- * @see 		<param-name>appsecret</param-name>
- * @see 		<param-value>b6a838ea12d6175c00793503500ede64</param-value>
- * @see 	</init-param>
- * @see 	<init-param>
- * @see 		<param-name>dataurl</param-name>
+ * @see 		<param-name>databaseurl</param-name>
  * @see 		<param-value>http://jadyer.tunnel.mobi/mpp/weixin/helper</param-value>
  * @see 	</init-param>
  * @see 	<init-param>
@@ -54,6 +45,7 @@ import com.jadyer.sdk.mpp.util.TokenHolder;
  */
 public class WeixinFilter implements Filter {
 	private static final Logger logger = LoggerFactory.getLogger(WeixinFilter.class);
+	public static String DATA_BASE_URL = null;
 	private String redirecturl = null;
 
 	@Override
@@ -61,10 +53,8 @@ public class WeixinFilter implements Filter {
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
+		DATA_BASE_URL = filterConfig.getInitParameter("databaseurl");
 		this.redirecturl = filterConfig.getInitParameter("redirecturl");
-		TokenHolder.setWeixinAppid(filterConfig.getInitParameter("appid"));
-		TokenHolder.setWeixinDataURL(filterConfig.getInitParameter("dataurl"));
-		TokenHolder.setWeixinAppsecret(filterConfig.getInitParameter("appsecret"));
 	}
 
 	/**

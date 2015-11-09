@@ -40,7 +40,7 @@ public class WeixinController extends WeixinMsgControllerCustomServiceAdapter {
 		//防伪
 		UserInfo userInfo = userService.findByWxId(inTextMsg.getToUserName());
 		if(null == userInfo){
-			return new OutTextMsg(inTextMsg).setContent("系统繁忙，该公众号未绑定到第三方平台。");
+			return new OutTextMsg(inTextMsg).setContent("该公众号未绑定");
 		}
 		//没绑定就提示绑定
 		if("0".equals(userInfo.getBindStatus()) && !Constants.WEIXIN_BIND_TEXT.equals(inTextMsg.getContent())){

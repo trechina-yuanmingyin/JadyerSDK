@@ -1,17 +1,24 @@
 package com.jadyer.sdk.mpp.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -81,10 +88,11 @@ public class WeixinHelperController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="/sign/jssdk")
-	public Map<String, String> signJSSDK(String url){
+	public Map<String, String> signJSSDK(String url) throws UnsupportedEncodingException{
 		Map<String, String> resultMap = new HashMap<String, String>();
 		String noncestr = RandomStringUtils.randomNumeric(16);
 		long timestamp = (long)(System.currentTimeMillis()/1000);
+		url = URLDecoder.decode(url, "UTF-8");
 		resultMap.put("appid", TokenHolder.getWeixinAppid());
 		resultMap.put("timestamp", String.valueOf(timestamp));
 		resultMap.put("noncestr", noncestr);
@@ -95,36 +103,36 @@ public class WeixinHelperController {
 
 
 	/**
-	 * 通过另一个节点获取微信access_token
-	 * @see 之所以提供这个方法是有一个情景:同一个微信SDK给两个应用使用,而这俩应用都会用到并刷新微信access_token
-	 * @create Nov 3, 2015 2:11:44 PM
+	 * 下载微信临时媒体文件
+	 * @param mediaId 媒体文件ID
+	 * @create Nov 9, 2015 5:06:19 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
-	@RequestMapping(value="/get/accessToken")
-	public ResponseEntity<String> getAccessTokenViaClust(){
-		return new ResponseEntity<String>(TokenHolder.getWeixinAccessToken(), HttpStatus.OK);
+	@RequestMapping(value="/get/tempMediaFile/{mediaId}")
+	public ResponseEntity<byte[]> getTempMediaFile(@PathVariable String mediaId) throws IOException {
+		String fullPath = MPPUtil.downloadWeixinTempMediaFile(TokenHolder.getWeixinAccessToken(), mediaId);
+		TokenHolder.setMediaIdFilePath(mediaId, fullPath);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentDispositionFormData("attachment", "get_" + FilenameUtils.getName(fullPath));
+		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+		return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(new File(fullPath)), headers, HttpStatus.CREATED);
 	}
 
 
 	/**
-	 * 通过另一个节点获取微信jsapi_ticket
-	 * @create Nov 3, 2015 2:30:38 PM
-	 * @author 玄玉<http://blog.csdn.net/jadyer>
-	 */
-	@RequestMapping(value="/get/jsapiTicket")
-	public ResponseEntity<String> getJSApiTicketViaClust(){
-		return new ResponseEntity<String>(TokenHolder.getWeixinJSApiTicket(), HttpStatus.OK);
-	}
-
-
-	/**
-	 * 通过另一个节点获取微信oauth_access_token
-	 * @create Nov 3, 2015 2:33:10 PM
+	 * 删除存储在本地的微信临时媒体文件
+	 * @param fileFullPath 存储在本地的微信临时媒体文件的完整路径
+	 * @create Nov 9, 2015 9:06:35 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
 	@ResponseBody
-	@RequestMapping(value="/get/oauthAccessToken")
-	public WeixinOAuthAccessToken getOAuthAccessTokenViaClust(String code){
-		return TokenHolder.getWeixinOAuthAccessToken(code);
+	@RequestMapping(value="/delete/tempMediaFile/{mediaId}")
+	public boolean deleteTempMediaFile(@PathVariable String mediaId){
+		try {
+			return new File(TokenHolder.getMediaIdFilePath(mediaId)).delete();
+		} catch (Exception e) {
+			logger.info("删除存储在本地的微信临时媒体文件mediaId={},fullPath={}失败,堆栈轨迹如下", mediaId, TokenHolder.getMediaIdFilePath(mediaId), e);
+			return false;
+		}
 	}
 }

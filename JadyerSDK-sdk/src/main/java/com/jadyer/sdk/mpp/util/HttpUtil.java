@@ -157,14 +157,15 @@ public final class HttpUtil {
 	 * @see 4)请求参数含中文等特殊字符时,可直接传入本方法,方法内部会使用本工具类设置的全局DEFAULT_CHARSET对其转码
 	 * @see 5)该方法在解码响应报文时所采用的编码,取自响应消息头中的[Content-Type:text/html; charset=GBK]的charset值
 	 * @see   若响应消息头中未指定Content-Type属性,则会使用HttpClient内部默认的ISO-8859-1
-	 * @see 6)下载的文件会保存在ava.io.tmpdir环境变量指定的目录中,CentOS6.5下是/tmp,Win7下是C:\Users\Jadyer\AppData\Local\Temp\
+	 * @see 6)下载的文件会保存在java.io.tmpdir环境变量指定的目录中
+	 * @see   CentOS6.5下是/tmp,CentOS6.5下的Tomcat中是/app/tomcat/temp,Win7下是C:\Users\Jadyer\AppData\Local\Temp\
 	 * @see 7)下载的文件若比较大,可能导致程序假死或内存溢出,此时可考虑在本方法内部直接输出流
 	 * @param reqURL 请求地址
 	 * @param params 请求参数,无参数时传null即可
 	 * @return 应答Map有两个key,isSuccess--yes or no,fullPath--isSuccess为yes时返回文件完整保存路径,failReason--isSuccess为no时返回下载失败的原因
 	 */
-	public static Map<String, Object> postWithDownload(String reqURL, Map<String, String> params){
-		Map<String, Object> resultMap = new HashMap<String, Object>();
+	public static Map<String, String> postWithDownload(String reqURL, Map<String, String> params){
+		Map<String, String> resultMap = new HashMap<String, String>();
 		HttpClient httpClient = new DefaultHttpClient();
 		httpClient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, DEFAULT_CONNECTION_TIMEOUT);
 		httpClient.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, DEFAULT_SO_TIMEOUT);
@@ -237,7 +238,7 @@ public final class HttpUtil {
 				if(StringUtils.isBlank(filename)){
 					filename = UUID.randomUUID().toString().replaceAll("-", "");
 				}
-				File _file = new File(System.getProperty("java.io.tmpdir") + filename);
+				File _file = new File(System.getProperty("java.io.tmpdir") + "/" + filename);
 				FileUtils.copyInputStreamToFile(entity.getContent(), _file);
 				resultMap.put("isSuccess", "yes");
 				resultMap.put("fullPath", _file.getCanonicalPath());

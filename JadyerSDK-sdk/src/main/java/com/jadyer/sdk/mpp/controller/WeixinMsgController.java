@@ -85,7 +85,7 @@ public abstract class WeixinMsgController {
 		out.write(outMsgXml);
 		out.flush();
 		out.close();
-		logger.info("应答给微信服务器消息为{}", outMsgXml);
+		logger.info("应答微信服务器消息-->{}", outMsgXml);
 		return;
 	}
 
@@ -136,7 +136,7 @@ public abstract class WeixinMsgController {
 		//解密消息
 		//String aeskey = "WhyEzMHrSKfV5HbsVf5DjZfV3yx7bsJ7TUivKdeeH22";
 		//decrypt(aeskey);
-		logger.info("收到微信服务器消息为{}", inMsgXml);
+		logger.info("收到微信服务器消息-->{}", inMsgXml);
 		return InMsgParser.parse(inMsgXml);
 	}
 

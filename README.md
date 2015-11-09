@@ -12,6 +12,11 @@
 3.上面提到的后端，对应的就是JadyerSDK-demo的Module<br/>
 
 # 更新日志
+[v1.0.4] 2015.11.09<br/>
+1.修复1.0.3版中走了弯路导致的若干BUG<br/>
+2.TokenHolder引入java.util.concurrent.atomic.AtomicBoolean保证更新Token过程中的旧Token可用<br/>
+3.微信后台示例中增加防伪标记，只有绑定到该平台的公众号才会提供服务，避免开发者URL被破译后盗用服务<br/>
+
 [v1.0.3] 2015.11.03<br/>
 1.增加集成方式的简单描述<br/>
 2.引入jssdk并编写了一个调用手机相机而不调用相册的例子<br/>
