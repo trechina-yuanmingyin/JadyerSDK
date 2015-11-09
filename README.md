@@ -14,8 +14,8 @@
 # 更新日志
 [v1.0.4] 2015.11.09<br/>
 1.修复1.0.3版中走了弯路导致的若干BUG<br/>
-2.TokenHolder引入java.util.concurrent.atomic.AtomicBoolean保证更新Token过程中的旧Token可用<br/>
-3.微信后台示例中增加防伪标记，只有绑定到该平台的公众号才会提供服务，避免开发者URL被破译后盗用服务<br/>
+2.TokenHolder引入java.util.concurrent.atomic.AtomicBoolean，保证更新Token过程中的旧Token可用<br/>
+3.微信后台增加防伪标记，绑定到平台后的公众号才提供服务，避免开发者URL被破译后盗用服务<br/>
 
 [v1.0.3] 2015.11.03<br/>
 1.增加集成方式的简单描述<br/>
