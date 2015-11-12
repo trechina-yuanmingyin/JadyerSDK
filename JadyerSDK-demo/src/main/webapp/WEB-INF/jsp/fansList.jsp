@@ -23,7 +23,7 @@
 		</tr>
 		<c:forEach items="${page.content}" var="fans">
 			<tr>
-				<td><span><img alt="粉丝头像" src="${fans.headimgurl}" height="30px" width="30px"></span></td>
+				<td><span><img alt="头像" src="${fans.headimgurl}" height="30px" width="30px"></span></td>
 				<td><span>${fans.nickname}</span></td>
 				<td><span>${fans.sex eq 1 ? '男' : fans.sex eq 2 ? '女' : '未知'}</span></td>
 				<td><span>${fans.country}</span></td>
