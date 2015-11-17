@@ -20,10 +20,14 @@
 						http://www.springframework.org/schema/data/jpa/spring-jpa-1.8.xsd">
 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE"/>
-		<property name="ignoreResourceNotFound" value="false"/>
+		<property name="ignoreResourceNotFound" value="true"/>
+		<!-- ignoreResourceNotFound=true之后,这里同时找到config.properties和db.properties时 -->
+		<!-- 默认会使用db.properties里面的配置覆盖掉config.properties里面的同名配置 -->
+		<!-- 若没有找到db.properties,则会以config.properties的配置为准 -->
 		<property name="locations">
 			<list>
 				<value>classpath:config-${appenv.active}.properties</value>
+				<value>file:/home/jadyer/config/mpp.jadyer.com/db.properties</value>
 			</list>
 		</property>
 	</bean>
