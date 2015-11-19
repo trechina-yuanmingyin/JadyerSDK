@@ -12,6 +12,9 @@
 3.上面提到的后端，对应的就是JadyerSDK-demo的Module<br/>
 
 # 更新日志
+[v1.0.5] 2015.11.19<br/>
+1.修复1.0.4中微信媒体文件下载接口采用ResponseEntity<byte[]>返回流导致图片无法打开的问题<br/>
+
 [v1.0.4] 2015.11.09<br/>
 1.修复1.0.3版中走了弯路导致的若干BUG<br/>
 2.TokenHolder引入java.util.concurrent.atomic.AtomicBoolean，保证更新Token过程中的旧Token可用<br/>
