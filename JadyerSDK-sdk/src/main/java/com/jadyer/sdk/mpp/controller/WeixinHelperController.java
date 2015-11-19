@@ -1,7 +1,10 @@
 package com.jadyer.sdk.mpp.controller;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -16,10 +19,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -109,13 +108,20 @@ public class WeixinHelperController {
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
 	@RequestMapping(value="/get/tempMediaFile/{mediaId}")
-	public ResponseEntity<byte[]> getTempMediaFile(@PathVariable String mediaId) throws IOException {
+	public void getTempMediaFile(@PathVariable String mediaId, HttpServletResponse response) throws Exception {
 		String fullPath = MPPUtil.downloadWeixinTempMediaFile(TokenHolder.getWeixinAccessToken(), mediaId);
 		TokenHolder.setMediaIdFilePath(mediaId, fullPath);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentDispositionFormData("attachment", "get_" + FilenameUtils.getName(fullPath));
-		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-		return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(new File(fullPath)), headers, HttpStatus.CREATED);
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-disposition", "attachment; filename=" + new String(((String)("get_"+FilenameUtils.getName(fullPath))).getBytes("UTF-8"), "ISO8859-1"));
+		InputStream is = FileUtils.openInputStream(new File(fullPath));
+		OutputStream os = new BufferedOutputStream(response.getOutputStream());
+		byte[] buff = new byte[1024];
+		int len = -1;
+		while((len=is.read(buff)) != -1){
+			os.write(buff, 0, len);
+		}
+		is.close();
+		os.close();
 	}
 
 
