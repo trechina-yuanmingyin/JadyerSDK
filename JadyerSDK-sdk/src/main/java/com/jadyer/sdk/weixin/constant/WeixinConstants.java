@@ -1,6 +1,6 @@
-package com.jadyer.sdk.constant;
+package com.jadyer.sdk.weixin.constant;
 
-public interface SDKConstants {
+public interface WeixinConstants {
 	/**
 	 * 网页授权获取用户信息的方式
 	 */

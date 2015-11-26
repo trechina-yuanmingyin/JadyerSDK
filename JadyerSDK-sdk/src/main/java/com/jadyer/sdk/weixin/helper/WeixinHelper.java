@@ -11,9 +11,9 @@ import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
-import com.jadyer.sdk.constant.SDKCodeEnum;
-import com.jadyer.sdk.constant.SDKConstants;
 import com.jadyer.sdk.util.HttpUtil;
+import com.jadyer.sdk.weixin.constant.WeixinCodeEnum;
+import com.jadyer.sdk.weixin.constant.WeixinConstants;
 import com.jadyer.sdk.weixin.model.WeixinErrorInfo;
 import com.jadyer.sdk.weixin.model.WeixinFansInfo;
 import com.jadyer.sdk.weixin.model.WeixinOAuthAccessToken;
@@ -33,14 +33,14 @@ public final class WeixinHelper {
 	 * @return 获取失败时将抛出RuntimeException
 	 */
 	static String getWeixinAccessToken(String appid, String appsecret){
-		String reqURL = SDKConstants.URL_WEIXIN_GET_ACCESSTOKEN.replace(SDKConstants.URL_PLACEHOLDER_APPID, appid).replace(SDKConstants.URL_PLACEHOLDER_APPSECRET, appsecret);
+		String reqURL = WeixinConstants.URL_WEIXIN_GET_ACCESSTOKEN.replace(WeixinConstants.URL_PLACEHOLDER_APPID, appid).replace(WeixinConstants.URL_PLACEHOLDER_APPSECRET, appsecret);
 		String respData = HttpUtil.post(reqURL);
 		logger.info("获取微信access_token,微信应答报文为-->{}", respData);
 		Map<String, String> map = JSON.parseObject(respData, new TypeReference<Map<String, String>>(){});
 		if(respData.contains("access_token")){
 			return map.get("access_token");
 		}else{
-			String errmsg = SDKCodeEnum.getMessageByCode(Integer.parseInt((map.get("errcode"))));
+			String errmsg = WeixinCodeEnum.getMessageByCode(Integer.parseInt((map.get("errcode"))));
 			if(StringUtils.isBlank(errmsg)){
 				errmsg = map.get("errmsg");
 			}
@@ -59,14 +59,14 @@ public final class WeixinHelper {
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
 	static String getWeixinJSApiTicket(String accesstoken){
-		String reqURL = SDKConstants.URL_WEIXIN_GET_JSAPI_TICKET.replace(SDKConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken);
+		String reqURL = WeixinConstants.URL_WEIXIN_GET_JSAPI_TICKET.replace(WeixinConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken);
 		String respData = HttpUtil.post(reqURL);
 		logger.info("获取微信jsapi_ticket,微信应答报文为-->{}", respData);
 		Map<String, String> map = JSON.parseObject(respData, new TypeReference<Map<String, String>>(){});
 		if("0".equals(map.get("errcode"))){
 			return map.get("ticket");
 		}else{
-			String errmsg = SDKCodeEnum.getMessageByCode(Integer.parseInt((map.get("errcode"))));
+			String errmsg = WeixinCodeEnum.getMessageByCode(Integer.parseInt((map.get("errcode"))));
 			if(StringUtils.isBlank(errmsg)){
 				errmsg = map.get("errmsg");
 			}
@@ -83,14 +83,14 @@ public final class WeixinHelper {
 	 * @return 返回获取到的网页access_token(获取失败时的应答码也在该返回中)
 	 */
 	static WeixinOAuthAccessToken getWeixinOAuthAccessToken(String appid, String appsecret, String code){
-		String reqURL = SDKConstants.URL_WEIXIN_OAUTH2_GET_ACCESSTOKEN.replace(SDKConstants.URL_PLACEHOLDER_APPID, appid)
-																	  .replace(SDKConstants.URL_PLACEHOLDER_APPSECRET, appsecret)
-																	  .replace(SDKConstants.URL_PLACEHOLDER_CODE, code);
+		String reqURL = WeixinConstants.URL_WEIXIN_OAUTH2_GET_ACCESSTOKEN.replace(WeixinConstants.URL_PLACEHOLDER_APPID, appid)
+																	  .replace(WeixinConstants.URL_PLACEHOLDER_APPSECRET, appsecret)
+																	  .replace(WeixinConstants.URL_PLACEHOLDER_CODE, code);
 		String respData = HttpUtil.post(reqURL);
 		logger.info("获取微信网页access_token,微信应答报文为-->{}", respData);
 		WeixinOAuthAccessToken weixinOauthAccessToken = JSON.parseObject(respData, WeixinOAuthAccessToken.class);
 		if(weixinOauthAccessToken.getErrcode() != 0){
-			String errmsg = SDKCodeEnum.getMessageByCode(weixinOauthAccessToken.getErrcode());
+			String errmsg = WeixinCodeEnum.getMessageByCode(weixinOauthAccessToken.getErrcode());
 			if(StringUtils.isNotBlank(errmsg)){
 				weixinOauthAccessToken.setErrmsg(errmsg);
 			}
@@ -108,10 +108,10 @@ public final class WeixinHelper {
 	 */
 	public static String buildWeixinOAuthCodeURL(String appid, String scope, String state, String redirectURI){
 		try {
-			return SDKConstants.URL_WEIXIN_OAUTH2_GET_CODE.replace(SDKConstants.URL_PLACEHOLDER_APPID, appid)
-														  .replace(SDKConstants.URL_PLACEHOLDER_SCOPE, scope)
-														  .replace(SDKConstants.URL_PLACEHOLDER_STATE, state)
-														  .replace(SDKConstants.URL_PLACEHOLDER_REDIRECT_URI, URLEncoder.encode(redirectURI, HttpUtil.DEFAULT_CHARSET));
+			return WeixinConstants.URL_WEIXIN_OAUTH2_GET_CODE.replace(WeixinConstants.URL_PLACEHOLDER_APPID, appid)
+														  .replace(WeixinConstants.URL_PLACEHOLDER_SCOPE, scope)
+														  .replace(WeixinConstants.URL_PLACEHOLDER_STATE, state)
+														  .replace(WeixinConstants.URL_PLACEHOLDER_REDIRECT_URI, URLEncoder.encode(redirectURI, HttpUtil.DEFAULT_CHARSET));
 		} catch (UnsupportedEncodingException e) {
 			return null;
 		}
@@ -128,14 +128,14 @@ public final class WeixinHelper {
 	 * @see -----------------------------------------------------------------------------------------------------------
 	 */
 	public static WeixinErrorInfo createWeixinMenu(String accesstoken, WeixinMenu menu){
-		String reqURL = SDKConstants.URL_WEIXIN_GET_CREATE_MENU.replace(SDKConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken);
+		String reqURL = WeixinConstants.URL_WEIXIN_GET_CREATE_MENU.replace(WeixinConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken);
 		String reqData = JSON.toJSONString(menu);
 		logger.info("自定义菜单创建-->待发送的JSON为{}", reqData);
 		String respData = HttpUtil.post(reqURL, reqData);
 		logger.info("自定义菜单创建-->微信应答JSON为{}", respData);
 		WeixinErrorInfo errinfo = JSON.parseObject(respData, WeixinErrorInfo.class);
 		if(errinfo.getErrcode() != 0){
-			String errmsg = SDKCodeEnum.getMessageByCode(errinfo.getErrcode());
+			String errmsg = WeixinCodeEnum.getMessageByCode(errinfo.getErrcode());
 			if(StringUtils.isNotBlank(errmsg)){
 				errinfo.setErrmsg(errmsg);
 			}
@@ -150,13 +150,13 @@ public final class WeixinHelper {
 	 * @see String menuJson = "{\"button\":[{\"type\":\"view\", \"name\":\"我的博客\", \"url\":\"http://blog.csdn.net/jadyer\"}, {\"name\":\"个人中心\", \"sub_button\": [{\"type\":\"view\", \"name\":\"搜索\", \"url\":\"http://www.soso.com/\"}, {\"type\":\"view\", \"name\":\"视频\", \"url\":\"http://v.qq.com/\"}, {\"type\":\"click\", \"name\":\"赞一下我们\", \"key\":\"V1001_GOOD\"}]}]}";
 	 */
 	public static WeixinErrorInfo createWeixinMenu(String accesstoken, String menuJson){
-		String reqURL = SDKConstants.URL_WEIXIN_GET_CREATE_MENU.replace(SDKConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken);
+		String reqURL = WeixinConstants.URL_WEIXIN_GET_CREATE_MENU.replace(WeixinConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken);
 		logger.info("自定义菜单创建-->待发送的JSON为{}", menuJson);
 		String respData = HttpUtil.post(reqURL, menuJson);
 		logger.info("自定义菜单创建-->微信应答JSON为{}", respData);
 		WeixinErrorInfo errinfo = JSON.parseObject(respData, WeixinErrorInfo.class);
 		if(errinfo.getErrcode() != 0){
-			String errmsg = SDKCodeEnum.getMessageByCode(errinfo.getErrcode());
+			String errmsg = WeixinCodeEnum.getMessageByCode(errinfo.getErrcode());
 			if(StringUtils.isNotBlank(errmsg)){
 				errinfo.setErrmsg(errmsg);
 			}
@@ -178,7 +178,7 @@ public final class WeixinHelper {
 	 * @see {"subscribe":1,"openid":"o3SHot22_IqkUI7DpahNv-KBiFIs","nickname":"玄玉","sex":1,"language":"en","city":"江北","province":"重庆","country":"中国","headimgurl":"http:\/\/wx.qlogo.cn\/mmopen\/Sa1DhFzJREXnSqZKc2Y2AficBdiaaiauFNBbiakfO7fJkf8Cp3oLgJQhbgkwmlN3co2aJr9iabEKJq5jsZYup3gibaVCHD5W13XRmR\/0","subscribe_time":1445398219,"remark":"","groupid":0}]
 	 */
 	public static WeixinFansInfo getWeixinFansInfo(String accesstoken, String openid){
-		String reqURL = SDKConstants.URL_WEIXIN_GET_FANSINFO.replace(SDKConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken).replace(SDKConstants.URL_PLACEHOLDER_OPENID, openid);
+		String reqURL = WeixinConstants.URL_WEIXIN_GET_FANSINFO.replace(WeixinConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken).replace(WeixinConstants.URL_PLACEHOLDER_OPENID, openid);
 		String respData = HttpUtil.post(reqURL);
 		return JSON.parseObject(respData, WeixinFansInfo.class);
 	}
@@ -191,14 +191,14 @@ public final class WeixinHelper {
 	 * @see 注意:如果需要以某个客服帐号来发消息,需要在请求JSON中加入customservice参数,这里暂未指定customservice
 	 */
 	public static WeixinErrorInfo pushWeixinMsgToFans(String accesstoken, WeixinCustomMsg customMsg){
-		String reqURL = SDKConstants.URL_WEIXIN_CUSTOM_PUSH_MESSAGE.replace(SDKConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken);
+		String reqURL = WeixinConstants.URL_WEIXIN_CUSTOM_PUSH_MESSAGE.replace(WeixinConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken);
 		String reqData = JSON.toJSONString(customMsg);
 		logger.info("客服接口主动推消息-->待发送的JSON为{}", reqData);
 		String respData = HttpUtil.post(reqURL, reqData);
 		logger.info("客服接口主动推消息-->微信应答JSON为{}", respData);
 		WeixinErrorInfo errinfo = JSON.parseObject(respData, WeixinErrorInfo.class);
 		if(errinfo.getErrcode() != 0){
-			String errmsg = SDKCodeEnum.getMessageByCode(errinfo.getErrcode());
+			String errmsg = WeixinCodeEnum.getMessageByCode(errinfo.getErrcode());
 			if(StringUtils.isNotBlank(errmsg)){
 				errinfo.setErrmsg(errmsg);
 			}
@@ -235,11 +235,11 @@ public final class WeixinHelper {
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
 	public static String downloadWeixinTempMediaFile(String accesstoken, String mediaId){
-		String reqURL = SDKConstants.URL_WEIXIN_GET_TEMP_MEDIA_FILE.replace(SDKConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken).replace(SDKConstants.URL_PLACEHOLDER_MEDIAID, mediaId);
+		String reqURL = WeixinConstants.URL_WEIXIN_GET_TEMP_MEDIA_FILE.replace(WeixinConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken).replace(WeixinConstants.URL_PLACEHOLDER_MEDIAID, mediaId);
 		Map<String, String> resultMap = HttpUtil.postWithDownload(reqURL, null);
 		if("no".equals(resultMap.get("isSuccess"))){
 			Map<String, String> errmap = JSON.parseObject((String)resultMap.get("failReason"), new TypeReference<Map<String, String>>(){});
-			String errmsg = SDKCodeEnum.getMessageByCode(Integer.parseInt((errmap.get("errcode"))));
+			String errmsg = WeixinCodeEnum.getMessageByCode(Integer.parseInt((errmap.get("errcode"))));
 			if(StringUtils.isBlank(errmsg)){
 				errmsg = errmap.get("errmsg");
 			}

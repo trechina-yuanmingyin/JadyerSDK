@@ -15,9 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.jadyer.sdk.constant.SDKConstants;
 import com.jadyer.sdk.util.HttpUtil;
 import com.jadyer.sdk.util.SDKUtil;
+import com.jadyer.sdk.weixin.constant.WeixinConstants;
 import com.jadyer.sdk.weixin.helper.WeixinHelper;
 import com.jadyer.sdk.weixin.helper.WeixinTokenHolder;
 
@@ -106,7 +106,7 @@ public class WeixinFilter implements Filter {
 			String state = fullURI.replace("?", "/").replace("&", "/");
 			state = state.replace("/oauth=base", "");
 			logger.info("计算粉丝请求的资源得到state={}", state);
-			response.sendRedirect(WeixinHelper.buildWeixinOAuthCodeURL(WeixinTokenHolder.getWeixinAppid(), SDKConstants.WEIXIN_OAUTH_SCOPE_SNSAPI_BASE, state, this.redirecturl));
+			response.sendRedirect(WeixinHelper.buildWeixinOAuthCodeURL(WeixinTokenHolder.getWeixinAppid(), WeixinConstants.WEIXIN_OAUTH_SCOPE_SNSAPI_BASE, state, this.redirecturl));
 		}else{
 			chain.doFilter(req, resp);
 		}
