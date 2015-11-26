@@ -1,4 +1,4 @@
-package com.jadyer.sdk.demo.mpp.reply;
+package com.jadyer.sdk.demo.weixin.reply;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
-import com.jadyer.sdk.demo.mpp.reply.model.ReplyInfo;
+import com.jadyer.sdk.demo.weixin.reply.model.ReplyInfo;
 
 public interface ReplyInfoDao extends JpaRepository<ReplyInfo, Integer>, JpaSpecificationExecutor<ReplyInfo> {
 	/**

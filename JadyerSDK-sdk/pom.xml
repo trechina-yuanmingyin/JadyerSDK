@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.jadyer.sdk</groupId>
 		<artifactId>JadyerSDK-parent</artifactId>
-		<version>1.0.6</version>
+		<version>1.1.0</version>
 	</parent>
 	<artifactId>JadyerSDK-sdk</artifactId>
 	<description>mvn deploy:deploy-file -DgroupId=com.jadyer.sdk -DartifactId=JadyerSDK-sdk -Dversion=1.0.6 -Dpackaging=jar -Dfile=JadyerSDK-sdk-1.0.6.jar -Durl=http://192.168.2.41:8081/nexus/content/repositories/releases -DrepositoryId=releases</description>

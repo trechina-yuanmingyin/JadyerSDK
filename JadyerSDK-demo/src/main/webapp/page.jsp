@@ -3,7 +3,7 @@
 
 <%--
 使用该通用分页有三个约束条件
-1.后台分页的方法中用于表示页码的参数名应为pageNo,可参考com.jadyer.sdk.demo.mpp.fans.FansController.java
+1.后台分页的方法中用于表示页码的参数名应为pageNo,可参考com.jadyer.sdk.demo.weixin.fans.FansController.java
 2.request.setAttribute("page", fansPage);即返回给前台的分页对象名称应为page
 3.<jsp:include page="/page.jsp?requestURI=${ctx}/fans/list"/>即引用时需传入requestURI
 --%>

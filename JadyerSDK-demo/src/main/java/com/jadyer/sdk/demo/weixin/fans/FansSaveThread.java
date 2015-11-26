@@ -1,11 +1,11 @@
-package com.jadyer.sdk.demo.mpp.fans;
+package com.jadyer.sdk.demo.weixin.fans;
 
 import java.util.Date;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 
 import com.jadyer.sdk.demo.common.base.ApplicationContextHolder;
-import com.jadyer.sdk.demo.mpp.fans.model.FansInfo;
+import com.jadyer.sdk.demo.weixin.fans.model.FansInfo;
 import com.jadyer.sdk.demo.user.UserInfoDao;
 import com.jadyer.sdk.demo.user.model.UserInfo;
 import com.jadyer.sdk.weixin.helper.WeixinHelper;

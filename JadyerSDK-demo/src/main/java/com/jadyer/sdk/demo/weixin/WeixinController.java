@@ -1,4 +1,4 @@
-package com.jadyer.sdk.demo.mpp;
+package com.jadyer.sdk.demo.weixin;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.jadyer.sdk.demo.common.constant.Constants;
 import com.jadyer.sdk.demo.common.util.LogUtil;
-import com.jadyer.sdk.demo.mpp.fans.FansInfoDao;
-import com.jadyer.sdk.demo.mpp.fans.FansSaveThread;
-import com.jadyer.sdk.demo.mpp.reply.ReplyInfoDao;
-import com.jadyer.sdk.demo.mpp.reply.model.ReplyInfo;
+import com.jadyer.sdk.demo.weixin.fans.FansInfoDao;
+import com.jadyer.sdk.demo.weixin.fans.FansSaveThread;
+import com.jadyer.sdk.demo.weixin.reply.ReplyInfoDao;
+import com.jadyer.sdk.demo.weixin.reply.model.ReplyInfo;
 import com.jadyer.sdk.demo.user.UserService;
 import com.jadyer.sdk.demo.user.model.UserInfo;
 import com.jadyer.sdk.weixin.controller.WeixinMsgControllerCustomServiceAdapter;

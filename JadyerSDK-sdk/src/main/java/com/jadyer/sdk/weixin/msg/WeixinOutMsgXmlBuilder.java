@@ -13,7 +13,7 @@ import com.jadyer.sdk.weixin.msg.out.WeixinOutNewsMsg;
 import com.jadyer.sdk.weixin.msg.out.WeixinOutTextMsg;
 
 /**
- * 回复消息的构建器
+ * 回复微信公众号消息的构建器
  * @create Oct 18, 2015 2:01:23 PM
  * @author 玄玉<http://blog.csdn.net/jadyer>
  */

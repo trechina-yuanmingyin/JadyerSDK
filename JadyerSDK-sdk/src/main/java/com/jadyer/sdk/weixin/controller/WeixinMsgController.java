@@ -29,8 +29,8 @@ import com.jadyer.sdk.weixin.msg.in.event.WeixinInMenuEventMsg;
 import com.jadyer.sdk.weixin.msg.out.WeixinOutMsg;
 
 /**
- * 接收微信服务器消息,自动解析成com.jadyer.sdk.weixin.msg.in.InMsg
- * 并分发到相应的处理方法,得到处理后的com.jadyer.sdk.weixin.msg.out.OutMsg并回复给微信服务器
+ * 接收微信服务器消息,自动解析成com.jadyer.sdk.weixin.msg.in.WeixinInMsg
+ * 并分发到相应的处理方法,得到处理后的com.jadyer.sdk.weixin.msg.out.WeixinOutMsg并回复给微信服务器
  * @create Oct 18, 2015 12:37:47 PM
  * @author 玄玉<http://blog.csdn.net/jadyer>
  */
@@ -112,7 +112,7 @@ public abstract class WeixinMsgController {
 
 
 	/**
-	 * 解析微信服务器请求过来的xml报文为InMsg对象
+	 * 解析微信服务器请求过来的xml报文为WeixinInMsg对象
 	 * @create Oct 18, 2015 3:38:57 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */

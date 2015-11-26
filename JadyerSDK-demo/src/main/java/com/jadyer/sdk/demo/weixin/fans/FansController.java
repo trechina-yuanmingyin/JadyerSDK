@@ -1,4 +1,4 @@
-package com.jadyer.sdk.demo.mpp.fans;
+package com.jadyer.sdk.demo.weixin.fans;
 
 import javax.annotation.Resource;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.jadyer.sdk.demo.common.constant.Constants;
-import com.jadyer.sdk.demo.mpp.fans.model.FansInfo;
+import com.jadyer.sdk.demo.weixin.fans.model.FansInfo;
 
 @Controller
 @RequestMapping(value="/fans")

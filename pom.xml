@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.jadyer.sdk</groupId>
 	<artifactId>JadyerSDK-parent</artifactId>
-	<version>1.0.6</version>
+	<version>1.1.0</version>
 	<packaging>pom</packaging>
 	<modules>
 		<module>JadyerSDK-demo</module>

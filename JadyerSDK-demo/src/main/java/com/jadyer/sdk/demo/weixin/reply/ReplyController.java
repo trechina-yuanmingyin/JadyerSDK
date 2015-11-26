@@ -1,4 +1,4 @@
-package com.jadyer.sdk.demo.mpp.reply;
+package com.jadyer.sdk.demo.weixin.reply;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jadyer.sdk.demo.common.base.CommonResult;
 import com.jadyer.sdk.demo.common.constant.Constants;
-import com.jadyer.sdk.demo.mpp.reply.model.ReplyInfo;
+import com.jadyer.sdk.demo.weixin.reply.model.ReplyInfo;
 
 @Controller
 @RequestMapping(value="/reply")
