@@ -49,3 +49,4 @@ hs_err_pid*
 target/
 bin/
 META-INF/
+logs

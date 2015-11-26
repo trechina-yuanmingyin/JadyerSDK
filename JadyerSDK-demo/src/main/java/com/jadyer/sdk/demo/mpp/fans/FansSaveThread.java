@@ -8,8 +8,8 @@ import com.jadyer.sdk.demo.common.base.ApplicationContextHolder;
 import com.jadyer.sdk.demo.mpp.fans.model.FansInfo;
 import com.jadyer.sdk.demo.user.UserInfoDao;
 import com.jadyer.sdk.demo.user.model.UserInfo;
-import com.jadyer.sdk.mpp.util.MPPUtil;
-import com.jadyer.sdk.mpp.util.TokenHolder;
+import com.jadyer.sdk.weixin.helper.WeixinHelper;
+import com.jadyer.sdk.weixin.helper.WeixinTokenHolder;
 
 public class FansSaveThread implements Runnable {
 	private UserInfo userInfo;
@@ -31,28 +31,28 @@ public class FansSaveThread implements Runnable {
 		/**
 		 * 获取并更新accesstoken
 		 */
-		userInfo.setAccessToken(TokenHolder.getWeixinAccessToken());
+		userInfo.setAccessToken(WeixinTokenHolder.getWeixinAccessToken());
 		userInfo.setAccessTokenTime(new Date());
 		userInfoDao.saveAndFlush(userInfo);
 		/**
 		 * 向微信服务器查询粉丝信息
 		 */
-		com.jadyer.sdk.mpp.model.FansInfo _fansInfo = MPPUtil.getWeixinFansInfo(TokenHolder.getWeixinAccessToken(), openid);
+		com.jadyer.sdk.weixin.model.WeixinFansInfo weixinFansInfo = WeixinHelper.getWeixinFansInfo(WeixinTokenHolder.getWeixinAccessToken(), openid);
 		fansInfo.setUid(userInfo.getId());
 		fansInfo.setWxId(userInfo.getWxId());
 		fansInfo.setOpenid(openid);
-		fansInfo.setSubscribe(String.valueOf(_fansInfo.getSubscribe()));
-		fansInfo.setSubscribeTime(DateFormatUtils.format(new Date(Long.parseLong(_fansInfo.getSubscribe_time())*1000), "yyyy-MM-dd HH:mm:ss"));
-		fansInfo.setNickname(_fansInfo.getNickname());
-		fansInfo.setSex(String.valueOf(_fansInfo.getSex()));
-		fansInfo.setCity(_fansInfo.getCity());
-		fansInfo.setCountry(_fansInfo.getCountry());
-		fansInfo.setProvince(_fansInfo.getProvince());
-		fansInfo.setLanguage(_fansInfo.getLanguage());
-		fansInfo.setHeadimgurl(_fansInfo.getHeadimgurl());
-		fansInfo.setUnionid(_fansInfo.getUnionid());
-		fansInfo.setRemark(_fansInfo.getRemark());
-		fansInfo.setGroupid(_fansInfo.getGroupid());
+		fansInfo.setSubscribe(String.valueOf(weixinFansInfo.getSubscribe()));
+		fansInfo.setSubscribeTime(DateFormatUtils.format(new Date(Long.parseLong(weixinFansInfo.getSubscribe_time())*1000), "yyyy-MM-dd HH:mm:ss"));
+		fansInfo.setNickname(weixinFansInfo.getNickname());
+		fansInfo.setSex(String.valueOf(weixinFansInfo.getSex()));
+		fansInfo.setCity(weixinFansInfo.getCity());
+		fansInfo.setCountry(weixinFansInfo.getCountry());
+		fansInfo.setProvince(weixinFansInfo.getProvince());
+		fansInfo.setLanguage(weixinFansInfo.getLanguage());
+		fansInfo.setHeadimgurl(weixinFansInfo.getHeadimgurl());
+		fansInfo.setUnionid(weixinFansInfo.getUnionid());
+		fansInfo.setRemark(weixinFansInfo.getRemark());
+		fansInfo.setGroupid(weixinFansInfo.getGroupid());
 		fansInfoDao.saveAndFlush(fansInfo);
 	}
 }

@@ -15,9 +15,9 @@ import com.jadyer.sdk.demo.common.base.CommonResult;
 import com.jadyer.sdk.demo.common.constant.CodeEnum;
 import com.jadyer.sdk.demo.common.constant.Constants;
 import com.jadyer.sdk.demo.user.model.UserInfo;
-import com.jadyer.sdk.mpp.model.ErrorInfo;
-import com.jadyer.sdk.mpp.util.MPPUtil;
-import com.jadyer.sdk.mpp.util.TokenHolder;
+import com.jadyer.sdk.weixin.helper.WeixinTokenHolder;
+import com.jadyer.sdk.weixin.helper.WeixinHelper;
+import com.jadyer.sdk.weixin.model.WeixinErrorInfo;
 
 @Controller
 @RequestMapping(value="/user")
@@ -76,10 +76,10 @@ public class UserController{
 		 * 但也不能不初始化微信appid和appsecret,否则无法发布自定义菜单或主动推消息给粉丝等等
 		 */
 		if(StringUtils.isNotBlank(userInfo.getAppId())){
-			TokenHolder.setWeixinAppid(userInfo.getAppId());
+			WeixinTokenHolder.setWeixinAppid(userInfo.getAppId());
 		}
 		if(StringUtils.isNotBlank(userInfo.getAppSecret())){
-			TokenHolder.setWeixinAppsecret(userInfo.getAppSecret());
+			WeixinTokenHolder.setWeixinAppsecret(userInfo.getAppSecret());
 		}
 		return "user/userInfo";
 	}
@@ -101,8 +101,8 @@ public class UserController{
 		userInfo.setAccessTokenTime(_userInfo.getAccessTokenTime());
 		request.getSession().setAttribute(Constants.USERINFO, userService.save(userInfo));
 		//更换绑定的公众号,也要同步更新微信appid和appsecret
-		TokenHolder.setWeixinAppid(userInfo.getAppId());
-		TokenHolder.setWeixinAppsecret(userInfo.getAppSecret());
+		WeixinTokenHolder.setWeixinAppid(userInfo.getAppId());
+		WeixinTokenHolder.setWeixinAppsecret(userInfo.getAppSecret());
 		return new CommonResult();
 	}
 
@@ -131,7 +131,7 @@ public class UserController{
 	@ResponseBody
 	@RequestMapping("/menu/weixin/create")
 	public CommonResult menuWeixinCreate(String menuJson){
-		ErrorInfo errorInfo = MPPUtil.createWeixinMenu(TokenHolder.getWeixinAccessToken(), menuJson);
+		WeixinErrorInfo errorInfo = WeixinHelper.createWeixinMenu(WeixinTokenHolder.getWeixinAccessToken(), menuJson);
 		if(0 == errorInfo.getErrcode()){
 			return new CommonResult();
 		}else{

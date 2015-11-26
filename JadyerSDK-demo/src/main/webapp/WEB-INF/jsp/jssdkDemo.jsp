@@ -1,8 +1,8 @@
 <%@ page pageEncoding="UTF-8"%>
-<%@ page import="com.jadyer.sdk.mpp.util.TokenHolder"%>
+<%@ page import="com.jadyer.sdk.weixin.helper.WeixinTokenHolder"%>
 <%
-out.println(TokenHolder.getWeixinAccessToken());
-out.print(TokenHolder.getWeixinJSApiTicket());
+	out.println(WeixinTokenHolder.getWeixinAccessToken());
+out.print(WeixinTokenHolder.getWeixinJSApiTicket());
 %>
 <!DOCTYPE HTML>
 <html>
