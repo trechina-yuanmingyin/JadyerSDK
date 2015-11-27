@@ -23,6 +23,7 @@ import com.jadyer.sdk.qq.msg.in.QQInTextMsg;
 import com.jadyer.sdk.qq.msg.in.event.QQInFollowEventMsg;
 import com.jadyer.sdk.qq.msg.in.event.QQInMenuEventMsg;
 import com.jadyer.sdk.qq.msg.out.QQOutMsg;
+import com.jadyer.sdk.util.SDKUtil;
 
 /**
  * 接收QQ服务器消息,自动解析成com.jadyer.sdk.qq.msg.in.QQInMsg
@@ -35,6 +36,7 @@ public abstract class QQMsgController {
 
 	@RequestMapping(value="/{token}")
 	public void index(@PathVariable String token, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		System.out.println("收到QQ服务器请求" + SDKUtil.buildStringFromMapWithStringArray(request.getParameterMap()));
 		//验签
 		token = DigestUtils.md5Hex(token + "http://blog.csdn.net/jadyer" + token);
 		if(!this.verifySignature(token, request)){
@@ -80,6 +82,7 @@ public abstract class QQMsgController {
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
 	private boolean verifySignature(String token, HttpServletRequest request){
+		System.out.println("收到QQ服务器请求的待验签" + SDKUtil.buildStringFromMapWithStringArray(request.getParameterMap()));
 		String signature = request.getParameter("signature");
 		String timestamp = request.getParameter("timestamp");
 		String nonce = request.getParameter("nonce");
@@ -101,6 +104,7 @@ public abstract class QQMsgController {
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
 	private QQInMsg getInMsg(HttpServletRequest request){
+		System.out.println("收到QQ服务器请求的待解析" + SDKUtil.buildStringFromMapWithStringArray(request.getParameterMap()));
 		String inMsgXml = null;
 		BufferedReader br = null;
 		try{
