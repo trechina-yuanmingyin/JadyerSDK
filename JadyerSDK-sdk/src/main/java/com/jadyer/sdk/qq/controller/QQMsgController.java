@@ -1,6 +1,5 @@
 package com.jadyer.sdk.qq.controller;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
@@ -9,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +34,8 @@ public abstract class QQMsgController {
 
 	@RequestMapping(value="/{token}")
 	public void index(@PathVariable String token, HttpServletRequest request, HttpServletResponse response) throws IOException {
-		System.out.println("收到QQ服务器请求" + SDKUtil.buildStringFromMapWithStringArray(request.getParameterMap()));
+		String reqBodyMsg = SDKUtil.extractHttpServletRequestBodyMessage(request);
+		logger.info("收到QQ服务器消息如下\n{}", SDKUtil.extractHttpServletRequestHeaderMessage(request)+"\n"+reqBodyMsg);
 		//验签
 		token = DigestUtils.md5Hex(token + "http://blog.csdn.net/jadyer" + token);
 		if(!this.verifySignature(token, request)){
@@ -55,7 +54,7 @@ public abstract class QQMsgController {
 			return;
 		}
 		//POST过来的请求表示QQ服务器请求通信
-		QQInMsg inMsg = this.getInMsg(request);
+		QQInMsg inMsg = QQInMsgParser.parse(reqBodyMsg);
 		QQOutMsg outMsg = new QQOutMsg();
 		if(inMsg instanceof QQInTextMsg){
 			outMsg = this.processInTextMsg((QQInTextMsg)inMsg);
@@ -82,7 +81,6 @@ public abstract class QQMsgController {
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
 	private boolean verifySignature(String token, HttpServletRequest request){
-		System.out.println("收到QQ服务器请求的待验签" + SDKUtil.buildStringFromMapWithStringArray(request.getParameterMap()));
 		String signature = request.getParameter("signature");
 		String timestamp = request.getParameter("timestamp");
 		String nonce = request.getParameter("nonce");
@@ -95,37 +93,6 @@ public abstract class QQMsgController {
 			return false;
 		}
 		return true;
-	}
-
-
-	/**
-	 * 解析QQ服务器请求过来的xml报文为QQInMsg对象
-	 * @create Nov 26, 2015 7:23:05 PM
-	 * @author 玄玉<http://blog.csdn.net/jadyer>
-	 */
-	private QQInMsg getInMsg(HttpServletRequest request){
-		System.out.println("收到QQ服务器请求的待解析" + SDKUtil.buildStringFromMapWithStringArray(request.getParameterMap()));
-		String inMsgXml = null;
-		BufferedReader br = null;
-		try{
-			StringBuilder sb = new StringBuilder();
-			br = request.getReader();
-			for(String line=null; (line=br.readLine())!=null;){
-				sb.append(line).append("\n");
-			}
-			inMsgXml = sb.toString();
-		}catch(IOException e){
-			throw new RuntimeException(e);
-		}finally {
-			if(null != br){
-				IOUtils.closeQuietly(br);
-			}
-		}
-		//解密消息
-		//String aeskey = "WhyEzMHrSKfV5HbsVf5DjZfV3yx7bsJ7TUivKdeeH22";
-		//decrypt(aeskey);
-		logger.info("收到QQ服务器消息-->{}", inMsgXml);
-		return QQInMsgParser.parse(inMsgXml);
 	}
 
 

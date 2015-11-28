@@ -1,6 +1,5 @@
 package com.jadyer.sdk.weixin.controller;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
@@ -9,13 +8,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.jadyer.sdk.util.SDKUtil;
 import com.jadyer.sdk.weixin.msg.WeixinInMsgParser;
 import com.jadyer.sdk.weixin.msg.WeixinOutMsgXmlBuilder;
 import com.jadyer.sdk.weixin.msg.in.WeixinInImageMsg;
@@ -39,6 +38,8 @@ public abstract class WeixinMsgController {
 
 	@RequestMapping(value="/{token}")
 	public void index(@PathVariable String token, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String reqBodyMsg = SDKUtil.extractHttpServletRequestBodyMessage(request);
+		logger.info("收到微信服务器消息如下\n{}", SDKUtil.extractHttpServletRequestHeaderMessage(request)+"\n"+reqBodyMsg);
 		//验签
 		token = DigestUtils.md5Hex(token + "http://blog.csdn.net/jadyer" + token);
 		if(!this.verifySignature(token, request)){
@@ -57,7 +58,9 @@ public abstract class WeixinMsgController {
 			return;
 		}
 		//POST过来的请求表示微信服务器请求通信
-		WeixinInMsg inMsg = this.getInMsg(request);
+		//String aeskey = "WhyEzMHrSKfV5HbsVf5DjZfV3yx7bsJ7TUivKdeeH22";
+		//decrypt(aeskey);
+		WeixinInMsg inMsg = WeixinInMsgParser.parse(reqBodyMsg);
 		WeixinOutMsg outMsg = new WeixinOutMsg();
 		if(inMsg instanceof WeixinInTextMsg){
 			outMsg = this.processInTextMsg((WeixinInTextMsg)inMsg);
@@ -108,36 +111,6 @@ public abstract class WeixinMsgController {
 			return false;
 		}
 		return true;
-	}
-
-
-	/**
-	 * 解析微信服务器请求过来的xml报文为WeixinInMsg对象
-	 * @create Oct 18, 2015 3:38:57 PM
-	 * @author 玄玉<http://blog.csdn.net/jadyer>
-	 */
-	private WeixinInMsg getInMsg(HttpServletRequest request){
-		String inMsgXml = null;
-		BufferedReader br = null;
-		try{
-			StringBuilder sb = new StringBuilder();
-			br = request.getReader();
-			for(String line=null; (line=br.readLine())!=null;){
-				sb.append(line).append("\n");
-			}
-			inMsgXml = sb.toString();
-		}catch(IOException e){
-			throw new RuntimeException(e);
-		}finally {
-			if(null != br){
-				IOUtils.closeQuietly(br);
-			}
-		}
-		//解密消息
-		//String aeskey = "WhyEzMHrSKfV5HbsVf5DjZfV3yx7bsJ7TUivKdeeH22";
-		//decrypt(aeskey);
-		logger.info("收到微信服务器消息-->{}", inMsgXml);
-		return WeixinInMsgParser.parse(inMsgXml);
 	}
 
 

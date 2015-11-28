@@ -1,9 +1,15 @@
 package com.jadyer.sdk.util;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.io.IOUtils;
 
 public final class SDKUtil {
 	private SDKUtil(){}
@@ -41,5 +47,53 @@ public final class SDKUtil {
 			sb.append("\n").append(entry.getKey()).append("=").append(Arrays.toString(entry.getValue()));
 		}
 		return sb.append("\n]").toString();
+	}
+
+
+	/**
+	 * 提取收到的HttpServletRequest请求报文头消息
+	 * @see 该方法默认使用了UTF-8解析请求消息
+	 * @see 解析过程中发生异常时会抛出RuntimeException
+	 * @create Nov 28, 2015 4:12:19 PM
+	 * @author 玄玉<http://blog.csdn.net/jadyer>
+	 */
+	public static String extractHttpServletRequestHeaderMessage(HttpServletRequest request){
+		StringBuilder sb = new StringBuilder();
+		sb.append(request.getMethod()).append(" ").append(request.getRequestURI() + (null==request.getQueryString()?"":"?"+request.getQueryString())).append(" ").append(request.getProtocol()).append("\n");
+		for(Enumeration<String> obj = request.getHeaderNames(); obj.hasMoreElements();){
+			sb.append(obj.nextElement()).append(": ").append(request.getHeader(obj.nextElement())).append("\n");
+		}
+		return sb.toString();
+	}
+
+
+	/**
+	 * 提取收到的HttpServletRequest请求报文体消息
+	 * @see 该方法默认使用了UTF-8解析请求消息
+	 * @see 解析过程中发生异常时会抛出RuntimeException
+	 * @create Nov 28, 2015 4:12:19 PM
+	 * @author 玄玉<http://blog.csdn.net/jadyer>
+	 */
+	public static String extractHttpServletRequestBodyMessage(HttpServletRequest request){
+		try{
+			request.setCharacterEncoding("UTF-8");
+		}catch(UnsupportedEncodingException e1){
+			//ignore
+		}
+		StringBuilder sb = new StringBuilder();
+		BufferedReader br = null;
+		try{
+			br = request.getReader();
+			for(String line=null; (line=br.readLine())!=null;){
+				sb.append(line).append("\n");
+			}
+		}catch(IOException e){
+			throw new RuntimeException(e);
+		}finally {
+			if(null != br){
+				IOUtils.closeQuietly(br);
+			}
+		}
+		return sb.toString();
 	}
 }
