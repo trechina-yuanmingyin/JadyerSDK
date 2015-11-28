@@ -174,15 +174,15 @@ public final class QQHelper {
 
 	/**
 	 * 获取用户基本信息
-	 * @see QQ服务器的应答报文是下面这样的,一般Content-Type里面编码都用charset,它竟然用encoding
+	 * @see QQ服务器的应答报文是下面这样的,微信服务器应答的还有一个encoding,QQ服务器的竟然连encoding都没有
 	 * @see HTTP/1.1 200 OK
-	 * @see Server: nginx/1.8.0
-	 * @see Date: Wed, 21 Oct 2015 03:56:53 GMT
-	 * @see Content-Type: application/json; encoding=utf-8
-	 * @see Content-Length: 357
-	 * @see Connection: keep-alive
+	 * @see Server: nginx
+	 * @see Date: Sat, 28 Nov 2015 14:25:31 GMT
+	 * @see Content-Type: application/json
+	 * @see Content-Length: 281
+	 * @see Connection: close
 	 * @see 
-	 * @see {"subscribe":1,"openid":"o3SHot22_IqkUI7DpahNv-KBiFIs","nickname":"玄玉","sex":1,"language":"en","city":"江北","province":"重庆","country":"中国","headimgurl":"http:\/\/wx.qlogo.cn\/mmopen\/Sa1DhFzJREXnSqZKc2Y2AficBdiaaiauFNBbiakfO7fJkf8Cp3oLgJQhbgkwmlN3co2aJr9iabEKJq5jsZYup3gibaVCHD5W13XRmR\/0","subscribe_time":1445398219,"remark":"","groupid":0}]
+	 * @see {"subscribe":1,"openid":"E12D231CFC30438FB6970B0C7669C101","nickname":"玄玉","sex":0,"language":"zh_CN","city":"","province":"","country":"","headimgurl":"http://q3.qlogo.cn/g?b=qq&k=FMnTHnicr3kJvcZyG9UatiaQ&s=40&t=1371634951","subscribe_time":1448711806,"remark":"","groupid":1}
 	 * @create Nov 28, 2015 8:45:20 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
