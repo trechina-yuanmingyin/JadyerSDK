@@ -26,7 +26,7 @@ public class QQDemoController {
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
 	@ResponseBody
-	@RequestMapping(value="/demo/createQQMenu")
+	@RequestMapping(value="/createQQMenu")
 	public QQErrorInfo createQQMenu(String appid, String appsecret){
 		QQTokenHolder.setQQAppid(appid);
 		QQTokenHolder.setQQAppsecret(appsecret);
@@ -49,7 +49,7 @@ public class QQDemoController {
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
 	@ResponseBody
-	@RequestMapping(value="/demo/getQQFansInfo")
+	@RequestMapping(value="/getQQFansInfo")
 	public QQFansInfo getQQFansInfo(String appid, String appsecret, String openid){
 		QQTokenHolder.setQQAppid(appid);
 		QQTokenHolder.setQQAppsecret(appsecret);
@@ -64,7 +64,7 @@ public class QQDemoController {
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
 	@ResponseBody
-	@RequestMapping(value="/demo/pushQQMsgToFans")
+	@RequestMapping(value="/pushQQMsgToFans")
 	public QQErrorInfo pushQQMsgToFans(String appid, String appsecret, String openid){
 		QQTokenHolder.setQQAppid(appid);
 		QQTokenHolder.setQQAppsecret(appsecret);
