@@ -6,6 +6,8 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
+import com.jadyer.sdk.qq.msg.in.QQInImageMsg;
+import com.jadyer.sdk.qq.msg.in.QQInLocationMsg;
 import com.jadyer.sdk.qq.msg.in.QQInMsg;
 import com.jadyer.sdk.qq.msg.in.QQInTextMsg;
 import com.jadyer.sdk.qq.msg.in.event.QQInFollowEventMsg;
@@ -44,6 +46,12 @@ public class QQInMsgParser{
 		if("text".equals(msgType)){
 			return parseInTextMsg(root, toUserName, fromUserName, createTime, msgType);
 		}
+		if("image".equals(msgType)){
+			return parseInImageMsg(root, toUserName, fromUserName, createTime, msgType);
+		}
+		if("location".equals(msgType)){
+			return parseInLocationMsg(root, toUserName, fromUserName, createTime, msgType);
+		}
 		if("event".equals(msgType)){
 			return parseInEventMsg(root, toUserName, fromUserName, createTime, msgType);
 		}
@@ -54,6 +62,26 @@ public class QQInMsgParser{
 	private static QQInMsg parseInTextMsg(Element root, String toUserName, String fromUserName, long createTime, String msgType) {
 		QQInTextMsg msg = new QQInTextMsg(toUserName, fromUserName, createTime, msgType);
 		msg.setContent(root.elementText("Content"));
+		msg.setMsgId(root.elementText("MsgId"));
+		return msg;
+	}
+
+
+	private static QQInMsg parseInImageMsg(Element root, String toUserName, String fromUserName, long createTime, String msgType) {
+		QQInImageMsg msg = new QQInImageMsg(toUserName, fromUserName, createTime, msgType);
+		msg.setPicUrl(root.elementText("PicUrl"));
+		//msg.setMediaId(root.elementText("MediaId"));
+		msg.setMsgId(root.elementText("MsgId"));
+		return msg;
+	}
+
+
+	private static QQInMsg parseInLocationMsg(Element root, String toUserName, String fromUserName, long createTime, String msgType) {
+		QQInLocationMsg msg = new QQInLocationMsg(toUserName, fromUserName, createTime, msgType);
+		msg.setLocation_X(root.elementText("Location_X"));
+		msg.setLocation_Y(root.elementText("Location_Y"));
+		msg.setScale(root.elementText("Scale"));
+		msg.setLabel(root.elementText("Label"));
 		msg.setMsgId(root.elementText("MsgId"));
 		return msg;
 	}

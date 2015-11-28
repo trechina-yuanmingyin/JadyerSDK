@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.jadyer.sdk.qq.msg.QQInMsgParser;
 import com.jadyer.sdk.qq.msg.QQOutMsgXmlBuilder;
+import com.jadyer.sdk.qq.msg.in.QQInImageMsg;
+import com.jadyer.sdk.qq.msg.in.QQInLocationMsg;
 import com.jadyer.sdk.qq.msg.in.QQInMsg;
 import com.jadyer.sdk.qq.msg.in.QQInTextMsg;
 import com.jadyer.sdk.qq.msg.in.event.QQInFollowEventMsg;
@@ -58,6 +60,12 @@ public abstract class QQMsgController {
 		if(inMsg instanceof QQInTextMsg){
 			outMsg = this.processInTextMsg((QQInTextMsg)inMsg);
 		}
+		if(inMsg instanceof QQInImageMsg){
+			outMsg = this.processInImageMsg((QQInImageMsg)inMsg);
+		}
+		if(inMsg instanceof QQInLocationMsg){
+			outMsg = this.processInLocationMsg((QQInLocationMsg)inMsg);
+		}
 		if(inMsg instanceof QQInFollowEventMsg){
 			outMsg = this.processInFollowEventMsg((QQInFollowEventMsg)inMsg);
 		}
@@ -99,6 +107,18 @@ public abstract class QQMsgController {
 	 * 处理收到的文本消息
 	 */
 	protected abstract QQOutMsg processInTextMsg(QQInTextMsg inTextMsg);
+
+
+	/**
+	 * 处理收到的图片消息
+	 */
+	protected abstract QQOutMsg processInImageMsg(QQInImageMsg inImageMsg);
+
+
+	/**
+	 * 处理收到的地址位置消息
+	 */
+	protected abstract QQOutMsg processInLocationMsg(QQInLocationMsg inLocationMsg);
 
 
 	/**

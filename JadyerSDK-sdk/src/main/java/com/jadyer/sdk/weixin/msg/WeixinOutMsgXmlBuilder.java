@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletResponse;
 
-import com.jadyer.sdk.weixin.msg.out.WeixinNews;
 import com.jadyer.sdk.weixin.msg.out.WeixinOutCustomServiceMsg;
 import com.jadyer.sdk.weixin.msg.out.WeixinOutImageMsg;
 import com.jadyer.sdk.weixin.msg.out.WeixinOutMsg;
@@ -147,7 +146,7 @@ public class WeixinOutMsgXmlBuilder {
 		  .append("<ArticleCount>").append(outNewsMsg.getArticleCount()).append("</ArticleCount>")
 		  .append("<Articles>");
 		if(!outNewsMsg.getArticles().isEmpty()){
-			for(WeixinNews news : outNewsMsg.getArticles()){
+			for(WeixinOutNewsMsg.WeixinNews news : outNewsMsg.getArticles()){
 				sb.append("<item>")
 				  .append("<Title><![CDATA[").append(news.getTitle()).append("]]></Title>")
 				  .append("<Description><![CDATA[").append(news.getDescription()).append("]]></Description>")
