@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Map;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ import com.jadyer.sdk.qq.constant.QQConstants;
 import com.jadyer.sdk.qq.model.QQErrorInfo;
 import com.jadyer.sdk.qq.model.QQFansInfo;
 import com.jadyer.sdk.qq.model.QQOAuthAccessToken;
+import com.jadyer.sdk.qq.model.custom.QQCustomMsg;
 import com.jadyer.sdk.qq.model.menu.QQMenu;
 import com.jadyer.sdk.util.HttpUtil;
 
@@ -191,64 +193,64 @@ public final class QQHelper {
 	}
 
 
-//	/**
-//	 * 客服接口主动推消息
-//	 * @create Nov 28, 2015 8:47:36 PM
-//	 * @author 玄玉<http://blog.csdn.net/jadyer>
-//	 */
-//	public static QQErrorInfo pushQQMsgToFans(String accesstoken, QQCustomMsg customMsg){
-//		String reqURL = QQConstants.URL_QQ_CUSTOM_PUSH_MESSAGE.replace(QQConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken);
-//		String reqData = JSON.toJSONString(customMsg);
-//		logger.info("客服接口主动推消息-->待发送的JSON为{}", reqData);
-//		String respData = HttpUtil.post(reqURL, reqData);
-//		logger.info("客服接口主动推消息-->QQ应答JSON为{}", respData);
-//		QQErrorInfo errinfo = JSON.parseObject(respData, QQErrorInfo.class);
-//		if(errinfo.getErrcode() != 0){
-//			String errmsg = QQCodeEnum.getMessageByCode(errinfo.getErrcode());
-//			if(StringUtils.isNotBlank(errmsg)){
-//				errinfo.setErrmsg(errmsg);
-//			}
-//		}
-//		return errinfo;
-//	}
-//
-//
-//	/**
-//	 * JS-SDK权限验证的签名
-//	 * @see 注意这里使用的是noncestr,不是nonceStr
-//	 * @param noncestr  随机字符串
-//	 * @param timestamp 时间戳
-//	 * @param url       当前网页的URL,不包含#及其后面部分
-//	 * @create Nov 28, 2015 8:48:52 PM
-//	 * @author 玄玉<http://blog.csdn.net/jadyer>
-//	 */
-//	public static String signQQJSSDK(String noncestr, String timestamp, String url){
-//		StringBuilder sb = new StringBuilder();
-//		sb.append("jsapi_ticket=").append(QQTokenHolder.getQQJSApiTicket()).append("&")
-//		  .append("noncestr=").append(noncestr).append("&")
-//		  .append("timestamp=").append(timestamp).append("&")
-//		  .append("url=").append(url);
-//		return DigestUtils.sha1Hex(sb.toString());
-//	}
-//
-//
-//	/**
-//	 * 获取临时素材
-//	 * @return 获取成功时返回文件保存在本地的路径,获取失败时将抛出RuntimeException
-//	 * @create Nov 28, 2015 8:49:15 PM
-//	 * @author 玄玉<http://blog.csdn.net/jadyer>
-//	 */
-//	public static String downloadQQTempMediaFile(String accesstoken, String mediaId){
-//		String reqURL = QQConstants.URL_QQ_GET_TEMP_MEDIA_FILE.replace(QQConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken).replace(QQConstants.URL_PLACEHOLDER_MEDIAID, mediaId);
-//		Map<String, String> resultMap = HttpUtil.postWithDownload(reqURL, null);
-//		if("no".equals(resultMap.get("isSuccess"))){
-//			Map<String, String> errmap = JSON.parseObject((String)resultMap.get("failReason"), new TypeReference<Map<String, String>>(){});
-//			String errmsg = QQCodeEnum.getMessageByCode(Integer.parseInt((errmap.get("errcode"))));
-//			if(StringUtils.isBlank(errmsg)){
-//				errmsg = errmap.get("errmsg");
-//			}
-//			throw new RuntimeException("下载QQ临时素材" + mediaId + "失败-->" + errmsg);
-//		}
-//		return resultMap.get("fullPath");
-//	}
+	/**
+	 * 单发主动推消息
+	 * @create Nov 28, 2015 8:47:36 PM
+	 * @author 玄玉<http://blog.csdn.net/jadyer>
+	 */
+	public static QQErrorInfo pushQQMsgToFans(String accesstoken, QQCustomMsg customMsg){
+		String reqURL = QQConstants.URL_QQ_CUSTOM_PUSH_MESSAGE.replace(QQConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken);
+		String reqData = JSON.toJSONString(customMsg);
+		logger.info("单发主动推消息-->发送的JSON为{}", reqData);
+		String respData = HttpUtil.post(reqURL, reqData);
+		logger.info("单发主动推消息-->QQ应答JSON为{}", respData);
+		QQErrorInfo errinfo = JSON.parseObject(respData, QQErrorInfo.class);
+		if(errinfo.getErrcode() != 0){
+			String errmsg = QQCodeEnum.getMessageByCode(errinfo.getErrcode());
+			if(StringUtils.isNotBlank(errmsg)){
+				errinfo.setErrmsg(errmsg);
+			}
+		}
+		return errinfo;
+	}
+
+
+	/**
+	 * JS-SDK权限验证的签名
+	 * @see 注意这里使用的是noncestr,不是nonceStr
+	 * @param noncestr  随机字符串
+	 * @param timestamp 时间戳
+	 * @param url       当前网页的URL,不包含#及其后面部分
+	 * @create Nov 28, 2015 8:48:52 PM
+	 * @author 玄玉<http://blog.csdn.net/jadyer>
+	 */
+	public static String signQQJSSDK(String noncestr, String timestamp, String url){
+		StringBuilder sb = new StringBuilder();
+		sb.append("jsapi_ticket=").append(QQTokenHolder.getQQJSApiTicket()).append("&")
+		  .append("noncestr=").append(noncestr).append("&")
+		  .append("timestamp=").append(timestamp).append("&")
+		  .append("url=").append(url);
+		return DigestUtils.sha1Hex(sb.toString());
+	}
+
+
+	/**
+	 * 获取临时素材
+	 * @return 获取成功时返回文件保存在本地的路径,获取失败时将抛出RuntimeException
+	 * @create Nov 28, 2015 8:49:15 PM
+	 * @author 玄玉<http://blog.csdn.net/jadyer>
+	 */
+	public static String downloadQQTempMediaFile(String accesstoken, String mediaId){
+		String reqURL = QQConstants.URL_QQ_GET_TEMP_MEDIA_FILE.replace(QQConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken).replace(QQConstants.URL_PLACEHOLDER_MEDIAID, mediaId);
+		Map<String, String> resultMap = HttpUtil.postWithDownload(reqURL, null);
+		if("no".equals(resultMap.get("isSuccess"))){
+			Map<String, String> errmap = JSON.parseObject((String)resultMap.get("failReason"), new TypeReference<Map<String, String>>(){});
+			String errmsg = QQCodeEnum.getMessageByCode(Integer.parseInt((errmap.get("errcode"))));
+			if(StringUtils.isBlank(errmsg)){
+				errmsg = errmap.get("errmsg");
+			}
+			throw new RuntimeException("下载QQ临时素材" + mediaId + "失败-->" + errmsg);
+		}
+		return resultMap.get("fullPath");
+	}
 }

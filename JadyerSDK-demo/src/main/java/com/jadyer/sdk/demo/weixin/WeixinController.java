@@ -126,8 +126,8 @@ public class WeixinController extends WeixinMsgControllerCustomServiceAdapter {
 //
 //
 //	@ResponseBody
-//	@RequestMapping(value="/getFansInfo")
-//	public FansInfo getFansInfo(){
+//	@RequestMapping(value="/getWeixinFansInfo")
+//	public FansInfo getWeixinFansInfo(){
 //		String accesstoken = "axJDAkVIyi5SEYXTnHbWQZypbO0O8p5cDM5CdU0gs4loKMtpB3QCSuK4S6rfPebIArXx33Lmg_U5QoSLflUIHwKQnlGSsTlqhgFk-5RT2y0";
 //		String openid = "o3SHot22_IqkUI7DpahNv-KBiFIs";
 //		return WeixinHelper.getWeixinFansInfo(accesstoken, openid);
@@ -135,8 +135,8 @@ public class WeixinController extends WeixinMsgControllerCustomServiceAdapter {
 //
 //
 //	@ResponseBody
-//	@RequestMapping(value="/createMenu")
-//	public ErrorInfo createMenu(){
+//	@RequestMapping(value="/createWeixinMenu")
+//	public ErrorInfo createWeixinMenu(){
 //		String accesstoken = "nHVQXjVPWlyvdglrU6EgGnH_MzvdltddS4HOzUJocjX-wb_NVOi-6rJjumZJayRqwHT7xx80ziBaDCXc6dqddVHheP7g6aJAxv71Lwj3Cxg";
 //		WeixinSubViewButton btn11 = new WeixinSubViewButton("我的博客", "http://blog.csdn.net/jadyer");
 //		WeixinSubViewButton btn22 = new WeixinSubViewButton("我的GitHub", "http://jadyer.tunnel.mobi/weixin/getOpenid?oauth=base&openid=openid");
@@ -151,8 +151,8 @@ public class WeixinController extends WeixinMsgControllerCustomServiceAdapter {
 //
 //
 //	@ResponseBody
-//	@RequestMapping(value="/pushMsgToFans")
-//	public ErrorInfo pushMsgToFans(){
+//	@RequestMapping(value="/pushWeixinMsgToFans")
+//	public ErrorInfo pushWeixinMsgToFans(){
 //		String accesstoken = "axJDAkVIyi5SEYXTnHbWQZypbO0O8p5cDM5CdU0gs4loKMtpB3QCSuK4S6rfPebIArXx33Lmg_U5QoSLflUIHwKQnlGSsTlqhgFk-5RT2y0";
 //		String openid = "o3SHot22_IqkUI7DpahNv-KBiFIs";
 //		//推文本消息
@@ -161,7 +161,7 @@ public class WeixinController extends WeixinMsgControllerCustomServiceAdapter {
 //		//推图文消息
 //		WeixinCustomNewsMsg.News.Article article11 = new Article("欢迎访问玄玉博客", "玄玉博客是一个开放态度的Java生态圈", "http://avatar.csdn.net/6/0/B/1_jadyer.jpg", "http://blog.csdn.net/jadyer");
 //		WeixinCustomNewsMsg.News.Article article22 = new Article("玄玉微信SDK", "玄玉微信SDK是一个正在研发中的SDK", "http://img.my.csdn.net/uploads/201507/26/1437881866_3678.png", "https://github.com/jadyer");
-//		WeixinCustomNewsMsg customNewsMsg = new WeixinCustomNewsMsg(openid, new WeixinNews(new Article[]{article11, article22}));
+//		WeixinCustomNewsMsg customNewsMsg = new WeixinCustomNewsMsg(openid, new News(new Article[]{article11, article22}));
 //		return WeixinHelper.pushWeixinMsgToFans(accesstoken, customNewsMsg);
 //	}
 //
