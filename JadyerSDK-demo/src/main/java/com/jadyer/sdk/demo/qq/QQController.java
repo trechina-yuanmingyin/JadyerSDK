@@ -89,12 +89,12 @@ public class QQController extends QQMsgController {
 
 	/**
 	 * 设置自定义菜单
-	 * @see http://127.0.0.1/qq/createQQMenu?appid=123&appsecret=123
+	 * @see http://127.0.0.1/qq/demo/createQQMenu?appid=123&appsecret=123
 	 * @create Nov 28, 2015 9:02:22 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
 	@ResponseBody
-	@RequestMapping(value="/createQQMenu")
+	@RequestMapping(value="/demo/createQQMenu")
 	public QQErrorInfo createQQMenu(String appid, String appsecret){
 		QQTokenHolder.setQQAppid(appid);
 		QQTokenHolder.setQQAppsecret(appsecret);
@@ -112,12 +112,12 @@ public class QQController extends QQMsgController {
 
 	/**
 	 * 拉取粉丝信息
-	 * @see http://127.0.0.1/qq/getQQFansInfo?appid=123&appsecret=123&openid=123
+	 * @see http://127.0.0.1/qq/demo/getQQFansInfo?appid=123&appsecret=123&openid=123
 	 * @create Nov 28, 2015 9:59:01 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
 	@ResponseBody
-	@RequestMapping(value="/getQQFansInfo")
+	@RequestMapping(value="/demo/getQQFansInfo")
 	public QQFansInfo getQQFansInfo(String appid, String appsecret, String openid){
 		QQTokenHolder.setQQAppid(appid);
 		QQTokenHolder.setQQAppsecret(appsecret);
@@ -127,12 +127,12 @@ public class QQController extends QQMsgController {
 
 	/**
 	 * 单发主动推消息
-	 * @see http://127.0.0.1/qq/pushQQMsgToFans?appid=123&appsecret=123&openid=123
+	 * @see http://127.0.0.1/qq/demo/pushQQMsgToFans?appid=123&appsecret=123&openid=123
 	 * @create Nov 28, 2015 9:54:55 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
 	@ResponseBody
-	@RequestMapping(value="/pushQQMsgToFans")
+	@RequestMapping(value="/demo/pushQQMsgToFans")
 	public QQErrorInfo pushQQMsgToFans(String appid, String appsecret, String openid){
 		QQTokenHolder.setQQAppid(appid);
 		QQTokenHolder.setQQAppsecret(appsecret);
