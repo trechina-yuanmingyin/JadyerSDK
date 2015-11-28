@@ -36,17 +36,16 @@ public abstract class QQMsgController {
 	public void index(@PathVariable String token, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String reqBodyMsg = SDKUtil.extractHttpServletRequestBodyMessage(request);
 		logger.info("收到QQ服务器消息如下\n{}", SDKUtil.extractHttpServletRequestHeaderMessage(request)+"\n"+reqBodyMsg);
-		//验签
-		token = DigestUtils.md5Hex(token + "http://blog.csdn.net/jadyer" + token);
-		if(!this.verifySignature(token, request)){
-			PrintWriter out = response.getWriter();
-			out.write("verify signature failed");
-			out.flush();
-			out.close();
-			return;
-		}
 		//GET过来的请求表示更新开发者服务器URL
 		if("GET".equalsIgnoreCase(request.getMethod())){
+			//验签
+			if(!this.verifySignature(DigestUtils.md5Hex(token+"http://blog.csdn.net/jadyer"+token), request)){
+				PrintWriter out = response.getWriter();
+				out.write("verify signature failed");
+				out.flush();
+				out.close();
+				return;
+			}
 			PrintWriter out = response.getWriter();
 			out.write(request.getParameter("echostr"));
 			out.flush();
