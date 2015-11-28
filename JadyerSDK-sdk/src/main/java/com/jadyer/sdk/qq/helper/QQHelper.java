@@ -26,6 +26,8 @@ public final class QQHelper {
 	/**
 	 * 获取QQ的access_token
 	 * @see 默认修饰符default即只有同包中的类才可使用
+	 * @see {"errcode":0,"errmsg":"ok","access_token":"ace43d3290372b1a412ec4272ffb3893","expire":7200}
+	 * @see {"errcode":40001,"errmsg":"\u83b7\u53d6access_token\u65f6AppSecret\u9519\u8bef\uff0c\u6216\u8005access_token\u65e0\u6548"}
 	 * @return 获取失败时将抛出RuntimeException
 	 * @create Nov 28, 2015 8:40:36 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
@@ -35,7 +37,7 @@ public final class QQHelper {
 		String respData = HttpUtil.post(reqURL);
 		logger.info("获取QQaccess_token,QQ应答报文为-->{}", respData);
 		Map<String, String> map = JSON.parseObject(respData, new TypeReference<Map<String, String>>(){});
-		if(respData.contains("access_token")){
+		if("0".equals(map.get("errcode")) && StringUtils.isNotBlank(map.get("access_token"))){
 			return map.get("access_token");
 		}else{
 			String errmsg = QQCodeEnum.getMessageByCode(Integer.parseInt((map.get("errcode"))));
