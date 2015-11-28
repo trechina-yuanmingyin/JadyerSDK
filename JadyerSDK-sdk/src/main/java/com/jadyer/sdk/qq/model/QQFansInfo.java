@@ -2,12 +2,13 @@ package com.jadyer.sdk.qq.model;
 
 /**
  * 封装粉丝基本信息
+ * @see <<QQ公众号API文档.pdf>>-20150907版中没有写返回openid,但在20151128222421时测试发现会返回openid
  * @create Nov 28, 2015 8:45:49 PM
  * @author 玄玉<http://blog.csdn.net/jadyer>
  */
 public class QQFansInfo {
 	private int subscribe;         //用户是否订阅该公众号标识,值为0时,代表此用户没有关注该公众号,拉取不到其余信息
-//	private String openid;         //用户的标识,对当前公众号唯一
+	private String openid;         //用户的标识,对当前公众号唯一
 	private String nickname;       //用户的昵称
 	private int sex;               //用户的性别,1--男性,2--女性,0--未知
 	private String city;           //用户所在城市
@@ -26,12 +27,12 @@ public class QQFansInfo {
 	public void setSubscribe(int subscribe) {
 		this.subscribe = subscribe;
 	}
-//	public String getOpenid() {
-//		return openid;
-//	}
-//	public void setOpenid(String openid) {
-//		this.openid = openid;
-//	}
+	public String getOpenid() {
+		return openid;
+	}
+	public void setOpenid(String openid) {
+		this.openid = openid;
+	}
 	public String getNickname() {
 		return nickname;
 	}
