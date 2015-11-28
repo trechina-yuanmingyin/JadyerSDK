@@ -25,10 +25,6 @@ public interface WeixinConstants {
 	 */
 	//获取access token
 	String URL_WEIXIN_GET_ACCESSTOKEN        = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + URL_PLACEHOLDER_APPID + "&secret=" + URL_PLACEHOLDER_APPSECRET;
-	//获取微信服务器IP地址
-	String URL_WEIXIN_GET_WEIXINIP_LIST      = "https://api.weixin.qq.com/cgi-bin/getcallbackip?access_token=" + URL_PLACEHOLDER_ACCESSTOKEN;
-	//向微信服务器新增永久图片(image)素材
-	String URL_WEIXIN_GET_ADD_FOREVER_IMAGE  = "https://api.weixin.qq.com/cgi-bin/material/add_material?access_token=" + URL_PLACEHOLDER_ACCESSTOKEN;
 	//获取用户基本信息
 	String URL_WEIXIN_GET_FANSINFO           = "https://api.weixin.qq.com/cgi-bin/user/info?lang=zh_CN&openid=" + URL_PLACEHOLDER_OPENID + "&access_token=" + URL_PLACEHOLDER_ACCESSTOKEN;
 	//自定义菜单之创建

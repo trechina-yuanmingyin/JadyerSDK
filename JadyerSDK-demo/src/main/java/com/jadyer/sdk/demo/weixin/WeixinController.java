@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.jadyer.sdk.demo.common.constant.Constants;
 import com.jadyer.sdk.demo.common.util.LogUtil;
+import com.jadyer.sdk.demo.user.UserService;
+import com.jadyer.sdk.demo.user.model.UserInfo;
 import com.jadyer.sdk.demo.weixin.fans.FansInfoDao;
 import com.jadyer.sdk.demo.weixin.fans.FansSaveThread;
 import com.jadyer.sdk.demo.weixin.reply.ReplyInfoDao;
 import com.jadyer.sdk.demo.weixin.reply.model.ReplyInfo;
-import com.jadyer.sdk.demo.user.UserService;
-import com.jadyer.sdk.demo.user.model.UserInfo;
 import com.jadyer.sdk.weixin.controller.WeixinMsgControllerCustomServiceAdapter;
 import com.jadyer.sdk.weixin.msg.in.WeixinInTextMsg;
 import com.jadyer.sdk.weixin.msg.in.event.WeixinInFollowEventMsg;
@@ -145,7 +145,7 @@ public class WeixinController extends WeixinMsgControllerCustomServiceAdapter {
 //		WeixinSubClickButton btn55 = new WeixinSubClickButton("幽默笑话", "joke");
 //		WeixinSuperButton sbtn11 = new WeixinSuperButton("个人中心", new WeixinButton[]{btn11, btn22});
 //		WeixinSuperButton sbtn22 = new WeixinSuperButton("休闲驿站", new WeixinButton[]{btn33, btn44});
-//		WeixinMenu menu = new WeixinMenu(new Button[]{sbtn11, btn55, sbtn22});
+//		WeixinMenu menu = new WeixinMenu(new WeixinButton[]{sbtn11, btn55, sbtn22});
 //		return WeixinHelper.createWeixinMenu(accesstoken, menu);
 //	}
 //

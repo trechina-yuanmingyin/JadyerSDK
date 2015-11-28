@@ -2,9 +2,18 @@ package com.jadyer.sdk.demo.qq;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jadyer.sdk.demo.common.util.LogUtil;
 import com.jadyer.sdk.qq.controller.QQMsgController;
+import com.jadyer.sdk.qq.helper.QQHelper;
+import com.jadyer.sdk.qq.helper.QQTokenHolder;
+import com.jadyer.sdk.qq.model.QQErrorInfo;
+import com.jadyer.sdk.qq.model.menu.QQButton;
+import com.jadyer.sdk.qq.model.menu.QQMenu;
+import com.jadyer.sdk.qq.model.menu.QQSubClickButton;
+import com.jadyer.sdk.qq.model.menu.QQSubViewButton;
+import com.jadyer.sdk.qq.model.menu.QQSuperButton;
 import com.jadyer.sdk.qq.msg.in.QQInImageMsg;
 import com.jadyer.sdk.qq.msg.in.QQInLocationMsg;
 import com.jadyer.sdk.qq.msg.in.QQInTextMsg;
@@ -75,18 +84,24 @@ public class QQController extends QQMsgController {
 	}
 
 
-//	@ResponseBody
-//	@RequestMapping(value="/createMenu")
-//	public ErrorInfo createMenu(){
-//		String accesstoken = "nHVQXjVPWlyvdglrU6EgGnH_MzvdltddS4HOzUJocjX-wb_NVOi-6rJjumZJayRqwHT7xx80ziBaDCXc6dqddVHheP7g6aJAxv71Lwj3Cxg";
-//		WeixinSubViewButton btn11 = new WeixinSubViewButton("我的博客", "http://blog.csdn.net/jadyer");
-//		WeixinSubViewButton btn22 = new WeixinSubViewButton("我的GitHub", "http://jadyer.tunnel.mobi/weixin/getOpenid?oauth=base&openid=openid");
-//		WeixinSubClickButton btn33 = new WeixinSubClickButton("历史上的今天", "123abc");
-//		WeixinSubClickButton btn44 = new WeixinSubClickButton("天气预报", "456");
-//		WeixinSubClickButton btn55 = new WeixinSubClickButton("幽默笑话", "joke");
-//		WeixinSuperButton sbtn11 = new WeixinSuperButton("个人中心", new WeixinButton[]{btn11, btn22});
-//		WeixinSuperButton sbtn22 = new WeixinSuperButton("休闲驿站", new WeixinButton[]{btn33, btn44});
-//		WeixinMenu menu = new WeixinMenu(new Button[]{sbtn11, btn55, sbtn22});
-//		return WeixinHelper.createWeixinMenu(accesstoken, menu);
-//	}
+	/**
+	 * 设置自定义菜单
+	 * @create Nov 28, 2015 9:02:22 PM
+	 * @author 玄玉<http://blog.csdn.net/jadyer>
+	 */
+	@ResponseBody
+	@RequestMapping(value="/createMenu")
+	public QQErrorInfo createMenu(String appid, String appsecret){
+		QQTokenHolder.setQQAppid(appid);
+		QQTokenHolder.setQQAppsecret(appsecret);
+		QQSubViewButton btn11 = new QQSubViewButton("我的博客", "http://blog.csdn.net/jadyer");
+		QQSubViewButton btn22 = new QQSubViewButton("我的GitHub", "https://github.com/jadyer");
+		QQSubClickButton btn33 = new QQSubClickButton("历史上的今天", "123abc");
+		QQSubClickButton btn44 = new QQSubClickButton("天气预报", "456");
+		QQSubClickButton btn55 = new QQSubClickButton("幽默笑话", "joke");
+		QQSuperButton sbtn11 = new QQSuperButton("个人中心", new QQButton[]{btn11, btn22});
+		QQSuperButton sbtn22 = new QQSuperButton("休闲驿站", new QQButton[]{btn33, btn44});
+		QQMenu menu = new QQMenu(new QQButton[]{sbtn11, btn55, sbtn22});
+		return QQHelper.createQQMenu(QQTokenHolder.getQQAccessToken(), menu);
+	}
 }
