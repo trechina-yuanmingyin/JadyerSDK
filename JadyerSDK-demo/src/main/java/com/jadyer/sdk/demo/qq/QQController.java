@@ -39,9 +39,9 @@ public class QQController extends QQMsgController {
 	protected QQOutMsg processInImageMsg(QQInImageMsg inImageMsg) {
 		//return new QQOutTextMsg(inImageMsg).setContent("<a href=\""+inImageMsg.getPicUrl()+"\">点此查看</a>刚才发送的图片");
 		QQOutNewsMsg outMsg = new QQOutNewsMsg(inImageMsg);
-		outMsg.addNews("第一个大图文标题", "点此查看刚才发送的图片", inImageMsg.getPicUrl(), inImageMsg.getPicUrl());
-		outMsg.addNews("第二个图文的标题", "第二个图文的描述", "http://img.my.csdn.net/uploads/201507/26/1437881866_3678.png", "https://github.com/jadyer");
-		outMsg.addNews("第三个图文的标题", "第三个图文的描述", "http://img.my.csdn.net/uploads/201009/14/7892753_1284475095fyR0.jpg", "http://blog.csdn.net/jadyer/article/details/5859908");
+		outMsg.addNews("查看刚才发送的图片", "第一个大图文描述", inImageMsg.getPicUrl(), inImageMsg.getPicUrl());
+		outMsg.addNews("点击访问我的博客", "第二个图文的描述", "http://img.my.csdn.net/uploads/201507/26/1437881866_3678.png", "http://blog.csdn.net/jadyer");
+		outMsg.addNews("点击访问我的Github", "第三个图文的描述", "http://img.my.csdn.net/uploads/201009/14/7892753_1284475095fyR0.jpg", "https://github.com/jadyer");
 		return outMsg;
 	}
 
