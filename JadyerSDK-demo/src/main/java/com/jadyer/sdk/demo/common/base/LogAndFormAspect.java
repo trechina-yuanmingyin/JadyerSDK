@@ -50,7 +50,7 @@ public class LogAndFormAspect {
 		if(null!=respData && respData.getClass().isAssignableFrom(ResponseEntity.class)){
 			returnInfo = "ResponseEntity";
 		}else{
-			returnInfo = JSON.toJSONStringWithDateFormat(respData, "yyyy-MM-dd HH:mm:ss", SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty, SerializerFeature.WriteNullNumberAsZero, SerializerFeature.WriteNullListAsEmpty, SerializerFeature.WriteNullBooleanAsFalse);
+			returnInfo = JSON.toJSONStringWithDateFormat(respData, JSON.DEFFAULT_DATE_FORMAT, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty, SerializerFeature.WriteNullNumberAsZero, SerializerFeature.WriteNullListAsEmpty, SerializerFeature.WriteNullBooleanAsFalse);
 		}
 		LogUtil.getAppLogger().info(methodInfo + "()被调用, 出参为" + returnInfo + ", Duration[" + (endTime-startTime) + "]ms");
 		LogUtil.getAppLogger().info("---------------------------------------------------------------------------------------------");

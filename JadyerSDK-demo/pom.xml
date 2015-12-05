@@ -29,6 +29,7 @@
 		<dependency>
 			<groupId>com.jadyer.sdk</groupId>
 			<artifactId>JadyerSDK-sdk</artifactId>
+			<!-- <version>${project.version}</version> -->
 			<version>${JadyerSDK.version}</version>
 		</dependency>
 		<dependency>
