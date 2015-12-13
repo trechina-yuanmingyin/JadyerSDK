@@ -27,7 +27,7 @@ import com.jadyer.sdk.demo.common.util.LogUtil;
 @Aspect
 @Component
 public class LogAndFormAspect {
-	@Around("execution(* com.jadyer.sdk.demo..*.*Controller.*(..))")
+	@Around("execution(* com.jadyer.sdk.demo..*Controller.*(..))")
 	public Object process(ProceedingJoinPoint joinPoint) throws Throwable {
 		Object respData = null;
 		long startTime = System.currentTimeMillis();
