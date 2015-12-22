@@ -80,5 +80,6 @@ updateTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMEST
 
 
 INSERT INTO t_reply_info(uid, category, type) VALUES(2, '0', '4');
-INSERT INTO t_user_info(id, parentId, username, password, uuid, bindStatus) VALUES(1, 0, 'admin', '38fa7ad72e2b908b9921238eb2601981', REPLACE(UUID(),'-',''), '0');
-INSERT INTO t_user_info(id, parentId, username, password, uuid, bindStatus) VALUES(2, 0, 'test', '398f2a4045f3caa202735395d58dc92f', REPLACE(UUID(),'-',''), '0');
+INSERT INTO t_user_info(id, parentId, username, password, uuid, bindStatus) VALUES(1, 0, 'admin', '5d94758beb7570fe406dbc50c29f4e15', REPLACE(UUID(),'-',''), '0');
+INSERT INTO t_user_info(id, parentId, username, password, uuid, bindStatus) VALUES(2, 1, 'wx', '908e88dd8b08e0acc83e67272dcbeaa8', REPLACE(UUID(),'-',''), '0');
+INSERT INTO t_user_info(id, parentId, username, password, uuid, bindStatus) VALUES(3, 1, 'qq', '5db0912b1cec068452c512eb02e855b4', REPLACE(UUID(),'-',''), '0');

@@ -21,8 +21,9 @@ public class UserService {
 	
 	private String buildEncryptPassword(String password){
 		String encrypt = DigestUtils.md5Hex(password);
-		return DigestUtils.md5Hex(password.substring(0, 3) + encrypt + password + encrypt + password.substring(password.length()-3));
+		return DigestUtils.md5Hex(password.substring(0, 1) + encrypt + password + encrypt + password.substring(password.length()-1));
 	}
+
 
 	@Transactional(readOnly=true)
 	public UserInfo findByUsernameAndPassword(String username, String password){
