@@ -20,6 +20,18 @@ import com.jadyer.sdk.qq.model.menu.QQSuperButton;
 @RequestMapping(value="/demo")
 public class QQDemoController {
 	/**
+	 * 网页授权静默获取粉丝openid
+	 * @create Dec 24, 2015 12:10:25 AM
+	 * @author 玄玉<http://blog.csdn.net/jadyer>
+	 */
+	@ResponseBody
+	@RequestMapping(value="/getopenid")
+	public String getopenid(String openid){
+		return "您的openid=" + openid;
+	}
+
+
+	/**
 	 * 设置自定义菜单
 	 * @see http://127.0.0.1/demo/createQQMenu?appid=123&appsecret=123
 	 * @create Nov 28, 2015 9:02:22 PM
