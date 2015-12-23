@@ -23,39 +23,19 @@ import com.jadyer.sdk.weixin.helper.WeixinTokenHolder;
 
 /**
  * 用于处理微信相关的Filter
- * @see -----------------------------------------------------------------------------------------------------------
- * @see <filter>
- * @see 	<filter-name>WeixinFilter</filter-name>
- * @see 	<filter-class>com.jadyer.sdk.weixin.filter.WeixinFilter</filter-class>
- * @see 	<init-param>
- * @see 		<param-name>databaseurl</param-name>
- * @see 		<param-value>http://jadyer.tunnel.mobi/mpp/weixin/helper</param-value>
- * @see 	</init-param>
- * @see 	<init-param>
- * @see 		<param-name>redirecturl</param-name>
- * @see 		<param-value>http://jadyer.tunnel.mobi/portal/weixin/helper/oauth/getAccessToken/33</param-value>
- * @see 	</init-param>
- * @see </filter>
- * @see <filter-mapping>
- * @see 	<filter-name>WeixinFilter</filter-name>
- * @see 	<url-pattern>/*</url-pattern>
- * @see </filter-mapping>
- * @see -----------------------------------------------------------------------------------------------------------
  * @create Oct 19, 2015 4:45:35 PM
  * @author 玄玉<http://blog.csdn.net/jadyer>
  */
 public class WeixinFilter implements Filter {
 	private static final Logger logger = LoggerFactory.getLogger(WeixinFilter.class);
-	public static String DATA_BASE_URL = null;
-	private String redirecturl = null;
+	private String dataurl = null;
 
 	@Override
 	public void destroy() {}
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-		DATA_BASE_URL = filterConfig.getInitParameter("databaseurl");
-		this.redirecturl = filterConfig.getInitParameter("redirecturl");
+		this.dataurl = filterConfig.getInitParameter("dataurl");
 	}
 
 	/**
@@ -72,7 +52,6 @@ public class WeixinFilter implements Filter {
 				throw new RuntimeException("请不要通过Ajax获取粉丝信息");
 			}
 			/**
-			 * 不同浏览来源的User-Agent头信息不同
 			 * @see 1.IE-11.0.9600.17843
 			 * @see   User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko
 			 * @see 2.Chrome-46.0.2490.71 m (64-bit)
@@ -98,15 +77,14 @@ public class WeixinFilter implements Filter {
 				return;
 			}
 			/**
-			 * 计算state
-			 * @see 注意得到的URL的第一个字符是斜线,如下所示
-			 * @see state=/JadyerSDK/user/get/2/uname=玄玉/openid=openid或者state=/user/get/2/uname=玄玉/openid=openid
+			 * state=http://www.jadyer.com/JadyerSDK/user/get/2/uname=玄玉/openid=openid
 			 */
-			String fullURI = request.getRequestURI() + (null==request.getQueryString()?"":"?"+request.getQueryString());
-			String state = fullURI.replace("?", "/").replace("&", "/");
-			state = state.replace("/oauth=base", "");
-			logger.info("计算粉丝请求的资源得到state={}", state);
-			response.sendRedirect(WeixinHelper.buildWeixinOAuthCodeURL(WeixinTokenHolder.getWeixinAppid(), WeixinConstants.WEIXIN_OAUTH_SCOPE_SNSAPI_BASE, state, this.redirecturl));
+			String fullURL = request.getRequestURL().toString() + (null==request.getQueryString()?"":"?"+request.getQueryString());
+			String state = fullURL.replace("?", "/").replaceAll("&", "/").replace("/oauth=base", "");
+			logger.info("计算粉丝请求的资源得到state=[{}]", state);
+			String redirectURL = WeixinHelper.buildWeixinOAuthCodeURL(WeixinTokenHolder.getWeixinAppid(), WeixinConstants.WEIXIN_OAUTH_SCOPE_SNSAPI_BASE, state, this.dataurl+"/weixin/helper/oauth/3");
+			logger.info("计算请求到微信服务器的redirectURL=[{}]", redirectURL);
+			response.sendRedirect(redirectURL);
 		}else{
 			chain.doFilter(req, resp);
 		}

@@ -23,11 +23,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.jadyer.sdk.util.HttpUtil;
-import com.jadyer.sdk.weixin.helper.WeixinTokenHolder;
 import com.jadyer.sdk.weixin.helper.WeixinHelper;
+import com.jadyer.sdk.weixin.helper.WeixinTokenHolder;
 import com.jadyer.sdk.weixin.model.WeixinOAuthAccessToken;
 
 /**
@@ -47,25 +46,26 @@ public class WeixinHelperController {
 	 * @param state 重定向到微信服务器时,由开发者服务器携带过去的参数,这里会原样带回
 	 * @return 获取失败则返回一个友好的HTML页面,获取成功后直接跳转到用户原本请求的资源
 	 */
-	@RequestMapping(value="/oauth/getAccessToken/{uid}")
-	public String getAccessToken(@PathVariable String uid, String code, String state, HttpServletResponse response) throws IOException{
+	@RequestMapping(value="/oauth/{uid}")
+	public String oauth(@PathVariable String uid, String code, String state, HttpServletResponse response) throws IOException{
+		logger.info("收到微信服务器回调code=[{}], state=[{}]", code, state);
 		if(StringUtils.isNotBlank(code)){
 			WeixinOAuthAccessToken oauthAccessToken = WeixinTokenHolder.getWeixinOAuthAccessToken(code);
 			if(0==oauthAccessToken.getErrcode() && StringUtils.isNotBlank(oauthAccessToken.getOpenid())){
 				/**
 				 * 还原state携带过来的粉丝请求的原URL
-				 * @see state=/JadyerSDK/user/get/2/uname=玄玉/openid=openid或者state=/user/get/2/uname=玄玉/openid=openid
+				 * @see state=http://www.jadyer.com/mpp/weixin/getOpenid/openid=openid/test=7645
 				 */
 				//1.获取到URL中的非参数部分
 				String uri = state.substring(0, state.indexOf("="));
 				uri = uri.substring(0, uri.lastIndexOf("/"));
 				//2.获取到URL中的参数部分(得到openid的方式为截取掉占位的,再追加真正的值)
 				String params = state.substring(uri.length()+1);
-				params = params.replaceAll("/", "&").substring(0, params.length()-6) + oauthAccessToken.getOpenid();
+				params = params.replaceAll("/", "&").replace("openid=openid", "openid="+oauthAccessToken.getOpenid());
 				//3.拼接粉丝请求的原URL并跳转过去
 				String fullURI = uri + "?" + params;
-				logger.info("还原粉丝请求的资源得到state={}", fullURI);
-				return InternalResourceViewResolver.REDIRECT_URL_PREFIX + fullURI;
+				logger.info("还原粉丝请求的资源得到state=[{}]", fullURI);
+				response.sendRedirect(fullURI);
 			}
 		}
 		response.setCharacterEncoding(HttpUtil.DEFAULT_CHARSET);

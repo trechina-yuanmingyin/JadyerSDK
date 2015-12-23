@@ -8,6 +8,8 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jadyer.sdk.demo.common.constant.Constants;
 import com.jadyer.sdk.demo.common.util.LogUtil;
@@ -37,6 +39,16 @@ public class WeixinController extends WeixinMsgControllerCustomServiceAdapter {
 
 	@Override
 	protected WeixinOutMsg processInTextMsg(WeixinInTextMsg inTextMsg) {
+//		//回复带链接和表情的文本消息
+//		if("blog".equals(inTextMsg.getContent())){
+//			return new WeixinOutTextMsg(inTextMsg).setContent("[右哼哼]欢迎访问<a href=\"http://blog.csdn.net/jadyer\">我的博客</a>[左哼哼]");
+//		}
+//		//回复多图文
+//		WeixinOutNewsMsg outMsg = new WeixinOutNewsMsg(inTextMsg);
+//		outMsg.addNews("第一个大图文标题", "第一个大图文描述", "http://avatar.csdn.net/6/0/B/1_jadyer.jpg", "http://blog.csdn.net/jadyer");
+//		outMsg.addNews("第二个图文的标题", "第二个图文的描述", "http://img.my.csdn.net/uploads/201507/26/1437881866_3678.png", "https://github.com/jadyer");
+//		outMsg.addNews("第三个图文的标题", "第三个图文的描述", "http://img.my.csdn.net/uploads/201009/14/7892753_1284475095fyR0.jpg", "http://blog.csdn.net/jadyer/article/details/5859908");
+//		return outMsg;
 		//防伪
 		UserInfo userInfo = userService.findByWxId(inTextMsg.getToUserName());
 		if(null == userInfo){
@@ -116,6 +128,13 @@ public class WeixinController extends WeixinMsgControllerCustomServiceAdapter {
 	}
 
 
+	@ResponseBody
+	@RequestMapping(value="/getOpenid", method=RequestMethod.GET)
+	public String getOpenid(String openid){
+		return openid;
+	}
+
+
 //	@ResponseBody
 //	@RequestMapping(value="/getWeixinAccessToken")
 //	public String getWeixinAccessToken(){
@@ -163,31 +182,5 @@ public class WeixinController extends WeixinMsgControllerCustomServiceAdapter {
 //		WeixinCustomNewsMsg.News.Article article22 = new Article("玄玉微信SDK", "玄玉微信SDK是一个正在研发中的SDK", "http://img.my.csdn.net/uploads/201507/26/1437881866_3678.png", "https://github.com/jadyer");
 //		WeixinCustomNewsMsg customNewsMsg = new WeixinCustomNewsMsg(openid, new News(new Article[]{article11, article22}));
 //		return WeixinHelper.pushWeixinMsgToFans(accesstoken, customNewsMsg);
-//	}
-//
-//
-//	@ResponseBody
-//	@RequestMapping(value="/getOpenid", method=RequestMethod.GET)
-//	public String getOpenid(String openid){
-//		return openid;
-//	}
-//
-//
-//	@Override
-//	protected OutMsg processInTextMsg(WeixinInTextMsg inTextMsg) {
-//		//回复纯文本消息
-//		if("hi".equals(inTextMsg.getContent())){
-//			return new WeixinOutTextMsg(inTextMsg).setContent("hello");
-//		}
-//		//回复带链接和表情的文本消息
-//		if("blog".equals(inTextMsg.getContent())){
-//			return new WeixinOutTextMsg(inTextMsg).setContent("[右哼哼]欢迎访问<a href=\"http://blog.csdn.net/jadyer\">我的博客</a>[左哼哼]");
-//		}
-//		//回复多图文
-//		WeixinOutNewsMsg outMsg = new WeixinOutNewsMsg(inTextMsg);
-//		outMsg.addNews("第一个大图文标题", "第一个大图文描述", "http://avatar.csdn.net/6/0/B/1_jadyer.jpg", "http://blog.csdn.net/jadyer");
-//		outMsg.addNews("第二个图文的标题", "第二个图文的描述", "http://img.my.csdn.net/uploads/201507/26/1437881866_3678.png", "https://github.com/jadyer");
-//		outMsg.addNews("第三个图文的标题", "第三个图文的描述", "http://img.my.csdn.net/uploads/201009/14/7892753_1284475095fyR0.jpg", "http://blog.csdn.net/jadyer/article/details/5859908");
-//		return outMsg;
 //	}
 }
