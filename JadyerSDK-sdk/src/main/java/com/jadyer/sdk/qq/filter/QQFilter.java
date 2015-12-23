@@ -54,18 +54,16 @@ public class QQFilter implements Filter {
 			/**
 			 * @see 1.IE-11.0.9600.17843
 			 * @see   User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko
-			 * @see 2.Chrome-46.0.2490.71 m (64-bit)
-			 * @see   User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.71 Safari/537.36
-			 * @see 3.Windows-1.5.0.22
+			 * @see 2.Chrome-46.0.2490.86 m (64-bit)
+			 * @see   User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36
+			 * @see 3.Windows-1.5.0.22(微信电脑版)
 			 * @see   User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36 MicroMessenger/6.5.2.501 NetType/WIFI WindowsWechat
-			 * @see 4.IOS-WeChat-6.3.1
-			 * @see   User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 7_1_1 like Mac OS X) AppleWebKit/537.51.2 (KHTML, like Gecko) Mobile/11D201 MicroMessenger/6.3.1 NetType/WIFI Language/en
-			 * @see 5.Android-WeChat-6.2.6
-			 * @see   User-Agent: Mozilla/5.0 (Linux; U; Android 4.4.2; zh-cn; H60-L01 Build/HDH60-L01) AppleWebKit/533.1 (KHTML, like Gecko)Version/4.0 MQQBrowser/5.4 TBS/025469 Mobile Safari/533.1 MicroMessenger/6.2.5.54_re87237d.622 NetType/WIFI Language/zh_CN
+			 * @see 4.IOS-QQ-6.1.0.496
+			 * @see   User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 7_1_1 like Mac OS X) AppleWebKit/537.51.2 (KHTML, like Gecko) Mobile/11D201 QQ/6.1.0.496 Pixel/640 NetType/WIFI Mem/14
 			 */
 			String userAgent = request.getHeader("User-Agent");
 			logger.info("网页授权获取粉丝信息时请求的User-Agent=[{}]", userAgent);
-			if(!userAgent.contains("MicroMessenger") || (!userAgent.contains("iPhone") && !userAgent.contains("Android"))){
+			if(!userAgent.contains("QQ") || (!userAgent.contains("iPhone") && !userAgent.contains("Android"))){
 				response.setCharacterEncoding(HttpUtil.DEFAULT_CHARSET);
 				response.setContentType("text/plain; charset=" + HttpUtil.DEFAULT_CHARSET);
 				response.setHeader("Cache-Control", "no-cache");

@@ -41,7 +41,7 @@ public class QQFilterDemo implements Filter {
 				throw new RuntimeException("请不要通过Ajax获取粉丝信息");
 			}
 			String userAgent = request.getHeader("User-Agent");
-			if(!userAgent.contains("MicroMessenger") || (!userAgent.contains("iPhone") && !userAgent.contains("Android"))){
+			if(!userAgent.contains("QQ") || (!userAgent.contains("iPhone") && !userAgent.contains("Android"))){
 				response.setCharacterEncoding(HttpUtil.DEFAULT_CHARSET);
 				response.setContentType("text/plain; charset=" + HttpUtil.DEFAULT_CHARSET);
 				response.setHeader("Cache-Control", "no-cache");
