@@ -103,11 +103,23 @@
 	<!-- http://www.jadyer.com/mpp/weixin/getOpenid?test=7645&openid=openid&oauth=base -->
 	<!-- 
 	<filter>
+		<filter-name>QQFilter</filter-name>
+		<filter-class>com.jadyer.sdk.qq.filter.QQFilter</filter-class>
+		<init-param>
+			<param-name>dataurl</param-name>
+			<param-value>http://www.jadyer.com/mpp</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>QQFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter>
 		<filter-name>WeixinFilter</filter-name>
 		<filter-class>com.jadyer.sdk.weixin.filter.WeixinFilter</filter-class>
 		<init-param>
 			<param-name>dataurl</param-name>
-			<param-value>http://weixinapi.msxf.com/mpp</param-value>
+			<param-value>http://www.jadyer.com/mpp</param-value>
 		</init-param>
 	</filter>
 	<filter-mapping>
