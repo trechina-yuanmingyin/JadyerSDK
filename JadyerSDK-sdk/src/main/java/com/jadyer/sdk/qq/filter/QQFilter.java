@@ -64,6 +64,7 @@ public class QQFilter implements Filter {
 			 * @see   User-Agent: Mozilla/5.0 (Linux; U; Android 4.4.2; zh-cn; H60-L01 Build/HDH60-L01) AppleWebKit/533.1 (KHTML, like Gecko)Version/4.0 MQQBrowser/5.4 TBS/025469 Mobile Safari/533.1 MicroMessenger/6.2.5.54_re87237d.622 NetType/WIFI Language/zh_CN
 			 */
 			String userAgent = request.getHeader("User-Agent");
+			logger.info("网页授权获取粉丝信息时请求的User-Agent=[{}]", userAgent);
 			if(!userAgent.contains("MicroMessenger") || (!userAgent.contains("iPhone") && !userAgent.contains("Android"))){
 				response.setCharacterEncoding(HttpUtil.DEFAULT_CHARSET);
 				response.setContentType("text/plain; charset=" + HttpUtil.DEFAULT_CHARSET);
