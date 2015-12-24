@@ -1,7 +1,7 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ page import="com.jadyer.sdk.weixin.helper.WeixinTokenHolder"%>
 <%
-	out.println(WeixinTokenHolder.getWeixinAccessToken());
+out.println(WeixinTokenHolder.getWeixinAccessToken());
 out.print(WeixinTokenHolder.getWeixinJSApiTicket());
 %>
 <!DOCTYPE HTML>
@@ -22,7 +22,7 @@ $(function(){
 				timestamp: data.timestamp,
 				nonceStr: data.noncestr,
 				signature: data.signature,
-				jsApiList: ["chooseImage", "uploadImage", "downloadImage"]
+				jsApiList: ["chooseImage", "uploadImage", "downloadImage", "scanQRCode"]
 			});
 		}
 	);
@@ -36,7 +36,7 @@ var images = {
 };
 wx.ready(function(){
 	wx.checkJsApi({
-		jsApiList: ["chooseImage", "uploadImage", "downloadImage"],
+		jsApiList: ["chooseImage", "uploadImage", "downloadImage", "scanQRCode"],
 		success: function(res){
 			alert("这是接口支持性的校验结果-->" + JSON.stringify(res));
 		}
@@ -79,6 +79,18 @@ wx.ready(function(){
 		}
 		upload();
 	};
+	/**
+	 * 微信扫一扫
+	 */
+	document.querySelector("#scanQRCode").onclick = function(){
+		wx.scanQRCode({
+			needResult: 1, //默认为0,扫描结果由微信处理,1则直接返回扫描结果
+			scanType: ["qrCode","barCode"], //可以指定扫二维码还是一维码,默认二者都有
+			success: function(res){
+				alert("扫码结果为-->["+res.resultStr+"]");
+			}
+		});
+	};
 });
 </script>
 </head>
@@ -95,5 +107,8 @@ wx.ready(function(){
 	<br/>
 	<br/>
 	<img id="mediaImg" src="" width="160px" height="160px">
+	<br/>
+	<br/>
+	<button id="scanQRCode">我要扫码</button>
 </body>
 </html>
