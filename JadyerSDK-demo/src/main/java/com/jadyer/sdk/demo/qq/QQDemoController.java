@@ -74,6 +74,8 @@ public class QQDemoController {
 
 	/**
 	 * 单发主动推消息
+	 * @see {"button":{"url":{"name":"test","type":"view","value":"https://github.com/jadyer/JadyerSDK/"}},"data":{"keynote4":{"value":"通路无双"},"keynote3":{"value":"789"},"first":{"value":"天下无敌任我行"},"keynote2":{"value":"456"},"end":{"value":"随心所欲陪你玩"},"keynote1":{"value":"123"}},"templateid":"mytemplateid","tousername":"E12D231CFC30438FB6970B0C7669C101"}
+	 * @see {"button":{"url":{"name":"test","type":"view","value":"https://github.com/jadyer/JadyerSDK/"}},"data":{"keynote4":{"value":"通路无双"},"keynote3":{"value":"789"},"first":{"value":"天下无敌任我行"},"keynote2":{"value":"456"},"end":{"value":"随心所欲陪你玩"},"keynote1":{"value":"123"}},"templateid":"mytemplateid","tousername":"E12D231CFC30438FB6970B0C7669C101","type":"view","url":"http://blog.csdn.net/jadyer"}
 	 * @create Dec 30, 2015 11:38:36 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
@@ -85,8 +87,8 @@ public class QQDemoController {
 		QQTemplateMsg templateMsg = new QQTemplateMsg();
 		templateMsg.setTousername(openid);
 		templateMsg.setTemplateid("mytemplateid");
-		templateMsg.setType(QQTemplateMsg.TEMPLATE_MSG_TYPE_VIEW);
-		templateMsg.setUrl("http://blog.csdn.net/jadyer");
+		//templateMsg.setType(QQTemplateMsg.TEMPLATE_MSG_TYPE_VIEW);
+		//templateMsg.setUrl("http://blog.csdn.net/jadyer");
 		DataItem data = new DataItem();
 		data.put("first", new DItem("天下无敌任我行"));
 		data.put("end", new DItem("随心所欲陪你玩"));
@@ -96,7 +98,7 @@ public class QQDemoController {
 		data.put("keynote4", new DItem("通路无双"));
 		templateMsg.setData(data);
 		ButtonItem button = new ButtonItem();
-		button.put("url", new BItem(QQTemplateMsg.TEMPLATE_MSG_TYPE_VIEW, "立即还款", "https://github.com/jadyer/JadyerSDK/"));
+		button.put("url", new BItem(QQTemplateMsg.TEMPLATE_MSG_TYPE_VIEW, "test", "https://github.com/jadyer/JadyerSDK/"));
 		templateMsg.setButton(button);
 		return QQHelper.pushQQTemplateMsgToFans(QQTokenHolder.getQQAccessToken(), templateMsg);
 	}
