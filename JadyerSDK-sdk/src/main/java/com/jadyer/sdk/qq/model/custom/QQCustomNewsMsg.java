@@ -1,6 +1,5 @@
 package com.jadyer.sdk.qq.model.custom;
 
-
 /**
  * 单发图文消息
  * @create Nov 28, 2015 9:40:51 PM

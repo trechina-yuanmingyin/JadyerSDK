@@ -31,6 +31,8 @@ public interface QQConstants {
 	String URL_QQ_GET_CREATE_MENU        = "https://api.mp.qq.com/cgi-bin/menu/create?access_token=" + URL_PLACEHOLDER_ACCESSTOKEN;
 	//单发主动推消息
 	String URL_QQ_CUSTOM_PUSH_MESSAGE    = "https://api.mp.qq.com/cgi-bin/message/custom/send?access_token=" + URL_PLACEHOLDER_ACCESSTOKEN;
+	//单发主动推模板消息
+	String URL_QQ_TEMPLATE_PUSH_MESSAGE  = "https://api.mp.qq.com/cgi-bin/message/template/send?access_token=" + URL_PLACEHOLDER_ACCESSTOKEN;
 	//网页授权获取用户信息的Code地址
 	String URL_QQ_OAUTH2_GET_CODE        = "https://open.mp.qq.com/connect/oauth2/authorize?appid=" + URL_PLACEHOLDER_APPID + "&redirect_uri=" + URL_PLACEHOLDER_REDIRECT_URI + "&response_type=code&scope=" + URL_PLACEHOLDER_SCOPE + "&state=" + URL_PLACEHOLDER_STATE + "#qq_redirect";
 	//通过code换取网页授权access_token

@@ -18,6 +18,7 @@ import com.jadyer.sdk.qq.model.QQFansInfo;
 import com.jadyer.sdk.qq.model.QQOAuthAccessToken;
 import com.jadyer.sdk.qq.model.custom.QQCustomMsg;
 import com.jadyer.sdk.qq.model.menu.QQMenu;
+import com.jadyer.sdk.qq.model.template.QQTemplateMsg;
 import com.jadyer.sdk.util.HttpUtil;
 
 public final class QQHelper {
@@ -201,6 +202,28 @@ public final class QQHelper {
 	public static QQErrorInfo pushQQMsgToFans(String accesstoken, QQCustomMsg customMsg){
 		String reqURL = QQConstants.URL_QQ_CUSTOM_PUSH_MESSAGE.replace(QQConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken);
 		String reqData = JSON.toJSONString(customMsg);
+		logger.info("单发主动推消息-->发送的JSON为{}", reqData);
+		String respData = HttpUtil.post(reqURL, reqData, "application/json; charset="+HttpUtil.DEFAULT_CHARSET);
+		logger.info("单发主动推消息-->QQ应答JSON为{}", respData);
+		QQErrorInfo errinfo = JSON.parseObject(respData, QQErrorInfo.class);
+		if(errinfo.getErrcode() != 0){
+			String errmsg = QQCodeEnum.getMessageByCode(errinfo.getErrcode());
+			if(StringUtils.isNotBlank(errmsg)){
+				errinfo.setErrmsg(errmsg);
+			}
+		}
+		return errinfo;
+	}
+
+
+	/**
+	 * 单发主动推模板消息
+	 * @create Dec 30, 2015 11:31:36 PM
+	 * @author 玄玉<http://blog.csdn.net/jadyer>
+	 */
+	public static QQErrorInfo pushQQTemplateMsgToFans(String accesstoken, QQTemplateMsg templateMsg){
+		String reqURL = QQConstants.URL_QQ_TEMPLATE_PUSH_MESSAGE.replace(QQConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken);
+		String reqData = JSON.toJSONString(templateMsg);
 		logger.info("单发主动推消息-->发送的JSON为{}", reqData);
 		String respData = HttpUtil.post(reqURL, reqData, "application/json; charset="+HttpUtil.DEFAULT_CHARSET);
 		logger.info("单发主动推消息-->QQ应答JSON为{}", respData);

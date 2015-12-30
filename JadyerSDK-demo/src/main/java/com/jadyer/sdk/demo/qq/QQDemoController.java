@@ -8,13 +8,16 @@ import com.jadyer.sdk.qq.helper.QQHelper;
 import com.jadyer.sdk.qq.helper.QQTokenHolder;
 import com.jadyer.sdk.qq.model.QQErrorInfo;
 import com.jadyer.sdk.qq.model.QQFansInfo;
-import com.jadyer.sdk.qq.model.custom.QQCustomTextMsg;
-import com.jadyer.sdk.qq.model.custom.QQCustomTextMsg.Text;
 import com.jadyer.sdk.qq.model.menu.QQButton;
 import com.jadyer.sdk.qq.model.menu.QQMenu;
 import com.jadyer.sdk.qq.model.menu.QQSubClickButton;
 import com.jadyer.sdk.qq.model.menu.QQSubViewButton;
 import com.jadyer.sdk.qq.model.menu.QQSuperButton;
+import com.jadyer.sdk.qq.model.template.QQTemplateMsg;
+import com.jadyer.sdk.qq.model.template.QQTemplateMsg.BItem;
+import com.jadyer.sdk.qq.model.template.QQTemplateMsg.ButtonItem;
+import com.jadyer.sdk.qq.model.template.QQTemplateMsg.DItem;
+import com.jadyer.sdk.qq.model.template.QQTemplateMsg.DataItem;
 
 @Controller
 @RequestMapping(value="/demo")
@@ -71,22 +74,53 @@ public class QQDemoController {
 
 	/**
 	 * 单发主动推消息
-	 * @see http://127.0.0.1/demo/pushQQMsgToFans?appid=123&appsecret=123&openid=123
-	 * @create Nov 28, 2015 9:54:55 PM
+	 * @create Dec 30, 2015 11:38:36 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
 	@ResponseBody
-	@RequestMapping(value="/pushQQMsgToFans")
-	public QQErrorInfo pushQQMsgToFans(String appid, String appsecret, String openid){
+	@RequestMapping(value="/pushQQTemplateMsgToFans")
+	public QQErrorInfo pushQQTemplateMsgToFans(String appid, String appsecret, String openid){
 		QQTokenHolder.setQQAppid(appid);
 		QQTokenHolder.setQQAppsecret(appsecret);
-//		//推图文消息
-//		QQCustomNewsMsg.MPNews.Article article11 = new Article("", "", "", "欢迎访问玄玉博客", "玄玉博客是一个开放态度的Java生态圈", "http://avatar.csdn.net/6/0/B/1_jadyer.jpg", "http://blog.csdn.net/jadyer");
-//		QQCustomNewsMsg.MPNews.Article article22 = new Article("", "", "", "玄玉微信SDK", "玄玉微信SDK是一个正在研发中的SDK", "http://img.my.csdn.net/uploads/201507/26/1437881866_3678.png", "https://github.com/jadyer");
-//		QQCustomNewsMsg customNewsMsg = new QQCustomNewsMsg(openid, new MPNews(new Article[]{article11, article22}));
-//		return QQHelper.pushQQMsgToFans(QQTokenHolder.getQQAccessToken(), customNewsMsg);
-		//推文本消息
-		QQCustomTextMsg customTextMsg = new QQCustomTextMsg(openid, new Text("这是一条主动推给单个粉丝的测试消息"));
-		return QQHelper.pushQQMsgToFans(QQTokenHolder.getQQAccessToken(), customTextMsg);
+		QQTemplateMsg templateMsg = new QQTemplateMsg();
+		templateMsg.setTousername(openid);
+		templateMsg.setTemplateid("mytemplateid");
+		templateMsg.setType(QQTemplateMsg.TEMPLATE_MSG_TYPE_VIEW);
+		templateMsg.setUrl("http://blog.csdn.net/jadyer");
+		DataItem data = new DataItem();
+		data.put("first", new DItem("天下无敌任我行"));
+		data.put("end", new DItem("随心所欲陪你玩"));
+		data.put("keynote1", new DItem("123"));
+		data.put("keynote2", new DItem("456"));
+		data.put("keynote3", new DItem("789"));
+		data.put("keynote4", new DItem("通路无双"));
+		templateMsg.setData(data);
+		ButtonItem button = new ButtonItem();
+		button.put("url", new BItem(QQTemplateMsg.TEMPLATE_MSG_TYPE_VIEW, "立即还款", "https://github.com/jadyer/JadyerSDK/"));
+		templateMsg.setButton(button);
+		return QQHelper.pushQQTemplateMsgToFans(QQTokenHolder.getQQAccessToken(), templateMsg);
 	}
+
+
+//	/**
+//	 * 单发主动推消息
+//	 * @see 暂不支持
+//	 * @see http://127.0.0.1/demo/pushQQMsgToFans?appid=123&appsecret=123&openid=123
+//	 * @create Nov 28, 2015 9:54:55 PM
+//	 * @author 玄玉<http://blog.csdn.net/jadyer>
+//	 */
+//	@ResponseBody
+//	@RequestMapping(value="/pushQQMsgToFans")
+//	public QQErrorInfo pushQQMsgToFans(String appid, String appsecret, String openid){
+//		QQTokenHolder.setQQAppid(appid);
+//		QQTokenHolder.setQQAppsecret(appsecret);
+////		//推图文消息
+////		QQCustomNewsMsg.MPNews.Article article11 = new Article("", "", "", "欢迎访问玄玉博客", "玄玉博客是一个开放态度的Java生态圈", "http://avatar.csdn.net/6/0/B/1_jadyer.jpg", "http://blog.csdn.net/jadyer");
+////		QQCustomNewsMsg.MPNews.Article article22 = new Article("", "", "", "玄玉微信SDK", "玄玉微信SDK是一个正在研发中的SDK", "http://img.my.csdn.net/uploads/201507/26/1437881866_3678.png", "https://github.com/jadyer");
+////		QQCustomNewsMsg customNewsMsg = new QQCustomNewsMsg(openid, new MPNews(new Article[]{article11, article22}));
+////		return QQHelper.pushQQMsgToFans(QQTokenHolder.getQQAccessToken(), customNewsMsg);
+//		//推文本消息
+//		QQCustomTextMsg customTextMsg = new QQCustomTextMsg(openid, new Text("这是一条主动推给单个粉丝的测试消息"));
+//		return QQHelper.pushQQMsgToFans(QQTokenHolder.getQQAccessToken(), customTextMsg);
+//	}
 }

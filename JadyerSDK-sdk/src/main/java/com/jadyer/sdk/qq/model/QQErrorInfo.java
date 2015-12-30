@@ -10,6 +10,7 @@ package com.jadyer.sdk.qq.model;
 public class QQErrorInfo {
 	private int errcode;
 	private String errmsg;
+	private String msgid;
 
 	public int getErrcode() {
 		return errcode;
@@ -22,5 +23,11 @@ public class QQErrorInfo {
 	}
 	public void setErrmsg(String errmsg) {
 		this.errmsg = errmsg;
+	}
+	public String getMsgid() {
+		return msgid;
+	}
+	public void setMsgid(String msgid) {
+		this.msgid = msgid;
 	}
 }
