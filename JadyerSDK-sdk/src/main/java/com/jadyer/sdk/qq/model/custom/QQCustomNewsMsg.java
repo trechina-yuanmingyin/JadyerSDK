@@ -1,5 +1,6 @@
 package com.jadyer.sdk.qq.model.custom;
 
+
 /**
  * 单发图文消息
  * @create Nov 28, 2015 9:40:51 PM
@@ -14,11 +15,11 @@ public class QQCustomNewsMsg extends QQCustomMsg {
 	/**
 	 * 封装图文消息内容的对象
 	 */
-	private News news;
+	private MPNews mpnews;
 
-	public QQCustomNewsMsg(String tousername, News news) {
+	public QQCustomNewsMsg(String tousername, MPNews mpnews) {
 		super(tousername);
-		this.news = news;
+		this.mpnews = mpnews;
 		this.msgtype = "mpnews";
 	}
 	
@@ -30,17 +31,17 @@ public class QQCustomNewsMsg extends QQCustomMsg {
 		this.msgtype = msgtype;
 	}
 
-	public News getNews() {
-		return news;
+	public MPNews getMpnews() {
+		return mpnews;
 	}
 
-	public void setNews(News news) {
-		this.news = news;
+	public void setMpnews(MPNews mpnews) {
+		this.mpnews = mpnews;
 	}
 
-	public static class News{
+	public static class MPNews{
 		private Article[] articles;
-		public News(Article[] articles) {
+		public MPNews(Article[] articles) {
 			this.articles = articles;
 		}
 		public Article[] getArticles() {
