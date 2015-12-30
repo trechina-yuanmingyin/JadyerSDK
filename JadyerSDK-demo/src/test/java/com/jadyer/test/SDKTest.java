@@ -5,6 +5,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.junit.Test;
 
 import com.jadyer.sdk.qq.helper.QQHelper;
+import com.jadyer.sdk.qq.model.custom.QQCustomTextMsg;
+import com.jadyer.sdk.qq.model.custom.QQCustomTextMsg.Text;
 import com.jadyer.sdk.util.HttpUtil;
 
 public class SDKTest {
@@ -30,5 +32,18 @@ public class SDKTest {
 		String accesstoken = "c33c7270918c211d4fd29eb42ed7296c";
 		String menu = "{\"button\":[{\"name\":\"个人中心\",\"sub_button\":[{\"name\":\"我的博客\",\"type\":\"view\",\"url\":\"http://blog.csdn.net/jadyer\"},{\"name\":\"我的GitHub\",\"type\":\"view\",\"url\":\"https://github.com/jadyer\"}]},{\"key\":\"joke\",\"name\":\"幽默笑话\",\"type\":\"click\"},{\"name\":\"休闲驿站\",\"sub_button\":[{\"key\":\"123abc\",\"name\":\"历史上的今天\",\"type\":\"click\"},{\"key\":\"456\",\"name\":\"天气预报\",\"type\":\"click\"}]}]}";
 		System.out.println(ReflectionToStringBuilder.toString(QQHelper.createQQMenu(accesstoken, menu), ToStringStyle.MULTI_LINE_STYLE));;
+	}
+
+	/**
+	 * 模拟QQ公众号主动推文本消息给粉丝
+	 * @create Dec 30, 2015 1:16:10 PM
+	 * @author 玄玉<http://blog.csdn.net/jadyer>
+	 */
+	@Test
+	public void pushQQMsgToFans(){
+		String openid = "E12D231CFC30438FB6970B0C7669C101";
+		String accesstoken = "bf29c35030adfd6dc3544291ec0826af";
+		QQCustomTextMsg customTextMsg = new QQCustomTextMsg(openid, new Text("这是一条主动推给单个粉丝的测试消息"));
+		QQHelper.pushQQMsgToFans(accesstoken, customTextMsg);
 	}
 }
