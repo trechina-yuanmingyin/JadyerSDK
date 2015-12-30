@@ -136,7 +136,7 @@ public final class QQHelper {
 		String reqURL = QQConstants.URL_QQ_GET_CREATE_MENU.replace(QQConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken);
 		String reqData = JSON.toJSONString(menu);
 		logger.info("自定义菜单创建-->发送的JSON为{}", reqData);
-		String respData = HttpUtil.post(reqURL, reqData);
+		String respData = HttpUtil.post(reqURL, reqData, "application/json; charset="+HttpUtil.DEFAULT_CHARSET);
 		logger.info("自定义菜单创建-->QQ应答JSON为{}", respData);
 		QQErrorInfo errinfo = JSON.parseObject(respData, QQErrorInfo.class);
 		if(errinfo.getErrcode() != 0){
@@ -159,7 +159,7 @@ public final class QQHelper {
 	public static QQErrorInfo createQQMenu(String accesstoken, String menuJson){
 		String reqURL = QQConstants.URL_QQ_GET_CREATE_MENU.replace(QQConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken);
 		logger.info("自定义菜单创建-->发送的JSON为{}", menuJson);
-		String respData = HttpUtil.post(reqURL, menuJson);
+		String respData = HttpUtil.post(reqURL, menuJson, "application/json; charset="+HttpUtil.DEFAULT_CHARSET);
 		logger.info("自定义菜单创建-->QQ应答JSON为{}", respData);
 		QQErrorInfo errinfo = JSON.parseObject(respData, QQErrorInfo.class);
 		if(errinfo.getErrcode() != 0){
@@ -202,7 +202,7 @@ public final class QQHelper {
 		String reqURL = QQConstants.URL_QQ_CUSTOM_PUSH_MESSAGE.replace(QQConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken);
 		String reqData = JSON.toJSONString(customMsg);
 		logger.info("单发主动推消息-->发送的JSON为{}", reqData);
-		String respData = HttpUtil.post(reqURL, reqData);
+		String respData = HttpUtil.post(reqURL, reqData, "application/json; charset="+HttpUtil.DEFAULT_CHARSET);
 		logger.info("单发主动推消息-->QQ应答JSON为{}", respData);
 		QQErrorInfo errinfo = JSON.parseObject(respData, QQErrorInfo.class);
 		if(errinfo.getErrcode() != 0){

@@ -131,7 +131,7 @@ public final class WeixinHelper {
 		String reqURL = WeixinConstants.URL_WEIXIN_GET_CREATE_MENU.replace(WeixinConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken);
 		String reqData = JSON.toJSONString(menu);
 		logger.info("自定义菜单创建-->待发送的JSON为{}", reqData);
-		String respData = HttpUtil.post(reqURL, reqData);
+		String respData = HttpUtil.post(reqURL, reqData, null);
 		logger.info("自定义菜单创建-->微信应答JSON为{}", respData);
 		WeixinErrorInfo errinfo = JSON.parseObject(respData, WeixinErrorInfo.class);
 		if(errinfo.getErrcode() != 0){
@@ -152,7 +152,7 @@ public final class WeixinHelper {
 	public static WeixinErrorInfo createWeixinMenu(String accesstoken, String menuJson){
 		String reqURL = WeixinConstants.URL_WEIXIN_GET_CREATE_MENU.replace(WeixinConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken);
 		logger.info("自定义菜单创建-->待发送的JSON为{}", menuJson);
-		String respData = HttpUtil.post(reqURL, menuJson);
+		String respData = HttpUtil.post(reqURL, menuJson, null);
 		logger.info("自定义菜单创建-->微信应答JSON为{}", respData);
 		WeixinErrorInfo errinfo = JSON.parseObject(respData, WeixinErrorInfo.class);
 		if(errinfo.getErrcode() != 0){
@@ -194,7 +194,7 @@ public final class WeixinHelper {
 		String reqURL = WeixinConstants.URL_WEIXIN_CUSTOM_PUSH_MESSAGE.replace(WeixinConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken);
 		String reqData = JSON.toJSONString(customMsg);
 		logger.info("客服接口主动推消息-->待发送的JSON为{}", reqData);
-		String respData = HttpUtil.post(reqURL, reqData);
+		String respData = HttpUtil.post(reqURL, reqData, null);
 		logger.info("客服接口主动推消息-->微信应答JSON为{}", respData);
 		WeixinErrorInfo errinfo = JSON.parseObject(respData, WeixinErrorInfo.class);
 		if(errinfo.getErrcode() != 0){

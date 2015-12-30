@@ -77,7 +77,7 @@ public final class HttpUtil {
 	 * 发送HTTP_POST请求
 	 */
 	public static String post(String reqURL){
-		return post(reqURL, null);
+		return post(reqURL, null, null);
 	}
 
 	/**
@@ -92,7 +92,7 @@ public final class HttpUtil {
 	 * @param reqData 请求报文,无参数时传null即可,多个参数则应拼接为param11=value11&22=value22&33=value33的形式
 	 * @return 远程主机响应正文
 	 */
-	public static String post(String reqURL, String reqData){
+	public static String post(String reqURL, String reqData, String contentType){
 		String respData = "";
 		HttpClient httpClient = new DefaultHttpClient();
 		httpClient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, DEFAULT_CONNECTION_TIMEOUT);
@@ -129,7 +129,11 @@ public final class HttpUtil {
 			HttpPost httpPost = new HttpPost(reqURL);
 			//由于下面使用的是new StringEntity(....),所以默认发出去的请求报文头中CONTENT_TYPE值为text/plain; charset=ISO-8859-1
 			//这就有可能会导致服务端接收不到POST过去的参数,比如运行在Tomcat6.0.36中的Servlet,所以我们手工指定CONTENT_TYPE头消息
-			httpPost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded; charset=" + DEFAULT_CHARSET);
+			if(StringUtils.isBlank(contentType)){
+				httpPost.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded; charset=" + DEFAULT_CHARSET);
+			}else{
+				httpPost.setHeader(HTTP.CONTENT_TYPE, contentType);
+			}
 			httpPost.setEntity(new StringEntity(null==reqData?"":reqData, DEFAULT_CHARSET));
 			HttpResponse response = httpClient.execute(httpPost);
 			HttpEntity entity = response.getEntity();
