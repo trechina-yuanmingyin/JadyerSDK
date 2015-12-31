@@ -35,20 +35,19 @@ public final class QQHelper {
 	 * @create Nov 28, 2015 8:40:36 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
-	static String getQQAccessToken(String appid, String appsecret){
+	static String getQQAccessToken(String appid, String appsecret) throws IllegalAccessException {
 		String reqURL = QQConstants.URL_QQ_GET_ACCESSTOKEN.replace(QQConstants.URL_PLACEHOLDER_APPID, appid).replace(QQConstants.URL_PLACEHOLDER_APPSECRET, appsecret);
 		String respData = HttpUtil.post(reqURL);
 		logger.info("获取QQaccess_token,QQ应答报文为-->{}", respData);
 		Map<String, String> map = JSON.parseObject(respData, new TypeReference<Map<String, String>>(){});
 		if("0".equals(map.get("errcode")) && StringUtils.isNotBlank(map.get("access_token"))){
 			return map.get("access_token");
-		}else{
-			String errmsg = QQCodeEnum.getMessageByCode(Integer.parseInt((map.get("errcode"))));
-			if(StringUtils.isBlank(errmsg)){
-				errmsg = map.get("errmsg");
-			}
-			throw new RuntimeException("获取QQaccess_token失败-->" + errmsg);
 		}
+		String errmsg = QQCodeEnum.getMessageByCode(Integer.parseInt((map.get("errcode"))));
+		if(StringUtils.isBlank(errmsg)){
+			errmsg = map.get("errmsg");
+		}
+		throw new IllegalAccessException(errmsg);
 	}
 
 
@@ -58,20 +57,19 @@ public final class QQHelper {
 	 * @create Nov 28, 2015 8:40:46 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
-	static String getQQJSApiTicket(String accesstoken){
+	static String getQQJSApiTicket(String accesstoken) throws IllegalAccessException {
 		String reqURL = QQConstants.URL_QQ_GET_JSAPI_TICKET.replace(QQConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken);
 		String respData = HttpUtil.post(reqURL);
 		logger.info("获取QQjsapi_ticket,QQ应答报文为-->{}", respData);
 		Map<String, String> map = JSON.parseObject(respData, new TypeReference<Map<String, String>>(){});
 		if("0".equals(map.get("errcode"))){
 			return map.get("ticket");
-		}else{
-			String errmsg = QQCodeEnum.getMessageByCode(Integer.parseInt((map.get("errcode"))));
-			if(StringUtils.isBlank(errmsg)){
-				errmsg = map.get("errmsg");
-			}
-			throw new RuntimeException("获取QQjsapi_ticket失败-->" + errmsg);
 		}
+		String errmsg = QQCodeEnum.getMessageByCode(Integer.parseInt((map.get("errcode"))));
+		if(StringUtils.isBlank(errmsg)){
+			errmsg = map.get("errmsg");
+		}
+		throw new IllegalAccessException(errmsg);
 	}
 
 

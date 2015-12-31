@@ -4,6 +4,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.jadyer.sdk.qq.model.QQOAuthAccessToken;
 
@@ -15,6 +17,7 @@ import com.jadyer.sdk.qq.model.QQOAuthAccessToken;
  * @author 玄玉<http://blog.csdn.net/jadyer>
  */
 public class QQTokenHolder {
+	private static final Logger logger = LoggerFactory.getLogger(QQTokenHolder.class);
 	private static final String QQ_APPID = "qq_appid";
 	private static final String QQ_APPSECRET = "qq_appsecret";
 	private static final String FLAG_QQ_ACCESSTOKEN = "qq_access_token";
@@ -126,9 +129,14 @@ public class QQTokenHolder {
 			return (String)tokenMap.get(FLAG_QQ_ACCESSTOKEN + getQQAppid());
 		}
 		if(qqAccessTokenRefreshing.compareAndSet(false, true)){
-			String accessToken = QQHelper.getQQAccessToken(getQQAppid(), getQQAppsecret());
-			tokenMap.put(FLAG_QQ_ACCESSTOKEN + getQQAppid(), accessToken);
-			tokenMap.put(FLAG_QQ_ACCESSTOKEN_EXPIRETIME + getQQAppid(), System.currentTimeMillis()+QQ_TOKEN_EXPIRE_TIME_MILLIS);
+			String accessToken = null;
+			try {
+				accessToken = QQHelper.getQQAccessToken(getQQAppid(), getQQAppsecret());
+				tokenMap.put(FLAG_QQ_ACCESSTOKEN + getQQAppid(), accessToken);
+				tokenMap.put(FLAG_QQ_ACCESSTOKEN_EXPIRETIME + getQQAppid(), System.currentTimeMillis()+QQ_TOKEN_EXPIRE_TIME_MILLIS);
+			} catch (IllegalAccessException e) {
+				logger.error("获取QQaccess_token失败-->"+e.getMessage(), e);
+			}
 			qqAccessTokenRefreshing.set(false);
 		}
 		return (String)tokenMap.get(FLAG_QQ_ACCESSTOKEN + getQQAppid());
@@ -147,9 +155,14 @@ public class QQTokenHolder {
 			return (String)tokenMap.get(FLAG_QQ_JSAPI_TICKET + getQQAppid());
 		}
 		if(qqJSApiTicketRefreshing.compareAndSet(false, true)){
-			String jsapiTicket = QQHelper.getQQJSApiTicket(getQQAccessToken());
-			tokenMap.put(FLAG_QQ_JSAPI_TICKET + getQQAppid(), jsapiTicket);
-			tokenMap.put(FLAG_QQ_JSAPI_TICKET_EXPIRETIME + getQQAppid(), System.currentTimeMillis()+QQ_TOKEN_EXPIRE_TIME_MILLIS);
+			String jsapiTicket = null;
+			try {
+				jsapiTicket = QQHelper.getQQJSApiTicket(getQQAccessToken());
+				tokenMap.put(FLAG_QQ_JSAPI_TICKET + getQQAppid(), jsapiTicket);
+				tokenMap.put(FLAG_QQ_JSAPI_TICKET_EXPIRETIME + getQQAppid(), System.currentTimeMillis()+QQ_TOKEN_EXPIRE_TIME_MILLIS);
+			} catch (IllegalAccessException e) {
+				logger.error("获取QQjsapi_ticket失败-->"+e.getMessage(), e);
+			}
 			qqJSApiTicketRefreshing.set(false);
 		}
 		return (String)tokenMap.get(FLAG_QQ_JSAPI_TICKET + getQQAppid());
