@@ -4,6 +4,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.jadyer.sdk.weixin.model.WeixinOAuthAccessToken;
 
@@ -15,6 +17,7 @@ import com.jadyer.sdk.weixin.model.WeixinOAuthAccessToken;
  * @author 玄玉<http://blog.csdn.net/jadyer>
  */
 public class WeixinTokenHolder {
+	private static final Logger logger = LoggerFactory.getLogger(WeixinTokenHolder.class);
 	private static final String WEIXIN_APPID = "weixin_appid";
 	private static final String WEIXIN_APPSECRET = "weixin_appsecret";
 	private static final String FLAG_WEIXIN_ACCESSTOKEN = "weixin_access_token";
@@ -126,9 +129,14 @@ public class WeixinTokenHolder {
 			return (String)tokenMap.get(FLAG_WEIXIN_ACCESSTOKEN + getWeixinAppid());
 		}
 		if(weixinAccessTokenRefreshing.compareAndSet(false, true)){
-			String accessToken = WeixinHelper.getWeixinAccessToken(getWeixinAppid(), getWeixinAppsecret());
-			tokenMap.put(FLAG_WEIXIN_ACCESSTOKEN + getWeixinAppid(), accessToken);
-			tokenMap.put(FLAG_WEIXIN_ACCESSTOKEN_EXPIRETIME + getWeixinAppid(), System.currentTimeMillis()+WEIXIN_TOKEN_EXPIRE_TIME_MILLIS);
+			String accessToken = null;
+			try {
+				accessToken = WeixinHelper.getWeixinAccessToken(getWeixinAppid(), getWeixinAppsecret());
+				tokenMap.put(FLAG_WEIXIN_ACCESSTOKEN + getWeixinAppid(), accessToken);
+				tokenMap.put(FLAG_WEIXIN_ACCESSTOKEN_EXPIRETIME + getWeixinAppid(), System.currentTimeMillis()+WEIXIN_TOKEN_EXPIRE_TIME_MILLIS);
+			} catch (IllegalAccessException e) {
+				logger.error("获取微信access_token失败-->"+e.getMessage(), e);
+			}
 			weixinAccessTokenRefreshing.set(false);
 		}
 		return (String)tokenMap.get(FLAG_WEIXIN_ACCESSTOKEN + getWeixinAppid());
@@ -147,9 +155,14 @@ public class WeixinTokenHolder {
 			return (String)tokenMap.get(FLAG_WEIXIN_JSAPI_TICKET + getWeixinAppid());
 		}
 		if(weixinJSApiTicketRefreshing.compareAndSet(false, true)){
-			String jsapiTicket = WeixinHelper.getWeixinJSApiTicket(getWeixinAccessToken());
-			tokenMap.put(FLAG_WEIXIN_JSAPI_TICKET + getWeixinAppid(), jsapiTicket);
-			tokenMap.put(FLAG_WEIXIN_JSAPI_TICKET_EXPIRETIME + getWeixinAppid(), System.currentTimeMillis()+WEIXIN_TOKEN_EXPIRE_TIME_MILLIS);
+			String jsapiTicket = null;
+			try {
+				jsapiTicket = WeixinHelper.getWeixinJSApiTicket(getWeixinAccessToken());
+				tokenMap.put(FLAG_WEIXIN_JSAPI_TICKET + getWeixinAppid(), jsapiTicket);
+				tokenMap.put(FLAG_WEIXIN_JSAPI_TICKET_EXPIRETIME + getWeixinAppid(), System.currentTimeMillis()+WEIXIN_TOKEN_EXPIRE_TIME_MILLIS);
+			} catch (IllegalAccessException e) {
+				logger.error("获取微信jsapi_ticket失败-->"+e.getMessage(), e);
+			}
 			weixinJSApiTicketRefreshing.set(false);
 		}
 		return (String)tokenMap.get(FLAG_WEIXIN_JSAPI_TICKET + getWeixinAppid());

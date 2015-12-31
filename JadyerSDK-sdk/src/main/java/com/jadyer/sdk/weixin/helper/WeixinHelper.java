@@ -32,20 +32,19 @@ public final class WeixinHelper {
 	 * @see {"errcode":40125,"errmsg":"invalid appsecret, view more at http:\/\/t.cn\/RAEkdVq hint: [M5_jKa0125vr22]"}
 	 * @return 获取失败时将抛出RuntimeException
 	 */
-	static String getWeixinAccessToken(String appid, String appsecret){
+	static String getWeixinAccessToken(String appid, String appsecret) throws IllegalAccessException {
 		String reqURL = WeixinConstants.URL_WEIXIN_GET_ACCESSTOKEN.replace(WeixinConstants.URL_PLACEHOLDER_APPID, appid).replace(WeixinConstants.URL_PLACEHOLDER_APPSECRET, appsecret);
 		String respData = HttpUtil.post(reqURL);
 		logger.info("获取微信access_token,微信应答报文为-->{}", respData);
 		Map<String, String> map = JSON.parseObject(respData, new TypeReference<Map<String, String>>(){});
 		if(respData.contains("access_token")){
 			return map.get("access_token");
-		}else{
-			String errmsg = WeixinCodeEnum.getMessageByCode(Integer.parseInt((map.get("errcode"))));
-			if(StringUtils.isBlank(errmsg)){
-				errmsg = map.get("errmsg");
-			}
-			throw new RuntimeException("获取微信access_token失败-->" + errmsg);
 		}
+		String errmsg = WeixinCodeEnum.getMessageByCode(Integer.parseInt((map.get("errcode"))));
+		if(StringUtils.isBlank(errmsg)){
+			errmsg = map.get("errmsg");
+		}
+		throw new IllegalAccessException(errmsg);
 	}
 
 
@@ -58,20 +57,19 @@ public final class WeixinHelper {
 	 * @create Oct 29, 2015 9:45:20 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
-	static String getWeixinJSApiTicket(String accesstoken){
+	static String getWeixinJSApiTicket(String accesstoken) throws IllegalAccessException {
 		String reqURL = WeixinConstants.URL_WEIXIN_GET_JSAPI_TICKET.replace(WeixinConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken);
 		String respData = HttpUtil.post(reqURL);
 		logger.info("获取微信jsapi_ticket,微信应答报文为-->{}", respData);
 		Map<String, String> map = JSON.parseObject(respData, new TypeReference<Map<String, String>>(){});
 		if("0".equals(map.get("errcode"))){
 			return map.get("ticket");
-		}else{
-			String errmsg = WeixinCodeEnum.getMessageByCode(Integer.parseInt((map.get("errcode"))));
-			if(StringUtils.isBlank(errmsg)){
-				errmsg = map.get("errmsg");
-			}
-			throw new RuntimeException("获取微信jsapi_ticket失败-->" + errmsg);
 		}
+		String errmsg = WeixinCodeEnum.getMessageByCode(Integer.parseInt((map.get("errcode"))));
+		if(StringUtils.isBlank(errmsg)){
+			errmsg = map.get("errmsg");
+		}
+		throw new IllegalAccessException(errmsg);
 	}
 
 
