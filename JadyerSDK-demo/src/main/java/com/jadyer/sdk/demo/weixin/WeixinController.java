@@ -3,7 +3,9 @@ package com.jadyer.sdk.demo.weixin;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
@@ -20,6 +22,7 @@ import com.jadyer.sdk.demo.weixin.fans.FansSaveThread;
 import com.jadyer.sdk.demo.weixin.reply.ReplyInfoDao;
 import com.jadyer.sdk.demo.weixin.reply.model.ReplyInfo;
 import com.jadyer.sdk.weixin.controller.WeixinMsgControllerCustomServiceAdapter;
+import com.jadyer.sdk.weixin.helper.WeixinTokenHolder;
 import com.jadyer.sdk.weixin.msg.in.WeixinInTextMsg;
 import com.jadyer.sdk.weixin.msg.in.event.WeixinInFollowEventMsg;
 import com.jadyer.sdk.weixin.msg.in.event.WeixinInMenuEventMsg;
@@ -183,4 +186,24 @@ public class WeixinController extends WeixinMsgControllerCustomServiceAdapter {
 //		WeixinCustomNewsMsg customNewsMsg = new WeixinCustomNewsMsg(openid, new News(new Article[]{article11, article22}));
 //		return WeixinHelper.pushWeixinMsgToFans(accesstoken, customNewsMsg);
 //	}
+
+
+	@PostConstruct
+	public void scheduleReport(){
+		Executors.newScheduledThreadPool(1).schedule(new Runnable(){
+			@Override
+			public void run() {
+				try {
+					List<UserInfo> userinfoList = userService.findAll();
+					for(UserInfo obj : userinfoList){
+						if("1".equals(obj.getBindStatus())){
+							WeixinTokenHolder.setWeixinAppidAppsecret(obj.getAppId(), obj.getAppSecret());
+						}
+					}
+				} catch (Exception e) {
+					LogUtil.getAppLogger().info("登记微信appid和appsecret任务异常, 堆栈轨迹如下", e);
+				}
+			}
+		}, 2, TimeUnit.MINUTES);
+	}
 }

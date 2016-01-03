@@ -24,7 +24,6 @@ public class UserService {
 		return DigestUtils.md5Hex(password.substring(0, 1) + encrypt + password + encrypt + password.substring(password.length()-1));
 	}
 
-
 	@Transactional(readOnly=true)
 	public UserInfo findByUsernameAndPassword(String username, String password){
 		return userInfoDao.findByUsernameAndPassword(username, buildEncryptPassword(password));
@@ -33,6 +32,11 @@ public class UserService {
 	@Transactional(readOnly=true)
 	public UserInfo findOne(int id){
 		return userInfoDao.findOne(id);
+	}
+
+	@Transactional(readOnly=true)
+	public List<UserInfo> findAll(){
+		return userInfoDao.findAll();
 	}
 
 	@Transactional(readOnly=true)
