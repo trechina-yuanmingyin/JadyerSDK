@@ -30,7 +30,7 @@ public class QQDemoController {
 	@ResponseBody
 	@RequestMapping(value="/getopenid")
 	public String getopenid(String openid){
-		return "您的openid=" + openid;
+		return "your openid is [" + openid + "]";
 	}
 
 
@@ -43,8 +43,7 @@ public class QQDemoController {
 	@ResponseBody
 	@RequestMapping(value="/createQQMenu")
 	public QQErrorInfo createQQMenu(String appid, String appsecret){
-		QQTokenHolder.setQQAppid(appid);
-		QQTokenHolder.setQQAppsecret(appsecret);
+		QQTokenHolder.setQQAppidAppsecret(appid, appsecret);
 		QQSubViewButton btn11 = new QQSubViewButton("我的博客", "http://blog.csdn.net/jadyer");
 		QQSubViewButton btn22 = new QQSubViewButton("我的GitHub", "https://github.com/jadyer");
 		QQSubClickButton btn33 = new QQSubClickButton("历史上的今天", "123abc");
@@ -53,7 +52,7 @@ public class QQDemoController {
 		QQSuperButton sbtn11 = new QQSuperButton("个人中心", new QQButton[]{btn11, btn22});
 		QQSuperButton sbtn22 = new QQSuperButton("休闲驿站", new QQButton[]{btn33, btn44});
 		QQMenu menu = new QQMenu(new QQButton[]{sbtn11, btn55, sbtn22});
-		return QQHelper.createQQMenu(QQTokenHolder.getQQAccessToken(), menu);
+		return QQHelper.createQQMenu(QQTokenHolder.getQQAccessToken(appid), menu);
 	}
 
 
@@ -66,9 +65,8 @@ public class QQDemoController {
 	@ResponseBody
 	@RequestMapping(value="/getQQFansInfo")
 	public QQFansInfo getQQFansInfo(String appid, String appsecret, String openid){
-		QQTokenHolder.setQQAppid(appid);
-		QQTokenHolder.setQQAppsecret(appsecret);
-		return QQHelper.getQQFansInfo(QQTokenHolder.getQQAccessToken(), openid);
+		QQTokenHolder.setQQAppidAppsecret(appid, appsecret);
+		return QQHelper.getQQFansInfo(QQTokenHolder.getQQAccessToken(appid), openid);
 	}
 
 
@@ -82,8 +80,7 @@ public class QQDemoController {
 	@ResponseBody
 	@RequestMapping(value="/pushQQTemplateMsgToFans")
 	public QQErrorInfo pushQQTemplateMsgToFans(String appid, String appsecret, String openid){
-		QQTokenHolder.setQQAppid(appid);
-		QQTokenHolder.setQQAppsecret(appsecret);
+		QQTokenHolder.setQQAppidAppsecret(appid, appsecret);
 		QQTemplateMsg templateMsg = new QQTemplateMsg();
 		templateMsg.setTousername(openid);
 		templateMsg.setTemplateid("mytemplateid");
@@ -100,7 +97,7 @@ public class QQDemoController {
 		ButtonItem button = new ButtonItem();
 		button.put("url", new BItem(QQTemplateMsg.TEMPLATE_MSG_TYPE_VIEW, "test", "https://github.com/jadyer/JadyerSDK/"));
 		templateMsg.setButton(button);
-		return QQHelper.pushQQTemplateMsgToFans(QQTokenHolder.getQQAccessToken(), templateMsg);
+		return QQHelper.pushQQTemplateMsgToFans(QQTokenHolder.getQQAccessToken(appid), templateMsg);
 	}
 
 

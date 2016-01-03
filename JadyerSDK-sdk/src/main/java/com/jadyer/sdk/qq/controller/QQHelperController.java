@@ -28,16 +28,16 @@ public class QQHelperController {
 
 	/**
 	 * 获取网页access_token
-	 * @param uid   预留字段,以便扩展为多用户支持
+	 * @param appid QQappid,通过它来支持多用户
 	 * @param code  QQ服务器发放的,有效期为5分钟的,用于换取网页access_token的code
 	 * @param state 重定向到QQ服务器时,由开发者服务器携带过去的参数,这里会原样带回
 	 * @return 获取失败则返回一个友好的HTML页面,获取成功后直接跳转到用户原本请求的资源
 	 */
-	@RequestMapping(value="/oauth/{uid}")
-	public String oauth(@PathVariable String uid, String code, String state, HttpServletResponse response) throws IOException{
+	@RequestMapping(value="/oauth/{appid}")
+	public String oauth(@PathVariable String appid, String code, String state, HttpServletResponse response) throws IOException{
 		logger.info("收到QQ服务器回调code=[{}], state=[{}]", code, state);
 		if(StringUtils.isNotBlank(code)){
-			QQOAuthAccessToken oauthAccessToken = QQTokenHolder.getQQOAuthAccessToken(code);
+			QQOAuthAccessToken oauthAccessToken = QQTokenHolder.getQQOAuthAccessToken(appid, code);
 			if(0==oauthAccessToken.getErrcode() && StringUtils.isNotBlank(oauthAccessToken.getOpenid())){
 				/**
 				 * 还原state携带过来的粉丝请求的原URL

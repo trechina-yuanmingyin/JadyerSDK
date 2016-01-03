@@ -18,8 +18,6 @@ import com.jadyer.sdk.qq.model.QQOAuthAccessToken;
  */
 public class QQTokenHolder {
 	private static final Logger logger = LoggerFactory.getLogger(QQTokenHolder.class);
-	private static final String QQ_APPID = "qq_appid";
-	private static final String QQ_APPSECRET = "qq_appsecret";
 	private static final String FLAG_QQ_ACCESSTOKEN = "qq_access_token";
 	private static final String FLAG_QQ_JSAPI_TICKET = "qq_jsapi_ticket";
 	private static final String FLAG_QQ_OAUTH_ACCESSTOKEN = "qq_oauth_access_token";
@@ -35,6 +33,32 @@ public class QQTokenHolder {
 	private QQTokenHolder(){}
 
 	/**
+	 * 登记QQappid和appsecret
+	 * @return 返回已登记的QQappsecret
+	 * @create Jan 3, 2016 7:09:04 PM
+	 * @author 玄玉<http://blog.csdn.net/jadyer>
+	 */
+	public static String setQQAppidAppsecret(String appid, String appsecret){
+		tokenMap.put(appid, appsecret);
+		return getQQAppsecret(appid);
+	}
+
+
+	/**
+	 * 获取已登记的QQappsecret
+	 * @create Jan 3, 2016 7:09:18 PM
+	 * @author 玄玉<http://blog.csdn.net/jadyer>
+	 */
+	public static String getQQAppsecret(String appid){
+		String appsecret = (String)tokenMap.get(appid);
+		if(StringUtils.isBlank(appsecret)){
+			throw new IllegalArgumentException("未登记QQappsecret");
+		}
+		return appsecret;
+	}
+
+
+	/**
 	 * 记录QQ媒体文件存储在本地的完整路径
 	 * @param mediaId           QQ媒体文件ID
 	 * @param localFileFullPath QQ媒体文件存储在本地的完整路径
@@ -42,9 +66,9 @@ public class QQTokenHolder {
 	 * @create Nov 28, 2015 8:27:41 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
-	public static String setMediaIdFilePath(String mediaId, String localFileFullPath){
-		tokenMap.put(mediaId, localFileFullPath);
-		return getMediaIdFilePath(mediaId);
+	public static String setMediaIdFilePath(String appid, String mediaId, String localFileFullPath){
+		tokenMap.put(appid+"_"+mediaId, localFileFullPath);
+		return getMediaIdFilePath(appid, mediaId);
 	}
 
 
@@ -55,64 +79,12 @@ public class QQTokenHolder {
 	 * @create Nov 28, 2015 8:28:36 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
-	public static String getMediaIdFilePath(String mediaId){
-		String localFileFullPath = (String)tokenMap.get(mediaId);
+	public static String getMediaIdFilePath(String appid, String mediaId){
+		String localFileFullPath = (String)tokenMap.get(appid+"_"+mediaId);
 		if(StringUtils.isBlank(localFileFullPath)){
-			throw new IllegalArgumentException("不存在的本地媒体文件mediaId=" + mediaId);
+			throw new IllegalArgumentException("不存在的本地媒体文件appid="+appid+",mediaId=" + mediaId);
 		}
 		return localFileFullPath;
-	}
-
-
-	/**
-	 * 设置QQappid
-	 * @return 返回已设置的QQappid
-	 * @create Nov 28, 2015 8:28:47 PM
-	 * @author 玄玉<http://blog.csdn.net/jadyer>
-	 */
-	public static String setQQAppid(String appid){
-		tokenMap.put(QQ_APPID, appid);
-		return getQQAppid();
-	}
-
-
-	/**
-	 * 获取已设置的QQappid
-	 * @create Nov 28, 2015 8:29:06 PM
-	 * @author 玄玉<http://blog.csdn.net/jadyer>
-	 */
-	public static String getQQAppid(){
-		String appid = (String)tokenMap.get(QQ_APPID);
-		if(StringUtils.isBlank(appid)){
-			throw new IllegalArgumentException("未设置QQappid");
-		}
-		return appid;
-	}
-
-
-	/**
-	 * 设置QQappsecret
-	 * @return 返回已设置的QQappsecret
-	 * @create Nov 28, 2015 8:29:28 PM
-	 * @author 玄玉<http://blog.csdn.net/jadyer>
-	 */
-	public static String setQQAppsecret(String appsecret){
-		tokenMap.put(QQ_APPSECRET, appsecret);
-		return getQQAppsecret();
-	}
-
-
-	/**
-	 * 获取已设置的QQappsecret
-	 * @create Nov 28, 2015 8:29:39 PM
-	 * @author 玄玉<http://blog.csdn.net/jadyer>
-	 */
-	public static String getQQAppsecret(){
-		String appsecret = (String)tokenMap.get(QQ_APPSECRET);
-		if(StringUtils.isBlank(appsecret)){
-			throw new IllegalArgumentException("未设置QQappsecret");
-		}
-		return appsecret;
 	}
 
 
@@ -123,23 +95,23 @@ public class QQTokenHolder {
 	 * @create Nov 28, 2015 8:30:12 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
-	public static String getQQAccessToken(){
-		Long expireTime = (Long)tokenMap.get(FLAG_QQ_ACCESSTOKEN_EXPIRETIME + getQQAppid());
+	public static String getQQAccessToken(String appid){
+		Long expireTime = (Long)tokenMap.get(FLAG_QQ_ACCESSTOKEN_EXPIRETIME + appid);
 		if(null!=expireTime && expireTime>=System.currentTimeMillis()){
-			return (String)tokenMap.get(FLAG_QQ_ACCESSTOKEN + getQQAppid());
+			return (String)tokenMap.get(FLAG_QQ_ACCESSTOKEN + appid);
 		}
 		if(qqAccessTokenRefreshing.compareAndSet(false, true)){
 			String accessToken = null;
 			try {
-				accessToken = QQHelper.getQQAccessToken(getQQAppid(), getQQAppsecret());
-				tokenMap.put(FLAG_QQ_ACCESSTOKEN + getQQAppid(), accessToken);
-				tokenMap.put(FLAG_QQ_ACCESSTOKEN_EXPIRETIME + getQQAppid(), System.currentTimeMillis()+QQ_TOKEN_EXPIRE_TIME_MILLIS);
+				accessToken = QQHelper.getQQAccessToken(appid, getQQAppsecret(appid));
+				tokenMap.put(FLAG_QQ_ACCESSTOKEN + appid, accessToken);
+				tokenMap.put(FLAG_QQ_ACCESSTOKEN_EXPIRETIME + appid, System.currentTimeMillis()+QQ_TOKEN_EXPIRE_TIME_MILLIS);
 			} catch (IllegalAccessException e) {
-				logger.error("获取QQaccess_token失败-->"+e.getMessage(), e);
+				logger.error("获取QQappid=["+appid+"]的access_token失败", e);
 			}
 			qqAccessTokenRefreshing.set(false);
 		}
-		return (String)tokenMap.get(FLAG_QQ_ACCESSTOKEN + getQQAppid());
+		return (String)tokenMap.get(FLAG_QQ_ACCESSTOKEN + appid);
 	}
 
 
@@ -149,23 +121,23 @@ public class QQTokenHolder {
 	 * @create Nov 28, 2015 8:31:20 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
-	public static String getQQJSApiTicket(){
-		Long expireTime = (Long)tokenMap.get(FLAG_QQ_JSAPI_TICKET_EXPIRETIME + getQQAppid());
+	public static String getQQJSApiTicket(String appid){
+		Long expireTime = (Long)tokenMap.get(FLAG_QQ_JSAPI_TICKET_EXPIRETIME + appid);
 		if(null!=expireTime && expireTime>=System.currentTimeMillis()){
-			return (String)tokenMap.get(FLAG_QQ_JSAPI_TICKET + getQQAppid());
+			return (String)tokenMap.get(FLAG_QQ_JSAPI_TICKET + appid);
 		}
 		if(qqJSApiTicketRefreshing.compareAndSet(false, true)){
 			String jsapiTicket = null;
 			try {
-				jsapiTicket = QQHelper.getQQJSApiTicket(getQQAccessToken());
-				tokenMap.put(FLAG_QQ_JSAPI_TICKET + getQQAppid(), jsapiTicket);
-				tokenMap.put(FLAG_QQ_JSAPI_TICKET_EXPIRETIME + getQQAppid(), System.currentTimeMillis()+QQ_TOKEN_EXPIRE_TIME_MILLIS);
+				jsapiTicket = QQHelper.getQQJSApiTicket(getQQAccessToken(appid));
+				tokenMap.put(FLAG_QQ_JSAPI_TICKET + appid, jsapiTicket);
+				tokenMap.put(FLAG_QQ_JSAPI_TICKET_EXPIRETIME + appid, System.currentTimeMillis()+QQ_TOKEN_EXPIRE_TIME_MILLIS);
 			} catch (IllegalAccessException e) {
-				logger.error("获取QQjsapi_ticket失败-->"+e.getMessage(), e);
+				logger.error("获取QQappid=["+appid+"]的jsapi_ticket失败", e);
 			}
 			qqJSApiTicketRefreshing.set(false);
 		}
-		return (String)tokenMap.get(FLAG_QQ_JSAPI_TICKET + getQQAppid());
+		return (String)tokenMap.get(FLAG_QQ_JSAPI_TICKET + appid);
 	}
 
 
@@ -177,17 +149,17 @@ public class QQTokenHolder {
 	 * @create Nov 28, 2015 8:32:05 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
-	public static QQOAuthAccessToken getQQOAuthAccessToken(String code){
-		Long expireTime = (Long)tokenMap.get(FLAG_QQ_OAUTH_ACCESSTOKEN_EXPIRETIME + getQQAppid());
+	public static QQOAuthAccessToken getQQOAuthAccessToken(String appid, String code){
+		Long expireTime = (Long)tokenMap.get(FLAG_QQ_OAUTH_ACCESSTOKEN_EXPIRETIME + appid);
 		if(null!=expireTime && expireTime>=System.currentTimeMillis()){
-			return (QQOAuthAccessToken)tokenMap.get(FLAG_QQ_OAUTH_ACCESSTOKEN + getQQAppid());
+			return (QQOAuthAccessToken)tokenMap.get(FLAG_QQ_OAUTH_ACCESSTOKEN + appid);
 		}
 		if(qqOAuthAccessTokenRefreshing.compareAndSet(false, true)){
-			QQOAuthAccessToken qqOauthAccessToken = QQHelper.getQQOAuthAccessToken(getQQAppid(), getQQAppsecret(), code);
-			tokenMap.put(FLAG_QQ_OAUTH_ACCESSTOKEN + getQQAppid(), qqOauthAccessToken);
-			tokenMap.put(FLAG_QQ_OAUTH_ACCESSTOKEN_EXPIRETIME + getQQAppid(), System.currentTimeMillis()+QQ_TOKEN_EXPIRE_TIME_MILLIS);
+			QQOAuthAccessToken qqOauthAccessToken = QQHelper.getQQOAuthAccessToken(appid, getQQAppsecret(appid), code);
+			tokenMap.put(FLAG_QQ_OAUTH_ACCESSTOKEN + appid, qqOauthAccessToken);
+			tokenMap.put(FLAG_QQ_OAUTH_ACCESSTOKEN_EXPIRETIME + appid, System.currentTimeMillis()+QQ_TOKEN_EXPIRE_TIME_MILLIS);
 			qqOAuthAccessTokenRefreshing.set(false);
 		}
-		return (QQOAuthAccessToken)tokenMap.get(FLAG_QQ_OAUTH_ACCESSTOKEN + getQQAppid());
+		return (QQOAuthAccessToken)tokenMap.get(FLAG_QQ_OAUTH_ACCESSTOKEN + appid);
 	}
 }

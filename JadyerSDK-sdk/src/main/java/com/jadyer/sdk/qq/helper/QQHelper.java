@@ -245,9 +245,9 @@ public final class QQHelper {
 	 * @create Nov 28, 2015 8:48:52 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
-	public static String signQQJSSDK(String noncestr, String timestamp, String url){
+	public static String signQQJSSDK(String appid, String noncestr, String timestamp, String url){
 		StringBuilder sb = new StringBuilder();
-		sb.append("jsapi_ticket=").append(QQTokenHolder.getQQJSApiTicket()).append("&")
+		sb.append("jsapi_ticket=").append(QQTokenHolder.getQQJSApiTicket(appid)).append("&")
 		  .append("noncestr=").append(noncestr).append("&")
 		  .append("timestamp=").append(timestamp).append("&")
 		  .append("url=").append(url);

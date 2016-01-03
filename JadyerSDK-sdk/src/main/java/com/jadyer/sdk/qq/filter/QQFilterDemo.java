@@ -12,6 +12,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +20,7 @@ import com.jadyer.sdk.util.HttpUtil;
 
 /**
  * 用于处理QQ相关的Filter
- * @see 自行提供appid和appurl
+ * @see 自行提供appid和appurl,请求参数需包含appid=123456789&oauth=base&openid=openid
  * @create Dec 24, 2015 12:12:21 AM
  * @author 玄玉<http://blog.csdn.net/jadyer>
  */
@@ -36,7 +37,8 @@ public class QQFilterDemo implements Filter {
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest)req;
 		HttpServletResponse response = (HttpServletResponse)resp;
-		if("base".equals(request.getParameter("oauth")) && "openid".equals(request.getParameter("openid"))){
+		String appid = request.getParameter("appid");
+		if(StringUtils.isNotBlank(appid) && "base".equals(request.getParameter("oauth")) && "openid".equals(request.getParameter("openid"))){
 			if(this.isAjaxRequest(request)){
 				throw new RuntimeException("请不要通过Ajax获取粉丝信息");
 			}
@@ -56,9 +58,9 @@ public class QQFilterDemo implements Filter {
 			String fullURL = request.getRequestURL().toString() + (null==request.getQueryString()?"":"?"+request.getQueryString());
 			String state = fullURL.replace("?", "/").replaceAll("&", "/").replace("/oauth=base", "");
 			logger.info("计算粉丝请求的资源得到state=[{}]", state);
-			String appid = null;
+			//String appurl = ConfigUtil.INSTANCE.getProperty("appurl");
 			String appurl = null;
-			String redirectURL = "https://open.mp.qq.com/connect/oauth2/authorize?appid=" + appid + "&redirect_uri=" + (appurl+"/qq/helper/oauth/3") + "&response_type=code&scope=snsapi_base&state=" + state + "#qq_redirect";
+			String redirectURL = "https://open.mp.qq.com/connect/oauth2/authorize?appid=" + appid + "&redirect_uri=" + (appurl+"/qq/helper/oauth/"+appid) + "&response_type=code&scope=snsapi_base&state=" + state + "#qq_redirect";
 			logger.info("计算请求到QQ服务器地址redirectURL=[{}]", redirectURL);
 			response.sendRedirect(redirectURL);
 		}else{

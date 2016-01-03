@@ -12,12 +12,12 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.jadyer.sdk.qq.constant.QQConstants;
 import com.jadyer.sdk.qq.helper.QQHelper;
-import com.jadyer.sdk.qq.helper.QQTokenHolder;
 import com.jadyer.sdk.util.HttpUtil;
 import com.jadyer.sdk.util.SDKUtil;
 
@@ -40,14 +40,15 @@ public class QQFilter implements Filter {
 
 	/**
 	 * 判断是否需要通过网页授权获取粉丝信息
-	 * @see 1.请求参数需包含oauth=base&openid=openid两个参数,无论GET还是POST请求
+	 * @see 1.请求参数需包含appid=wx63ae5326e400cca2&oauth=base&openid=openid
 	 * @see 2.该Filter常用于自定义菜单跳转URL时获取粉丝的openid,故验证条件较为苛刻
 	 */
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest)req;
 		HttpServletResponse response = (HttpServletResponse)resp;
-		if("base".equals(request.getParameter("oauth")) && "openid".equals(request.getParameter("openid"))){
+		String appid = request.getParameter("appid");
+		if(StringUtils.isNotBlank(appid) && "base".equals(request.getParameter("oauth")) && "openid".equals(request.getParameter("openid"))){
 			if(SDKUtil.isAjaxRequest(request)){
 				throw new RuntimeException("请不要通过Ajax获取粉丝信息");
 			}
@@ -81,7 +82,7 @@ public class QQFilter implements Filter {
 			String fullURL = request.getRequestURL().toString() + (null==request.getQueryString()?"":"?"+request.getQueryString());
 			String state = fullURL.replace("?", "/").replaceAll("&", "/").replace("/oauth=base", "");
 			logger.info("计算粉丝请求的资源得到state=[{}]", state);
-			String redirectURL = QQHelper.buildQQOAuthCodeURL(QQTokenHolder.getQQAppid(), QQConstants.QQ_OAUTH_SCOPE_SNSAPI_BASE, state, this.dataurl+"/qq/helper/oauth/3");
+			String redirectURL = QQHelper.buildQQOAuthCodeURL(appid, QQConstants.QQ_OAUTH_SCOPE_SNSAPI_BASE, state, this.dataurl+"/qq/helper/oauth/"+appid);
 			logger.info("计算请求到QQ服务器地址redirectURL=[{}]", redirectURL);
 			response.sendRedirect(redirectURL);
 		}else{
