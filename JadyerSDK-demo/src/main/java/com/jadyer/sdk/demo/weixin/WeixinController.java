@@ -1,5 +1,6 @@
 package com.jadyer.sdk.demo.weixin;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -59,12 +60,13 @@ public class WeixinController extends WeixinMsgControllerCustomServiceAdapter {
 			return new WeixinOutTextMsg(inTextMsg).setContent("该公众号未绑定");
 		}
 		//没绑定就提示绑定
-		if("0".equals(userInfo.getBindStatus()) && !Constants.WEIXIN_BIND_TEXT.equals(inTextMsg.getContent())){
-			return new WeixinOutTextMsg(inTextMsg).setContent("账户未绑定\r请发送\"" + Constants.WEIXIN_BIND_TEXT + "\"绑定");
+		if("0".equals(userInfo.getBindStatus()) && !Constants.MPP_BIND_TEXT.equals(inTextMsg.getContent())){
+			return new WeixinOutTextMsg(inTextMsg).setContent("账户未绑定\r请发送\"" + Constants.MPP_BIND_TEXT + "\"绑定");
 		}
 		//绑定
-		if("0".equals(userInfo.getBindStatus()) && Constants.WEIXIN_BIND_TEXT.equals(inTextMsg.getContent())){
+		if("0".equals(userInfo.getBindStatus()) && Constants.MPP_BIND_TEXT.equals(inTextMsg.getContent())){
 			userInfo.setBindStatus("1");
+			userInfo.setBindTime(new Date());
 			userService.save(userInfo);
 			return new WeixinOutTextMsg(inTextMsg).setContent("绑定完毕，升级成功");
 		}

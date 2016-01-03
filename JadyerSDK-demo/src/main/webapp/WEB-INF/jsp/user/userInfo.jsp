@@ -29,7 +29,7 @@ function submit(){
 				$("#userBindForm").serialize(),
 				function(data){
 					if(1000 == data.code){
-						alert("操作成功！！\r\n请于公众号回复\“<%=Constants.WEIXIN_BIND_TEXT%>\”完成绑定");
+						alert("操作成功！！\r\n请于公众号回复\“<%=Constants.MPP_BIND_TEXT%>\”完成绑定");
 					}else{
 						$.promptBox(data.message, "#ffb848");
 					}
@@ -67,7 +67,7 @@ function submit(){
 			<tr><th>原始ID：</th><td><input class="inpte" type="text" id="mpid" name="mpid" value="${userInfo.mpid}" maxlength="32"/></td></tr>
 			<tr><th>公众号：</th><td><input class="inpte" type="text" id="mpno" name="mpno" value="${userInfo.mpno}" maxlength="32"/></td></tr>
 			<tr><th>公众名：</th><td><input class="inpte" type="text" id="mpname" name="mpname" value="${userInfo.mpname}" maxlength="32"/></td></tr>
-			<!-- 
+			<%--
 			<tr>
 				<th>微信加解密方式：</th>
 				<td>
@@ -78,7 +78,7 @@ function submit(){
 					</select>
 				</td>
 			</tr>
-			 -->
+			--%>
 		</table>
 		<table class="tab_head tab_in tab_list2" width="100%">
 			<tr class="ti"><th colspan="3">操作</th></tr>

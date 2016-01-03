@@ -1,5 +1,8 @@
 package com.jadyer.sdk.demo.weixin.fans;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Resource;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -41,10 +44,12 @@ public class FansController{
 		Specification<FansInfo> spec = new Specification<FansInfo>(){
 			@Override
 			public Predicate toPredicate(Root<FansInfo> root, CriteriaQuery<?> query, CriteriaBuilder builder){
+				List<Predicate> list = new ArrayList<Predicate>();
 				Path<Integer> _uid = root.get("uid");
-				//builder.like(root.<String>get("nickname"), "%"+nickname+"%");
-				query.where(builder.equal(_uid, uid));
-				return null;
+				list.add(builder.equal(_uid, uid));
+				//list.add(builder.equal(root.get("uid").as(Integer.class), uid));
+				//list.add(builder.like(root.<String>get("nickname"), "%"+nickname+"%"));
+				return builder.and(list.toArray(new Predicate[list.size()]));
 			}
 		};
 		//执行

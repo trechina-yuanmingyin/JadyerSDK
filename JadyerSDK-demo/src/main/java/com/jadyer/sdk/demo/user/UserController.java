@@ -1,5 +1,7 @@
 package com.jadyer.sdk.demo.user;
 
+import java.util.Date;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
@@ -92,6 +94,8 @@ public class UserController{
 		userInfo.setUsername(_userInfo.getUsername());
 		userInfo.setPid(_userInfo.getPid());
 		userInfo.setUuid(_userInfo.getUuid());
+		userInfo.setMptype(_userInfo.getMptype());
+		userInfo.setBindTime(new Date());
 		request.getSession().setAttribute(Constants.USERINFO, userService.save(userInfo));
 		//更换绑定的公众号,也要同步更新微信或QQ公众平台的appid和appsecret
 		if("1".equals(userInfo.getMptype())){

@@ -101,8 +101,10 @@ public class ReplyController{
 			public Predicate toPredicate(Root<ReplyInfo> root, CriteriaQuery<?> query, CriteriaBuilder builder){
 				Path<Integer> _uid = root.get("uid");
 				Path<Integer> _category = root.get("category");
-				query.where(builder.equal(_uid, uid)).where(builder.equal(_category, "2"));
-				return null;
+				Predicate p1 = builder.equal(_uid, uid);
+				Predicate p2 = builder.equal(_category, 2);
+				query.where(builder.and(p1, p2));
+				return query.getRestriction();
 			}
 		};
 		//执行
