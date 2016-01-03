@@ -43,7 +43,7 @@
 		<li ${currentMenu eq 'menu_sys' ? 'class="on"' : ''}>
 			<a href="#"><span>平台设置</span><i></i></a>
 			<div>
-				<a href="${ctx}/view?url=user/menu_weixin"><span>公众菜单</span></a>
+				<a href="${ctx}/view?url=user/mpmenu"><span>公众菜单</span></a>
 				<a href="${ctx}/user/info"><span>个人资料</span></a>
 				<a href="${ctx}/view?url=user/password"><span>修改密码</span></a>
 			</div>

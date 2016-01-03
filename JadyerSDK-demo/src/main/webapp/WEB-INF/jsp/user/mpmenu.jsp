@@ -6,7 +6,7 @@
 
 <script>
 function deploy(){
-	$.post("${ctx}/user/menu/weixin/create",
+	$.post("${ctx}/user/menu/create",
 		{menuJson:$("#RawJson").val()},
 		function(data){
 			if(1000 == data.code){
@@ -20,7 +20,7 @@ function deploy(){
 </script>
 
 <div class="c_nav">
-	<div class="ti">微信菜单</div>
+	<div class="ti">公众菜单</div>
 </div>
 <!--Content-->
 <div class="c_content">

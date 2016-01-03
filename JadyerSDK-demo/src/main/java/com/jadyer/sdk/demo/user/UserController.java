@@ -16,7 +16,9 @@ import com.jadyer.sdk.demo.common.base.CommonResult;
 import com.jadyer.sdk.demo.common.constant.CodeEnum;
 import com.jadyer.sdk.demo.common.constant.Constants;
 import com.jadyer.sdk.demo.user.model.UserInfo;
+import com.jadyer.sdk.qq.helper.QQHelper;
 import com.jadyer.sdk.qq.helper.QQTokenHolder;
+import com.jadyer.sdk.qq.model.QQErrorInfo;
 import com.jadyer.sdk.weixin.helper.WeixinHelper;
 import com.jadyer.sdk.weixin.helper.WeixinTokenHolder;
 import com.jadyer.sdk.weixin.model.WeixinErrorInfo;
@@ -126,17 +128,32 @@ public class UserController{
 
 
 	/**
-	 * 通过JSON的方式发布微信自定义菜单
-	 * @param menuJson 微信自定义菜单数据的JSON串
+	 * 通过JSON的方式发布微信或QQ公众号自定义菜单
+	 * @param menuJson 微信或QQ公众号自定义菜单数据的JSON串
 	 */
 	@ResponseBody
-	@RequestMapping("/menu/weixin/create")
-	public CommonResult menuWeixinCreate(String appid, String menuJson){
-		WeixinErrorInfo errorInfo = WeixinHelper.createWeixinMenu(WeixinTokenHolder.getWeixinAccessToken(appid), menuJson);
-		if(0 == errorInfo.getErrcode()){
-			return new CommonResult();
-		}else{
-			return new CommonResult(errorInfo.getErrcode(), errorInfo.getErrmsg());
+	@RequestMapping("/menu/create")
+	public CommonResult menuCreate(String menuJson, HttpServletRequest request){
+		UserInfo userInfo = (UserInfo)request.getSession().getAttribute(Constants.USERINFO);
+		if("0".equals(userInfo.getBindStatus())){
+			return new CommonResult(CodeEnum.SYSTEM_ERROR.getCode(), "当前用户未绑定微信或QQ公众平台");
 		}
+		if("1".equals(userInfo.getMptype())){
+			WeixinErrorInfo errorInfo = WeixinHelper.createWeixinMenu(WeixinTokenHolder.getWeixinAccessToken(userInfo.getAppid()), menuJson);
+			if(0 == errorInfo.getErrcode()){
+				return new CommonResult();
+			}else{
+				return new CommonResult(errorInfo.getErrcode(), errorInfo.getErrmsg());
+			}
+		}
+		if("2".equals(userInfo.getMptype())){
+			QQErrorInfo errorInfo = QQHelper.createQQMenu(QQTokenHolder.getQQAccessToken(userInfo.getAppid()), menuJson);
+			if(0 == errorInfo.getErrcode()){
+				return new CommonResult();
+			}else{
+				return new CommonResult(errorInfo.getErrcode(), errorInfo.getErrmsg());
+			}
+		}
+		return new CommonResult(CodeEnum.SYSTEM_ERROR.getCode(), "当前用户未关联微信或QQ公众平台");
 	}
 }
