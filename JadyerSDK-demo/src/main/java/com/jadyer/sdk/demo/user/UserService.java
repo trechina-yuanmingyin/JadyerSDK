@@ -40,8 +40,13 @@ public class UserService {
 	}
 
 	@Transactional(readOnly=true)
-	public UserInfo findByWxId(String wxId){
-		return userInfoDao.findByWxId(wxId);
+	public UserInfo findByWxid(String mpid){
+		return userInfoDao.findByWxid(mpid);
+	}
+
+	@Transactional(readOnly=true)
+	public UserInfo findByQqid(String mpid){
+		return userInfoDao.findByQqid(mpid);
 	}
 
 	public UserInfo save(UserInfo userInfo){

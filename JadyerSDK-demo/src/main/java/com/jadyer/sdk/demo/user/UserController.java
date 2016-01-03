@@ -14,6 +14,7 @@ import com.jadyer.sdk.demo.common.base.CommonResult;
 import com.jadyer.sdk.demo.common.constant.CodeEnum;
 import com.jadyer.sdk.demo.common.constant.Constants;
 import com.jadyer.sdk.demo.user.model.UserInfo;
+import com.jadyer.sdk.qq.helper.QQTokenHolder;
 import com.jadyer.sdk.weixin.helper.WeixinHelper;
 import com.jadyer.sdk.weixin.helper.WeixinTokenHolder;
 import com.jadyer.sdk.weixin.model.WeixinErrorInfo;
@@ -66,10 +67,15 @@ public class UserController{
 		if(80!=request.getServerPort() && 443!=request.getServerPort()){
 			sb.append(":").append(request.getServerPort());
 		}
-		sb.append(request.getContextPath()).append("/");
-		sb.append("weixin/").append(userInfo.getUuid());
+		sb.append(request.getContextPath());
+		if("1".equals(userInfo.getMptype())){
+			sb.append("/weixin/").append(userInfo.getUuid());
+		}
+		if("2".equals(userInfo.getMptype())){
+			sb.append("/qq/").append(userInfo.getUuid());
+		}
 		request.setAttribute("token", DigestUtils.md5Hex(userInfo.getUuid() + "http://blog.csdn.net/jadyer" + userInfo.getUuid()));
-		request.setAttribute("weixinURL", sb.toString());
+		request.setAttribute("mpurl", sb.toString());
 		return "user/userInfo";
 	}
 
@@ -84,13 +90,16 @@ public class UserController{
 		UserInfo _userInfo = (UserInfo)request.getSession().getAttribute(Constants.USERINFO);
 		userInfo.setPassword(_userInfo.getPassword());
 		userInfo.setUsername(_userInfo.getUsername());
-		userInfo.setParentId(_userInfo.getParentId());
+		userInfo.setPid(_userInfo.getPid());
 		userInfo.setUuid(_userInfo.getUuid());
-		userInfo.setAccessToken(_userInfo.getAccessToken());
-		userInfo.setAccessTokenTime(_userInfo.getAccessTokenTime());
 		request.getSession().setAttribute(Constants.USERINFO, userService.save(userInfo));
-		//更换绑定的公众号,也要同步更新微信appid和appsecret
-		WeixinTokenHolder.setWeixinAppidAppsecret(userInfo.getAppId(), userInfo.getAppSecret());
+		//更换绑定的公众号,也要同步更新微信或QQ公众平台的appid和appsecret
+		if("1".equals(userInfo.getMptype())){
+			WeixinTokenHolder.setWeixinAppidAppsecret(userInfo.getAppid(), userInfo.getAppsecret());
+		}
+		if("2".equals(userInfo.getMptype())){
+			QQTokenHolder.setQQAppidAppsecret(userInfo.getAppid(), userInfo.getAppsecret());
+		}
 		return new CommonResult();
 	}
 

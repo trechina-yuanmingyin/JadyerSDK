@@ -21,21 +21,18 @@ public class UserInfo {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
-	private int parentId;
+	private int pid;
 	private String username;
 	private String password;
 	private String uuid;
-	private String token;
-	private String wxId;
-	private String wxNo;
-	private String wxName;
-	private String appId;
-	private String appSecret;
-	private String appAESKey;
-	private String appAESStatus;
-	private String accessToken;
-	private Date accessTokenTime;
+	private String mptype;
+	private String mpid;
+	private String mpno;
+	private String mpname;
+	private String appid;
+	private String appsecret;
 	private String bindStatus;
+	private Date bindTime;
 	@Basic(fetch=FetchType.LAZY)
 	private Date createTime = new Date();
 	@Basic(fetch=FetchType.LAZY)
@@ -47,11 +44,11 @@ public class UserInfo {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getParentId() {
-		return parentId;
+	public int getPid() {
+		return pid;
 	}
-	public void setParentId(int parentId) {
-		this.parentId = parentId;
+	public void setPid(int pid) {
+		this.pid = pid;
 	}
 	public String getUsername() {
 		return username;
@@ -71,71 +68,53 @@ public class UserInfo {
 	public void setUuid(String uuid) {
 		this.uuid = uuid;
 	}
-	public String getToken() {
-		return token;
+	public String getMptype() {
+		return mptype;
 	}
-	public void setToken(String token) {
-		this.token = token;
+	public void setMptype(String mptype) {
+		this.mptype = mptype;
 	}
-	public String getWxId() {
-		return wxId;
+	public String getMpid() {
+		return mpid;
 	}
-	public void setWxId(String wxId) {
-		this.wxId = wxId;
+	public void setMpid(String mpid) {
+		this.mpid = mpid;
 	}
-	public String getWxNo() {
-		return wxNo;
+	public String getMpno() {
+		return mpno;
 	}
-	public void setWxNo(String wxNo) {
-		this.wxNo = wxNo;
+	public void setMpno(String mpno) {
+		this.mpno = mpno;
 	}
-	public String getWxName() {
-		return wxName;
+	public String getMpname() {
+		return mpname;
 	}
-	public void setWxName(String wxName) {
-		this.wxName = wxName;
+	public void setMpname(String mpname) {
+		this.mpname = mpname;
 	}
-	public String getAppId() {
-		return appId;
+	public String getAppid() {
+		return appid;
 	}
-	public void setAppId(String appId) {
-		this.appId = appId;
+	public void setAppid(String appid) {
+		this.appid = appid;
 	}
-	public String getAppSecret() {
-		return appSecret;
+	public String getAppsecret() {
+		return appsecret;
 	}
-	public void setAppSecret(String appSecret) {
-		this.appSecret = appSecret;
-	}
-	public String getAppAESKey() {
-		return appAESKey;
-	}
-	public void setAppAESKey(String appAESKey) {
-		this.appAESKey = appAESKey;
-	}
-	public String getAppAESStatus() {
-		return appAESStatus;
-	}
-	public void setAppAESStatus(String appAESStatus) {
-		this.appAESStatus = appAESStatus;
-	}
-	public String getAccessToken() {
-		return accessToken;
-	}
-	public void setAccessToken(String accessToken) {
-		this.accessToken = accessToken;
-	}
-	public Date getAccessTokenTime() {
-		return accessTokenTime;
-	}
-	public void setAccessTokenTime(Date accessTokenTime) {
-		this.accessTokenTime = accessTokenTime;
+	public void setAppsecret(String appsecret) {
+		this.appsecret = appsecret;
 	}
 	public String getBindStatus() {
 		return bindStatus;
 	}
 	public void setBindStatus(String bindStatus) {
 		this.bindStatus = bindStatus;
+	}
+	public Date getBindTime() {
+		return bindTime;
+	}
+	public void setBindTime(Date bindTime) {
+		this.bindTime = bindTime;
 	}
 	public Date getCreateTime() {
 		return createTime;

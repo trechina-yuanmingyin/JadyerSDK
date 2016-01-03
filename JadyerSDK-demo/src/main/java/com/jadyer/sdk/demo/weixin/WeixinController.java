@@ -21,6 +21,7 @@ import com.jadyer.sdk.demo.weixin.fans.FansInfoDao;
 import com.jadyer.sdk.demo.weixin.fans.FansSaveThread;
 import com.jadyer.sdk.demo.weixin.reply.ReplyInfoDao;
 import com.jadyer.sdk.demo.weixin.reply.model.ReplyInfo;
+import com.jadyer.sdk.qq.helper.QQTokenHolder;
 import com.jadyer.sdk.weixin.controller.WeixinMsgControllerCustomServiceAdapter;
 import com.jadyer.sdk.weixin.helper.WeixinTokenHolder;
 import com.jadyer.sdk.weixin.msg.in.WeixinInTextMsg;
@@ -53,7 +54,7 @@ public class WeixinController extends WeixinMsgControllerCustomServiceAdapter {
 //		outMsg.addNews("第三个图文的标题", "第三个图文的描述", "http://img.my.csdn.net/uploads/201009/14/7892753_1284475095fyR0.jpg", "http://blog.csdn.net/jadyer/article/details/5859908");
 //		return outMsg;
 		//防伪
-		UserInfo userInfo = userService.findByWxId(inTextMsg.getToUserName());
+		UserInfo userInfo = userService.findByWxid(inTextMsg.getToUserName());
 		if(null == userInfo){
 			return new WeixinOutTextMsg(inTextMsg).setContent("该公众号未绑定");
 		}
@@ -85,7 +86,7 @@ public class WeixinController extends WeixinMsgControllerCustomServiceAdapter {
 	@Override
 	protected WeixinOutMsg processInMenuEventMsg(WeixinInMenuEventMsg inMenuEventMsg) {
 		//防伪
-		UserInfo userInfo = userService.findByWxId(inMenuEventMsg.getToUserName());
+		UserInfo userInfo = userService.findByWxid(inMenuEventMsg.getToUserName());
 		if(null == userInfo){
 			return new WeixinOutTextMsg(inMenuEventMsg).setContent("该公众号未绑定");
 		}
@@ -106,7 +107,7 @@ public class WeixinController extends WeixinMsgControllerCustomServiceAdapter {
 	@Override
 	protected WeixinOutMsg processInFollowEventMsg(WeixinInFollowEventMsg inFollowEventMsg) {
 		//防伪
-		UserInfo userInfo = userService.findByWxId(inFollowEventMsg.getToUserName());
+		UserInfo userInfo = userService.findByWxid(inFollowEventMsg.getToUserName());
 		if(null == userInfo){
 			return new WeixinOutTextMsg(inFollowEventMsg).setContent("该公众号未绑定");
 		}
@@ -197,7 +198,12 @@ public class WeixinController extends WeixinMsgControllerCustomServiceAdapter {
 					List<UserInfo> userinfoList = userService.findAll();
 					for(UserInfo obj : userinfoList){
 						if("1".equals(obj.getBindStatus())){
-							WeixinTokenHolder.setWeixinAppidAppsecret(obj.getAppId(), obj.getAppSecret());
+							if("1".equals(obj.getMptype())){
+								WeixinTokenHolder.setWeixinAppidAppsecret(obj.getAppid(), obj.getAppsecret());
+							}
+							if("2".equals(obj.getMptype())){
+								QQTokenHolder.setQQAppidAppsecret(obj.getAppid(), obj.getAppsecret());
+							}
 						}
 					}
 				} catch (Exception e) {

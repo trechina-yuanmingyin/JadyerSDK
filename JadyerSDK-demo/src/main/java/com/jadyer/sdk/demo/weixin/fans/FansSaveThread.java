@@ -36,9 +36,9 @@ public class FansSaveThread implements Runnable {
 		/**
 		 * 向微信服务器查询粉丝信息
 		 */
-		com.jadyer.sdk.weixin.model.WeixinFansInfo weixinFansInfo = WeixinHelper.getWeixinFansInfo(WeixinTokenHolder.getWeixinAccessToken(userInfo.getAppId()), openid);
+		com.jadyer.sdk.weixin.model.WeixinFansInfo weixinFansInfo = WeixinHelper.getWeixinFansInfo(WeixinTokenHolder.getWeixinAccessToken(userInfo.getAppid()), openid);
 		fansInfo.setUid(userInfo.getId());
-		fansInfo.setWxId(userInfo.getWxId());
+		fansInfo.setWxId(userInfo.getMpid());
 		fansInfo.setOpenid(openid);
 		fansInfo.setSubscribe(String.valueOf(weixinFansInfo.getSubscribe()));
 		fansInfo.setSubscribeTime(DateFormatUtils.format(new Date(Long.parseLong(weixinFansInfo.getSubscribe_time())*1000), "yyyy-MM-dd HH:mm:ss"));

@@ -1,25 +1,21 @@
 DROP TABLE IF EXISTS t_user_info;
 CREATE TABLE t_user_info(
-id              INT AUTO_INCREMENT PRIMARY KEY COMMENT '主键',
-parentId        INT NOT NULL COMMENT '平台用户所属上一级ID',
-username        VARCHAR(16) NOT NULL COMMENT '用户名',
-password        VARCHAR(32) NOT NULL COMMENT '登录密码',
-uuid            VARCHAR(32) NOT NULL COMMENT '用户唯一标识，用来生成微信Token',
-token           VARCHAR(32) COMMENT '微信Token',
-wxId            VARCHAR(32) COMMENT '微信原始ID',
-wxNo            VARCHAR(32) COMMENT '微信号',
-wxName          VARCHAR(32) COMMENT '微信名称',
-appId           VARCHAR(32) COMMENT '微信应用ID',
-appSecret       VARCHAR(64) COMMENT '微信应用密钥',
-appAESKey       VARCHAR(64) COMMENT '微信消息加解密密钥',
-appAESStatus    CHAR(1) COMMENT '微信消息加解密方式：0--明文模式，1--兼容模式，2--安全模式',
-accessToken     VARCHAR(1024) COMMENT '微信access_token',
-accessTokenTime TIMESTAMP NULL DEFAULT '0000-00-00 00:00:00' COMMENT '获取微信access_token的时间',
-bindStatus      CHAR(1) COMMENT '微信绑定状态：0--未绑定，1--已绑定',
+id         INT AUTO_INCREMENT PRIMARY KEY COMMENT '主键',
+pid        INT NOT NULL COMMENT '平台用户所属上一级ID',
+username   VARCHAR(16) NOT NULL COMMENT '用户名',
+password   VARCHAR(32) NOT NULL COMMENT '登录密码',
+uuid       VARCHAR(32) NOT NULL COMMENT '用户唯一标识，用来生成微信或QQ公众平台Token',
+mptype     CHAR(1) COMMENT '公众平台类型：0--未知，1--微信，2--QQ',
+mpid       VARCHAR(32) COMMENT '微信或QQ公众平台原始ID',
+mpno       VARCHAR(32) COMMENT '微信或QQ公众平台号',
+mpname     VARCHAR(32) COMMENT '微信或QQ公众平台名称',
+appid      VARCHAR(32) COMMENT '微信或QQ公众平台appid',
+appsecret  VARCHAR(64) COMMENT '微信或QQ公众平台appsecret',
+bindStatus CHAR(1) COMMENT '微信或QQ公众平台绑定状态：0--未绑定，1--已绑定',
+bindTime   TIMESTAMP NULL DEFAULT '0000-00-00 00:00:00' COMMENT '微信或QQ公众平台绑定解绑时间',
 createTime TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
-updateTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-UNIQUE INDEX unique_index_wxId(wxId)
-)ENGINE=InnoDB DEFAULT CHARSET=UTF8 COMMENT='平台用户表';
+updateTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'
+)ENGINE=InnoDB DEFAULT CHARSET=UTF8 COMMENT='mpplus平台用户表';
 
 
 DROP TABLE IF EXISTS t_fans_info;
@@ -80,6 +76,6 @@ updateTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMEST
 
 
 INSERT INTO t_reply_info(uid, category, type) VALUES(2, '0', '4');
-INSERT INTO t_user_info(id, parentId, username, password, uuid, bindStatus) VALUES(1, 0, 'admin', '5d94758beb7570fe406dbc50c29f4e15', REPLACE(UUID(),'-',''), '0');
-INSERT INTO t_user_info(id, parentId, username, password, uuid, bindStatus) VALUES(2, 1, 'wx', '908e88dd8b08e0acc83e67272dcbeaa8', REPLACE(UUID(),'-',''), '0');
-INSERT INTO t_user_info(id, parentId, username, password, uuid, bindStatus) VALUES(3, 1, 'qq', '5db0912b1cec068452c512eb02e855b4', REPLACE(UUID(),'-',''), '0');
+INSERT INTO t_user_info(id, pid, username, password, uuid, mptype, bindStatus) VALUES(1, 0, 'admin', '5d94758beb7570fe406dbc50c29f4e15', REPLACE(UUID(),'-',''), '0', '0');
+INSERT INTO t_user_info(id, pid, username, password, uuid, mptype, bindStatus) VALUES(2, 1, 'wx', '908e88dd8b08e0acc83e67272dcbeaa8', REPLACE(UUID(),'-',''), '1', '0');
+INSERT INTO t_user_info(id, pid, username, password, uuid, mptype, bindStatus) VALUES(3, 1, 'qq', '5db0912b1cec068452c512eb02e855b4', REPLACE(UUID(),'-',''), '2', '0');
