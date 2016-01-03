@@ -137,7 +137,7 @@ public class WeixinHelperController {
 		try {
 			return new File(WeixinTokenHolder.getMediaIdFilePath(mediaId)).delete();
 		} catch (Exception e) {
-			logger.info("删除存储在本地的微信临时媒体文件mediaId={},fullPath={}失败,堆栈轨迹如下", mediaId, WeixinTokenHolder.getMediaIdFilePath(mediaId), e);
+			logger.info("删除存储在本地的微信临时媒体文件mediaId=["+mediaId+"],fullPath=["+WeixinTokenHolder.getMediaIdFilePath(mediaId)+"]失败,堆栈轨迹如下", e);
 			return false;
 		}
 	}
