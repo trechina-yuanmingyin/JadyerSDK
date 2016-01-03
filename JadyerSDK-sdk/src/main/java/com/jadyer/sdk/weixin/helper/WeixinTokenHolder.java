@@ -18,8 +18,8 @@ import com.jadyer.sdk.weixin.model.WeixinOAuthAccessToken;
  */
 public class WeixinTokenHolder {
 	private static final Logger logger = LoggerFactory.getLogger(WeixinTokenHolder.class);
-	private static final String WEIXIN_APPID = "weixin_appid";
-	private static final String WEIXIN_APPSECRET = "weixin_appsecret";
+//	private static final String WEIXIN_APPID = "weixin_appid";
+//	private static final String WEIXIN_APPSECRET = "weixin_appsecret";
 	private static final String FLAG_WEIXIN_ACCESSTOKEN = "weixin_access_token";
 	private static final String FLAG_WEIXIN_JSAPI_TICKET = "weixin_jsapi_ticket";
 	private static final String FLAG_WEIXIN_OAUTH_ACCESSTOKEN = "weixin_oauth_access_token";
@@ -35,6 +35,32 @@ public class WeixinTokenHolder {
 	private WeixinTokenHolder(){}
 
 	/**
+	 * 登记微信appid和appsecret
+	 * @return 返回已登记的微信appsecret
+	 * @create Jan 3, 2016 3:07:12 PM
+	 * @author 玄玉<http://blog.csdn.net/jadyer>
+	 */
+	public static String setWeixinAppidAppsecret(String appid, String appsecret){
+		tokenMap.put(appid, appsecret);
+		return getWeixinAppsecret(appid);
+	}
+
+
+	/**
+	 * 获取已登记的微信appsecret
+	 * @create Jan 3, 2016 3:07:21 PM
+	 * @author 玄玉<http://blog.csdn.net/jadyer>
+	 */
+	public static String getWeixinAppsecret(String appid){
+		String appsecret = (String)tokenMap.get(appid);
+		if(StringUtils.isBlank(appsecret)){
+			throw new IllegalArgumentException("未登记微信appsecret");
+		}
+		return appsecret;
+	}
+
+
+	/**
 	 * 记录微信媒体文件存储在本地的完整路径
 	 * @param mediaId           微信媒体文件ID
 	 * @param localFileFullPath 微信媒体文件存储在本地的完整路径
@@ -42,9 +68,9 @@ public class WeixinTokenHolder {
 	 * @create Nov 9, 2015 9:21:28 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
-	public static String setMediaIdFilePath(String mediaId, String localFileFullPath){
-		tokenMap.put(mediaId, localFileFullPath);
-		return getMediaIdFilePath(mediaId);
+	public static String setMediaIdFilePath(String appid, String mediaId, String localFileFullPath){
+		tokenMap.put(appid+"_"+mediaId, localFileFullPath);
+		return getMediaIdFilePath(appid, mediaId);
 	}
 
 
@@ -55,64 +81,12 @@ public class WeixinTokenHolder {
 	 * @create Nov 9, 2015 9:21:52 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
-	public static String getMediaIdFilePath(String mediaId){
-		String localFileFullPath = (String)tokenMap.get(mediaId);
+	public static String getMediaIdFilePath(String appid, String mediaId){
+		String localFileFullPath = (String)tokenMap.get(appid+"_"+mediaId);
 		if(StringUtils.isBlank(localFileFullPath)){
-			throw new IllegalArgumentException("不存在的本地媒体文件mediaId=" + mediaId);
+			throw new IllegalArgumentException("不存在的本地媒体文件appid="+appid+",mediaId="+mediaId);
 		}
 		return localFileFullPath;
-	}
-
-
-	/**
-	 * 设置微信appid
-	 * @return 返回已设置的微信appid
-	 * @create Nov 1, 2015 2:17:33 PM
-	 * @author 玄玉<http://blog.csdn.net/jadyer>
-	 */
-	public static String setWeixinAppid(String appid){
-		tokenMap.put(WEIXIN_APPID, appid);
-		return getWeixinAppid();
-	}
-
-
-	/**
-	 * 获取已设置的微信appid
-	 * @create Nov 1, 2015 2:20:43 PM
-	 * @author 玄玉<http://blog.csdn.net/jadyer>
-	 */
-	public static String getWeixinAppid(){
-		String appid = (String)tokenMap.get(WEIXIN_APPID);
-		if(StringUtils.isBlank(appid)){
-			throw new IllegalArgumentException("未设置微信appid");
-		}
-		return appid;
-	}
-
-
-	/**
-	 * 设置微信appsecret
-	 * @return 返回已设置的微信appsecret
-	 * @create Nov 1, 2015 2:18:39 PM
-	 * @author 玄玉<http://blog.csdn.net/jadyer>
-	 */
-	public static String setWeixinAppsecret(String appsecret){
-		tokenMap.put(WEIXIN_APPSECRET, appsecret);
-		return getWeixinAppsecret();
-	}
-
-
-	/**
-	 * 获取已设置的微信appsecret
-	 * @create Nov 1, 2015 2:21:23 PM
-	 * @author 玄玉<http://blog.csdn.net/jadyer>
-	 */
-	public static String getWeixinAppsecret(){
-		String appsecret = (String)tokenMap.get(WEIXIN_APPSECRET);
-		if(StringUtils.isBlank(appsecret)){
-			throw new IllegalArgumentException("未设置微信appsecret");
-		}
-		return appsecret;
 	}
 
 
@@ -123,23 +97,23 @@ public class WeixinTokenHolder {
 	 * @create Oct 29, 2015 8:13:24 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
-	public static String getWeixinAccessToken(){
-		Long expireTime = (Long)tokenMap.get(FLAG_WEIXIN_ACCESSTOKEN_EXPIRETIME + getWeixinAppid());
+	public static String getWeixinAccessToken(String appid){
+		Long expireTime = (Long)tokenMap.get(FLAG_WEIXIN_ACCESSTOKEN_EXPIRETIME + appid);
 		if(null!=expireTime && expireTime>=System.currentTimeMillis()){
-			return (String)tokenMap.get(FLAG_WEIXIN_ACCESSTOKEN + getWeixinAppid());
+			return (String)tokenMap.get(FLAG_WEIXIN_ACCESSTOKEN + appid);
 		}
 		if(weixinAccessTokenRefreshing.compareAndSet(false, true)){
 			String accessToken = null;
 			try {
-				accessToken = WeixinHelper.getWeixinAccessToken(getWeixinAppid(), getWeixinAppsecret());
-				tokenMap.put(FLAG_WEIXIN_ACCESSTOKEN + getWeixinAppid(), accessToken);
-				tokenMap.put(FLAG_WEIXIN_ACCESSTOKEN_EXPIRETIME + getWeixinAppid(), System.currentTimeMillis()+WEIXIN_TOKEN_EXPIRE_TIME_MILLIS);
+				accessToken = WeixinHelper.getWeixinAccessToken(appid, getWeixinAppsecret(appid));
+				tokenMap.put(FLAG_WEIXIN_ACCESSTOKEN + appid, accessToken);
+				tokenMap.put(FLAG_WEIXIN_ACCESSTOKEN_EXPIRETIME + appid, System.currentTimeMillis()+WEIXIN_TOKEN_EXPIRE_TIME_MILLIS);
 			} catch (IllegalAccessException e) {
-				logger.error("获取微信access_token失败-->"+e.getMessage(), e);
+				logger.error("获取微信appid=["+appid+"]的access_token失败", e);
 			}
 			weixinAccessTokenRefreshing.set(false);
 		}
-		return (String)tokenMap.get(FLAG_WEIXIN_ACCESSTOKEN + getWeixinAppid());
+		return (String)tokenMap.get(FLAG_WEIXIN_ACCESSTOKEN + appid);
 	}
 
 
@@ -149,23 +123,23 @@ public class WeixinTokenHolder {
 	 * @create Oct 29, 2015 9:55:33 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
-	public static String getWeixinJSApiTicket(){
-		Long expireTime = (Long)tokenMap.get(FLAG_WEIXIN_JSAPI_TICKET_EXPIRETIME + getWeixinAppid());
+	public static String getWeixinJSApiTicket(String appid){
+		Long expireTime = (Long)tokenMap.get(FLAG_WEIXIN_JSAPI_TICKET_EXPIRETIME + appid);
 		if(null!=expireTime && expireTime>=System.currentTimeMillis()){
-			return (String)tokenMap.get(FLAG_WEIXIN_JSAPI_TICKET + getWeixinAppid());
+			return (String)tokenMap.get(FLAG_WEIXIN_JSAPI_TICKET + appid);
 		}
 		if(weixinJSApiTicketRefreshing.compareAndSet(false, true)){
 			String jsapiTicket = null;
 			try {
-				jsapiTicket = WeixinHelper.getWeixinJSApiTicket(getWeixinAccessToken());
-				tokenMap.put(FLAG_WEIXIN_JSAPI_TICKET + getWeixinAppid(), jsapiTicket);
-				tokenMap.put(FLAG_WEIXIN_JSAPI_TICKET_EXPIRETIME + getWeixinAppid(), System.currentTimeMillis()+WEIXIN_TOKEN_EXPIRE_TIME_MILLIS);
+				jsapiTicket = WeixinHelper.getWeixinJSApiTicket(getWeixinAccessToken(appid));
+				tokenMap.put(FLAG_WEIXIN_JSAPI_TICKET + appid, jsapiTicket);
+				tokenMap.put(FLAG_WEIXIN_JSAPI_TICKET_EXPIRETIME + appid, System.currentTimeMillis()+WEIXIN_TOKEN_EXPIRE_TIME_MILLIS);
 			} catch (IllegalAccessException e) {
-				logger.error("获取微信jsapi_ticket失败-->"+e.getMessage(), e);
+				logger.error("获取微信appid=["+appid+"]的jsapi_ticket失败", e);
 			}
 			weixinJSApiTicketRefreshing.set(false);
 		}
-		return (String)tokenMap.get(FLAG_WEIXIN_JSAPI_TICKET + getWeixinAppid());
+		return (String)tokenMap.get(FLAG_WEIXIN_JSAPI_TICKET + appid);
 	}
 
 
@@ -177,17 +151,17 @@ public class WeixinTokenHolder {
 	 * @create Oct 29, 2015 9:32:01 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
-	public static WeixinOAuthAccessToken getWeixinOAuthAccessToken(String code){
-		Long expireTime = (Long)tokenMap.get(FLAG_WEIXIN_OAUTH_ACCESSTOKEN_EXPIRETIME + getWeixinAppid());
+	public static WeixinOAuthAccessToken getWeixinOAuthAccessToken(String appid, String code){
+		Long expireTime = (Long)tokenMap.get(FLAG_WEIXIN_OAUTH_ACCESSTOKEN_EXPIRETIME + appid);
 		if(null!=expireTime && expireTime>=System.currentTimeMillis()){
-			return (WeixinOAuthAccessToken)tokenMap.get(FLAG_WEIXIN_OAUTH_ACCESSTOKEN + getWeixinAppid());
+			return (WeixinOAuthAccessToken)tokenMap.get(FLAG_WEIXIN_OAUTH_ACCESSTOKEN + appid);
 		}
 		if(weixinOAuthAccessTokenRefreshing.compareAndSet(false, true)){
-			WeixinOAuthAccessToken weixinOauthAccessToken = WeixinHelper.getWeixinOAuthAccessToken(getWeixinAppid(), getWeixinAppsecret(), code);
-			tokenMap.put(FLAG_WEIXIN_OAUTH_ACCESSTOKEN + getWeixinAppid(), weixinOauthAccessToken);
-			tokenMap.put(FLAG_WEIXIN_OAUTH_ACCESSTOKEN_EXPIRETIME + getWeixinAppid(), System.currentTimeMillis()+WEIXIN_TOKEN_EXPIRE_TIME_MILLIS);
+			WeixinOAuthAccessToken weixinOauthAccessToken = WeixinHelper.getWeixinOAuthAccessToken(appid, getWeixinAppsecret(appid), code);
+			tokenMap.put(FLAG_WEIXIN_OAUTH_ACCESSTOKEN + appid, weixinOauthAccessToken);
+			tokenMap.put(FLAG_WEIXIN_OAUTH_ACCESSTOKEN_EXPIRETIME + appid, System.currentTimeMillis()+WEIXIN_TOKEN_EXPIRE_TIME_MILLIS);
 			weixinOAuthAccessTokenRefreshing.set(false);
 		}
-		return (WeixinOAuthAccessToken)tokenMap.get(FLAG_WEIXIN_OAUTH_ACCESSTOKEN + getWeixinAppid());
+		return (WeixinOAuthAccessToken)tokenMap.get(FLAG_WEIXIN_OAUTH_ACCESSTOKEN + appid);
 	}
 }

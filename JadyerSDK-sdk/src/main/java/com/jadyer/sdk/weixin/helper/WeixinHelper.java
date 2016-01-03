@@ -215,9 +215,9 @@ public final class WeixinHelper {
 	 * @create Oct 29, 2015 10:11:29 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
-	public static String signWeixinJSSDK(String noncestr, String timestamp, String url){
+	public static String signWeixinJSSDK(String appid, String noncestr, String timestamp, String url){
 		StringBuilder sb = new StringBuilder();
-		sb.append("jsapi_ticket=").append(WeixinTokenHolder.getWeixinJSApiTicket()).append("&")
+		sb.append("jsapi_ticket=").append(WeixinTokenHolder.getWeixinJSApiTicket(appid)).append("&")
 		  .append("noncestr=").append(noncestr).append("&")
 		  .append("timestamp=").append(timestamp).append("&")
 		  .append("url=").append(url);

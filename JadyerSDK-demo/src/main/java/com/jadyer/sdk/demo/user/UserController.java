@@ -4,7 +4,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,8 +14,8 @@ import com.jadyer.sdk.demo.common.base.CommonResult;
 import com.jadyer.sdk.demo.common.constant.CodeEnum;
 import com.jadyer.sdk.demo.common.constant.Constants;
 import com.jadyer.sdk.demo.user.model.UserInfo;
-import com.jadyer.sdk.weixin.helper.WeixinTokenHolder;
 import com.jadyer.sdk.weixin.helper.WeixinHelper;
+import com.jadyer.sdk.weixin.helper.WeixinTokenHolder;
 import com.jadyer.sdk.weixin.model.WeixinErrorInfo;
 
 @Controller
@@ -71,16 +70,6 @@ public class UserController{
 		sb.append("weixin/").append(userInfo.getUuid());
 		request.setAttribute("token", DigestUtils.md5Hex(userInfo.getUuid() + "http://blog.csdn.net/jadyer" + userInfo.getUuid()));
 		request.setAttribute("weixinURL", sb.toString());
-		/**
-		 * 微信管理平台不需要配置WeixinFilter,这是因为它可以更换绑定的公众号,这样即便配置WeixinFilter也是无意义的
-		 * 但也不能不初始化微信appid和appsecret,否则无法发布自定义菜单或主动推消息给粉丝等等
-		 */
-		if(StringUtils.isNotBlank(userInfo.getAppId())){
-			WeixinTokenHolder.setWeixinAppid(userInfo.getAppId());
-		}
-		if(StringUtils.isNotBlank(userInfo.getAppSecret())){
-			WeixinTokenHolder.setWeixinAppsecret(userInfo.getAppSecret());
-		}
 		return "user/userInfo";
 	}
 
@@ -101,8 +90,7 @@ public class UserController{
 		userInfo.setAccessTokenTime(_userInfo.getAccessTokenTime());
 		request.getSession().setAttribute(Constants.USERINFO, userService.save(userInfo));
 		//更换绑定的公众号,也要同步更新微信appid和appsecret
-		WeixinTokenHolder.setWeixinAppid(userInfo.getAppId());
-		WeixinTokenHolder.setWeixinAppsecret(userInfo.getAppSecret());
+		WeixinTokenHolder.setWeixinAppidAppsecret(userInfo.getAppId(), userInfo.getAppSecret());
 		return new CommonResult();
 	}
 
@@ -130,8 +118,8 @@ public class UserController{
 	 */
 	@ResponseBody
 	@RequestMapping("/menu/weixin/create")
-	public CommonResult menuWeixinCreate(String menuJson){
-		WeixinErrorInfo errorInfo = WeixinHelper.createWeixinMenu(WeixinTokenHolder.getWeixinAccessToken(), menuJson);
+	public CommonResult menuWeixinCreate(String appid, String menuJson){
+		WeixinErrorInfo errorInfo = WeixinHelper.createWeixinMenu(WeixinTokenHolder.getWeixinAccessToken(appid), menuJson);
 		if(0 == errorInfo.getErrcode()){
 			return new CommonResult();
 		}else{

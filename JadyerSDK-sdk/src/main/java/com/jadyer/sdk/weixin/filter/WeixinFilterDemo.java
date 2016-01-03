@@ -12,6 +12,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +37,8 @@ public class WeixinFilterDemo implements Filter {
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest)req;
 		HttpServletResponse response = (HttpServletResponse)resp;
-		if("base".equals(request.getParameter("oauth")) && "openid".equals(request.getParameter("openid"))){
+		String appid = request.getParameter("appid");
+		if(StringUtils.isNotBlank(appid) && "base".equals(request.getParameter("oauth")) && "openid".equals(request.getParameter("openid"))){
 			if(this.isAjaxRequest(request)){
 				throw new RuntimeException("请不要通过Ajax获取粉丝信息");
 			}
@@ -56,11 +58,9 @@ public class WeixinFilterDemo implements Filter {
 			String fullURL = request.getRequestURL().toString() + (null==request.getQueryString()?"":"?"+request.getQueryString());
 			String state = fullURL.replace("?", "/").replaceAll("&", "/").replace("/oauth=base", "");
 			logger.info("计算粉丝请求的资源得到state=[{}]", state);
-			//String appid = ConfigUtil.INSTANCE.getProperty("appid");
 			//String appurl = ConfigUtil.INSTANCE.getProperty("appurl");
-			String appid = null;
 			String appurl = null;
-			String redirectURL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appid + "&redirect_uri=" + (appurl+"/weixin/helper/oauth/3") + "&response_type=code&scope=snsapi_base&state=" + state + "#wechat_redirect";
+			String redirectURL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appid + "&redirect_uri=" + (appurl+"/weixin/helper/oauth/"+appid) + "&response_type=code&scope=snsapi_base&state=" + state + "#wechat_redirect";
 			logger.info("计算请求到微信服务器的redirectURL=[{}]", redirectURL);
 			response.sendRedirect(redirectURL);
 		}else{

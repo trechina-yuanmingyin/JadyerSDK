@@ -41,16 +41,16 @@ public class WeixinHelperController {
 
 	/**
 	 * 获取网页access_token
-	 * @param uid   预留字段,以便扩展为多用户支持
+	 * @param appid 微信appid,通过它来支持多用户
 	 * @param code  微信服务器发放的,有效期为5分钟的,用于换取网页access_token的code
 	 * @param state 重定向到微信服务器时,由开发者服务器携带过去的参数,这里会原样带回
 	 * @return 获取失败则返回一个友好的HTML页面,获取成功后直接跳转到用户原本请求的资源
 	 */
-	@RequestMapping(value="/oauth/{uid}")
-	public String oauth(@PathVariable String uid, String code, String state, HttpServletResponse response) throws IOException{
+	@RequestMapping(value="/oauth/{appid}")
+	public String oauth(@PathVariable String appid, String code, String state, HttpServletResponse response) throws IOException{
 		logger.info("收到微信服务器回调code=[{}], state=[{}]", code, state);
 		if(StringUtils.isNotBlank(code)){
-			WeixinOAuthAccessToken oauthAccessToken = WeixinTokenHolder.getWeixinOAuthAccessToken(code);
+			WeixinOAuthAccessToken oauthAccessToken = WeixinTokenHolder.getWeixinOAuthAccessToken(appid, code);
 			if(0==oauthAccessToken.getErrcode() && StringUtils.isNotBlank(oauthAccessToken.getOpenid())){
 				/**
 				 * 还原state携带过来的粉丝请求的原URL
@@ -87,15 +87,15 @@ public class WeixinHelperController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="/sign/jssdk")
-	public Map<String, String> signJSSDK(String url) throws UnsupportedEncodingException{
+	public Map<String, String> signJSSDK(String appid, String url) throws UnsupportedEncodingException{
 		Map<String, String> resultMap = new HashMap<String, String>();
 		String noncestr = RandomStringUtils.randomNumeric(16);
 		long timestamp = (long)(System.currentTimeMillis()/1000);
 		url = URLDecoder.decode(url, "UTF-8");
-		resultMap.put("appid", WeixinTokenHolder.getWeixinAppid());
+		resultMap.put("appid", appid);
 		resultMap.put("timestamp", String.valueOf(timestamp));
 		resultMap.put("noncestr", noncestr);
-		resultMap.put("signature", WeixinHelper.signWeixinJSSDK(noncestr, String.valueOf(timestamp), url));
+		resultMap.put("signature", WeixinHelper.signWeixinJSSDK(appid, noncestr, String.valueOf(timestamp), url));
 		resultMap.put("url", url);
 		return resultMap;
 	}
@@ -107,10 +107,10 @@ public class WeixinHelperController {
 	 * @create Nov 9, 2015 5:06:19 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
-	@RequestMapping(value="/get/tempMediaFile/{mediaId}")
-	public void getTempMediaFile(@PathVariable String mediaId, HttpServletResponse response) throws Exception {
-		String fullPath = WeixinHelper.downloadWeixinTempMediaFile(WeixinTokenHolder.getWeixinAccessToken(), mediaId);
-		WeixinTokenHolder.setMediaIdFilePath(mediaId, fullPath);
+	@RequestMapping(value="/get/tempMediaFile/{appid}/{mediaId}")
+	public void getTempMediaFile(@PathVariable String appid, @PathVariable String mediaId, HttpServletResponse response) throws Exception {
+		String fullPath = WeixinHelper.downloadWeixinTempMediaFile(WeixinTokenHolder.getWeixinAccessToken(appid), mediaId);
+		WeixinTokenHolder.setMediaIdFilePath(appid, mediaId, fullPath);
 		response.setContentType("application/octet-stream");
 		response.setHeader("Content-disposition", "attachment; filename=" + new String(((String)("get_"+FilenameUtils.getName(fullPath))).getBytes("UTF-8"), "ISO8859-1"));
 		InputStream is = FileUtils.openInputStream(new File(fullPath));
@@ -132,12 +132,13 @@ public class WeixinHelperController {
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
 	@ResponseBody
-	@RequestMapping(value="/delete/tempMediaFile/{mediaId}")
-	public boolean deleteTempMediaFile(@PathVariable String mediaId){
+	@RequestMapping(value="/delete/tempMediaFile/{appid}/{mediaId}")
+	public boolean deleteTempMediaFile(@PathVariable String appid, @PathVariable String mediaId){
+		String localFileFullPath = WeixinTokenHolder.getMediaIdFilePath(appid, mediaId);
 		try {
-			return new File(WeixinTokenHolder.getMediaIdFilePath(mediaId)).delete();
+			return new File(localFileFullPath).delete();
 		} catch (Exception e) {
-			logger.info("删除存储在本地的微信临时媒体文件mediaId=["+mediaId+"],fullPath=["+WeixinTokenHolder.getMediaIdFilePath(mediaId)+"]失败,堆栈轨迹如下", e);
+			logger.info("删除存储在本地的微信临时媒体文件mediaId=["+mediaId+"],fullPath=["+localFileFullPath+"]失败,堆栈轨迹如下", e);
 			return false;
 		}
 	}
