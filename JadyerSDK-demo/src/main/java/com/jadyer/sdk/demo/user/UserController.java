@@ -1,7 +1,11 @@
 package com.jadyer.sdk.demo.user;
 
 import java.util.Date;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,6 +19,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import com.jadyer.sdk.demo.common.base.CommonResult;
 import com.jadyer.sdk.demo.common.constant.CodeEnum;
 import com.jadyer.sdk.demo.common.constant.Constants;
+import com.jadyer.sdk.demo.common.util.LogUtil;
 import com.jadyer.sdk.demo.user.model.UserInfo;
 import com.jadyer.sdk.qq.helper.QQHelper;
 import com.jadyer.sdk.qq.helper.QQTokenHolder;
@@ -28,6 +33,31 @@ import com.jadyer.sdk.weixin.model.WeixinErrorInfo;
 public class UserController{
 	@Resource
 	private UserService userService;
+
+	@PostConstruct
+	public void scheduleReport(){
+		Executors.newScheduledThreadPool(1).schedule(new Runnable(){
+			@Override
+			public void run() {
+				try {
+					List<UserInfo> userinfoList = userService.findAll();
+					for(UserInfo obj : userinfoList){
+						if("1".equals(obj.getBindStatus())){
+							if("1".equals(obj.getMptype())){
+								WeixinTokenHolder.setWeixinAppidAppsecret(obj.getAppid(), obj.getAppsecret());
+							}
+							if("2".equals(obj.getMptype())){
+								QQTokenHolder.setQQAppidAppsecret(obj.getAppid(), obj.getAppsecret());
+							}
+						}
+					}
+				} catch (Exception e) {
+					LogUtil.getAppLogger().info("登记微信appid和appsecret任务异常, 堆栈轨迹如下", e);
+				}
+			}
+		}, 2, TimeUnit.MINUTES);
+	}
+
 
 	/**
 	 * 登录
