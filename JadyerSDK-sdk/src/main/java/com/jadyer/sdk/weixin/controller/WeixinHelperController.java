@@ -86,8 +86,8 @@ public class WeixinHelperController {
 	 * @param url 当前网页的URL,不包含#及其后面部分
 	 */
 	@ResponseBody
-	@RequestMapping(value="/sign/jssdk")
-	public Map<String, String> signJSSDK(String appid, String url) throws UnsupportedEncodingException{
+	@RequestMapping(value="/jssdk/sign")
+	public Map<String, String> jssdkSign(String appid, String url) throws UnsupportedEncodingException{
 		Map<String, String> resultMap = new HashMap<String, String>();
 		String noncestr = RandomStringUtils.randomNumeric(16);
 		long timestamp = (long)(System.currentTimeMillis()/1000);
@@ -107,8 +107,8 @@ public class WeixinHelperController {
 	 * @create Nov 9, 2015 5:06:19 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
-	@RequestMapping(value="/get/tempMediaFile/{appid}/{mediaId}")
-	public void getTempMediaFile(@PathVariable String appid, @PathVariable String mediaId, HttpServletResponse response) throws Exception {
+	@RequestMapping(value="/tempMediaFile/get/{appid}/{mediaId}")
+	public void tempMediaFileGet(@PathVariable String appid, @PathVariable String mediaId, HttpServletResponse response) throws Exception {
 		String fullPath = WeixinHelper.downloadWeixinTempMediaFile(WeixinTokenHolder.getWeixinAccessToken(appid), mediaId);
 		WeixinTokenHolder.setMediaIdFilePath(appid, mediaId, fullPath);
 		response.setContentType("application/octet-stream");
@@ -132,8 +132,8 @@ public class WeixinHelperController {
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
 	@ResponseBody
-	@RequestMapping(value="/delete/tempMediaFile/{appid}/{mediaId}")
-	public boolean deleteTempMediaFile(@PathVariable String appid, @PathVariable String mediaId){
+	@RequestMapping(value="/tempMediaFile/delete/{appid}/{mediaId}")
+	public boolean tempMediaFileDelete(@PathVariable String appid, @PathVariable String mediaId){
 		String localFileFullPath = WeixinTokenHolder.getMediaIdFilePath(appid, mediaId);
 		try {
 			return new File(localFileFullPath).delete();
