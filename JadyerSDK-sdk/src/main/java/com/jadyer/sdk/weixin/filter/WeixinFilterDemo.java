@@ -20,7 +20,7 @@ import com.jadyer.sdk.util.HttpUtil;
 
 /**
  * 用于处理微信相关的Filter
- * @see 自行提供appid和appurl
+ * @see 自行提供appid和appurl,请求参数需包含appid=wx63ae5326e400cca2&oauth=base&openid=openid
  * @create Oct 19, 2015 4:45:35 PM
  * @author 玄玉<http://blog.csdn.net/jadyer>
  */
