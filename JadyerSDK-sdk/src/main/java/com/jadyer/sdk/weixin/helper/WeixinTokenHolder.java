@@ -18,8 +18,6 @@ import com.jadyer.sdk.weixin.model.WeixinOAuthAccessToken;
  */
 public class WeixinTokenHolder {
 	private static final Logger logger = LoggerFactory.getLogger(WeixinTokenHolder.class);
-//	private static final String WEIXIN_APPID = "weixin_appid";
-//	private static final String WEIXIN_APPSECRET = "weixin_appsecret";
 	private static final String FLAG_WEIXIN_ACCESSTOKEN = "weixin_access_token";
 	private static final String FLAG_WEIXIN_JSAPI_TICKET = "weixin_jsapi_ticket";
 	private static final String FLAG_WEIXIN_OAUTH_ACCESSTOKEN = "weixin_oauth_access_token";

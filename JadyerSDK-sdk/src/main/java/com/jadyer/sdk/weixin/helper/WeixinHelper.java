@@ -30,7 +30,7 @@ public final class WeixinHelper {
 	 * @see 默认修饰符default即只有同包中的类才可使用
 	 * @see {"access_token":"8DF72J-d_u3XIaq22e_HUY_fe5wfdoj6awnq2wDrk5v05zf1yEuUhUdtfX7yqB5wAJ1edwGrgAyJvinZTXl2RamjsqDOIg4L1humLuj32Oo","expires_in":7200}
 	 * @see {"errcode":40125,"errmsg":"invalid appsecret, view more at http:\/\/t.cn\/RAEkdVq hint: [M5_jKa0125vr22]"}
-	 * @return 获取失败时将抛出RuntimeException
+	 * @return 获取失败时将抛出Exception
 	 */
 	static String getWeixinAccessToken(String appid, String appsecret) throws IllegalAccessException {
 		String reqURL = WeixinConstants.URL_WEIXIN_GET_ACCESSTOKEN.replace(WeixinConstants.URL_PLACEHOLDER_APPID, appid).replace(WeixinConstants.URL_PLACEHOLDER_APPSECRET, appsecret);
@@ -53,7 +53,7 @@ public final class WeixinHelper {
 	 * @see http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html
 	 * @see {"errcode":40001,"errmsg":"invalid credential, access_token is invalid or not latest hint: [3sEnya0653vr23]"}
 	 * @see {"errcode":0,"errmsg":"ok","ticket":"sM4AOVdWfPE4DxkXGEs8VDqmMJ5Cg8sos8UXyJqPG4FpcrJtLcmFoV69dhqNmiQdoF1HjamNrYH9c8S9r4B_MA","expires_in":7200}
-	 * @return 获取失败时将抛出RuntimeException
+	 * @return 获取失败时将抛出Exception
 	 * @create Oct 29, 2015 9:45:20 PM
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
