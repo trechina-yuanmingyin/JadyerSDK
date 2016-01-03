@@ -128,6 +128,18 @@ public class UserController{
 
 
 	/**
+	 * 修改密码
+	 * @see 修改成功后要刷新HttpSession中的用户信息
+	 */
+	@ResponseBody
+	@RequestMapping("/menu/getjson")
+	public CommonResult menuGetjson(HttpServletRequest request){
+		int uid = (Integer)request.getSession().getAttribute(Constants.UID);
+		return new CommonResult(userService.getMenuJson(uid));
+	}
+
+
+	/**
 	 * 通过JSON的方式发布微信或QQ公众号自定义菜单
 	 * @param menuJson 微信或QQ公众号自定义菜单数据的JSON串
 	 */
@@ -140,19 +152,17 @@ public class UserController{
 		}
 		if("1".equals(userInfo.getMptype())){
 			WeixinErrorInfo errorInfo = WeixinHelper.createWeixinMenu(WeixinTokenHolder.getWeixinAccessToken(userInfo.getAppid()), menuJson);
-			if(0 == errorInfo.getErrcode()){
+			if(0==errorInfo.getErrcode() && null!=userService.menuJsonSave(userInfo.getId(), menuJson)){
 				return new CommonResult();
-			}else{
-				return new CommonResult(errorInfo.getErrcode(), errorInfo.getErrmsg());
 			}
+			return new CommonResult(errorInfo.getErrcode(), errorInfo.getErrmsg());
 		}
 		if("2".equals(userInfo.getMptype())){
 			QQErrorInfo errorInfo = QQHelper.createQQMenu(QQTokenHolder.getQQAccessToken(userInfo.getAppid()), menuJson);
-			if(0 == errorInfo.getErrcode()){
+			if(0==errorInfo.getErrcode() && null!=userService.menuJsonSave(userInfo.getId(), menuJson)){
 				return new CommonResult();
-			}else{
-				return new CommonResult(errorInfo.getErrcode(), errorInfo.getErrmsg());
 			}
+			return new CommonResult(errorInfo.getErrcode(), errorInfo.getErrmsg());
 		}
 		return new CommonResult(CodeEnum.SYSTEM_ERROR.getCode(), "当前用户未关联微信或QQ公众平台");
 	}

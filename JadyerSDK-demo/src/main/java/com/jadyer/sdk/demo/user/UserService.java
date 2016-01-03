@@ -70,21 +70,29 @@ public class UserService {
 	}
 
 	/**
-	 * 查询指定平台用户的微信菜单资料
+	 * 查询当前登录用户关联的公众平台自定义菜单JSON信息
 	 */
-	@Transactional(readOnly=true)
-	public List<MenuInfo> findMenuList(int uid){
-		return menuInfoDao.findMenuListByUID(uid);
+	public String getMenuJson(int uid){
+		List<MenuInfo> menuList = menuInfoDao.findMenuListByUID(uid);
+		for(MenuInfo obj : menuList){
+			if("3".equals(obj.getType())){
+				return obj.getMenuJson();
+			}
+		}
+		return null;
 	}
 
 	/**
-	 * 暂未使用到该方法
-	 * @create Oct 25, 2015 3:02:19 PM
-	 * @author 玄玉<http://blog.csdn.net/jadyer>
+	 * 存储微信或QQ公众号自定义菜单的JSON字符串
+	 * @param menuJson 微信或QQ公众号自定义菜单数据的JSON字符串
+	 * @return 返回本次存储在数据库的自定义菜单内容
 	 */
-	@Deprecated
-	public boolean updateMenu(int uid){
-		menuInfoDao.deleteByUID(uid);
-		return false;
+	public MenuInfo menuJsonSave(int uid, String menuJson){
+		MenuInfo info = new MenuInfo();
+		info.setUid(uid);
+		info.setType("3");
+		info.setName("json");
+		info.setMenuJson(menuJson);
+		return menuInfoDao.saveAndFlush(info);
 	}
 }

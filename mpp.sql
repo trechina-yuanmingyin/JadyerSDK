@@ -63,13 +63,14 @@ UNIQUE INDEX unique_index_keyword(keyword)
 DROP TABLE IF EXISTS t_menu_info;
 CREATE TABLE t_menu_info(
 id         INT AUTO_INCREMENT PRIMARY KEY COMMENT '主键',
+pid        INT COMMENT '上一级菜单的ID，一级菜单情况下为0',
 uid        INT NOT NULL COMMENT '平台用户ID，对应t_user#id',
-parentId   INT NOT NULL COMMENT '上一级菜单的ID，一级菜单情况下为0',
-level      CHAR(1) NOT NULL COMMENT '菜单级别：0--未知，1--一级菜单，2--二级菜单',
-type       CHAR(1) NOT NULL COMMENT '菜单类型：0--占位，1--CLICK，2--VIEW',
-name       VARCHAR(16) NOT NULL COMMENT '菜单名称',
+type       CHAR(1) NOT NULL COMMENT '菜单类型：1--CLICK，2--VIEW，3--JSON',
+level      CHAR(1) COMMENT '菜单级别：1--一级菜单，2--二级菜单',
+name       VARCHAR(16) COMMENT '菜单名称',
 viewURL    VARCHAR(256) COMMENT 'type=2时用到',
 replyId    INT COMMENT 'type=1时用到，对应t_reply_info#id',
+menuJson   VARCHAR(999) COMMENT '微信或QQ公众号菜单JSON',
 createTime TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
 updateTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'
 )ENGINE=InnoDB DEFAULT CHARSET=UTF8 COMMENT='自定义菜单表';

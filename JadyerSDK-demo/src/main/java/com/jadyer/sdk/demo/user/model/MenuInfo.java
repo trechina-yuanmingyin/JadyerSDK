@@ -21,13 +21,14 @@ public class MenuInfo {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
+	private String pid;
 	private int uid;
-	private int parentId;
 	private String level;
 	private String type;
 	private String name;
 	private String viewURL;
 	private int replyId;
+	private String menuJson;
 	@Basic(fetch=FetchType.LAZY)
 	private Date createTime = new Date();
 	@Basic(fetch=FetchType.LAZY)
@@ -39,17 +40,17 @@ public class MenuInfo {
 	public void setId(int id) {
 		this.id = id;
 	}
+	public String getPid() {
+		return pid;
+	}
+	public void setPid(String pid) {
+		this.pid = pid;
+	}
 	public int getUid() {
 		return uid;
 	}
 	public void setUid(int uid) {
 		this.uid = uid;
-	}
-	public int getParentId() {
-		return parentId;
-	}
-	public void setParentId(int parentId) {
-		this.parentId = parentId;
 	}
 	public String getLevel() {
 		return level;
@@ -80,6 +81,12 @@ public class MenuInfo {
 	}
 	public void setReplyId(int replyId) {
 		this.replyId = replyId;
+	}
+	public String getMenuJson() {
+		return menuJson;
+	}
+	public void setMenuJson(String menuJson) {
+		this.menuJson = menuJson;
 	}
 	public Date getCreateTime() {
 		return createTime;

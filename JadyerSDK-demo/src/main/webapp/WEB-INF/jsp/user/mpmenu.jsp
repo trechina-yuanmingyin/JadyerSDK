@@ -5,6 +5,18 @@
 <jsp:include page="/header.jsp"/>
 
 <script>
+$(function(){
+	$.get("${pageContext.request.contextPath}/user/menu/getjson",
+		function(data){
+			if(1000 == data.code){
+				$("#RawJson").text(data.data);
+			}else{
+				$("#RawJson").text("读取自定义菜单JSON失败-->["+data.message+"]");
+			}
+		}
+	);
+});
+
 function deploy(){
 	$.post("${ctx}/user/menu/create",
 		{menuJson:$("#RawJson").val()},
@@ -47,40 +59,7 @@ function deploy(){
 			<td>
 				<link rel="stylesheet" href="${ctx}/js/codeformat/json/s.css"/>
 				<script src="${ctx}/js/codeformat/json/c.js" id="codeformatJsonC" data="${ctx}/js/codeformat/json"></script>
-				<textarea id="RawJson" style="height:800px;">{
-    "button": [
-        {
-            "type": "click", 
-            "name": "今日歌曲", 
-            "key": "V1001_TODAY_MUSIC"
-        }, 
-        {
-            "type": "click", 
-            "name": "歌手简介", 
-            "key": "V1001_TODAY_SINGER"
-        }, 
-        {
-            "name": "菜单", 
-            "sub_button": [
-                {
-                    "type": "view", 
-                    "name": "搜索", 
-                    "url": "http://www.soso.com/"
-                }, 
-                {
-                    "type": "view", 
-                    "name": "视频", 
-                    "url": "http://v.qq.com/"
-                }, 
-                {
-                    "type": "click", 
-                    "name": "赞一下我们", 
-                    "key": "V1001_GOOD"
-                }
-            ]
-        }
-    ]
-}</textarea>
+				<textarea id="RawJson" style="height:800px;"></textarea>
 				<div id="ControlsRow">
 					<input type="Button" class="btn_o mt_5" value="格式化" onclick="Process()"/>
 					<span id="TabSizeHolder">
