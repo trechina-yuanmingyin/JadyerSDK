@@ -10,6 +10,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +33,7 @@ import com.jadyer.sdk.weixin.model.WeixinErrorInfo;
 @Controller
 @RequestMapping(value="/user")
 public class UserController{
+	private Logger logger = LoggerFactory.getLogger(getClass());
 	@Resource
 	private UserService userService;
 
@@ -45,9 +48,11 @@ public class UserController{
 						if("1".equals(obj.getBindStatus())){
 							if("1".equals(obj.getMptype())){
 								WeixinTokenHolder.setWeixinAppidAppsecret(obj.getAppid(), obj.getAppsecret());
+								logger.info("登记微信appid=[{}],appsecret=[{}]完毕", obj.getAppid(), obj.getAppsecret());
 							}
 							if("2".equals(obj.getMptype())){
 								QQTokenHolder.setQQAppidAppsecret(obj.getAppid(), obj.getAppsecret());
+								logger.info("登记QQappid=[{}],appsecret=[{}]完毕", obj.getAppid(), obj.getAppsecret());
 							}
 						}
 					}

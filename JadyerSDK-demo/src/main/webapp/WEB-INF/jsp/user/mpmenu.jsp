@@ -40,11 +40,11 @@ function deploy(){
 		<tr class="ti"><th colspan="4">请注意</th></tr>
 		<tr><td><span>1、自定义菜单最多包括3个一级菜单，每个一级菜单最多包含5个二级菜单。</span></td></tr>
 		<tr><td><span>2、一级菜单最多4个汉字，二级菜单最多7个汉字，多出来的部分将会以“...”代替。</span></td></tr>
-		<tr><td><span>3、创建自定义菜单后，由于微信客户端缓存，需要24小时微信客户端才会展现出来。测试时可以尝试取消关注公众账号后再次关注，则可以看到创建后的效果。</span></td></tr>
+		<tr><td><span>3、创建自定义菜单后，由于客户端缓存，需要24小时客户端才会展现出来。测试时可以尝试取消关注公众账号后再次关注，则可以看到创建后的效果。</span></td></tr>
 		<tr>
 			<td>
-				<span><span style="color:red;">注：</span>以上限制来自<a href="http://mp.weixin.qq.com/wiki/13/43de8269be54a0a6f64413e4dfa94f39.html" target="_blank" style="color:blue;">微信公众平台，</a></span>
-				<span>微信自定义菜单创建的JSON格式请访问<a href="http://mp.weixin.qq.com/wiki/13/43de8269be54a0a6f64413e4dfa94f39.html" target="_blank" style="color:blue;">微信公众平台开发者文档。</a></span>
+				<span><span style="color:red;">注：</span>以上限制来自<a href="http://mp.weixin.qq.com/wiki/13/43de8269be54a0a6f64413e4dfa94f39.html" target="_blank" style="color:blue;">微信或QQ公众平台，</a></span>
+				<span>自定义菜单创建的JSON格式请访问<a href="http://mp.weixin.qq.com/wiki/13/43de8269be54a0a6f64413e4dfa94f39.html" target="_blank" style="color:blue;">微信或QQ公众平台开发者文档。</a></span>
 			</td>
 		</tr>
 	</table>
