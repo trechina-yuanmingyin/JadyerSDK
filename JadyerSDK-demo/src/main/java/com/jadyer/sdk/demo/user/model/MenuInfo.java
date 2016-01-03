@@ -27,7 +27,7 @@ public class MenuInfo {
 	private String type;
 	private String name;
 	private String viewURL;
-	private int replyId;
+	private String replyId;
 	private String menuJson;
 	@Basic(fetch=FetchType.LAZY)
 	private Date createTime = new Date();
@@ -76,10 +76,10 @@ public class MenuInfo {
 	public void setViewURL(String viewURL) {
 		this.viewURL = viewURL;
 	}
-	public int getReplyId() {
+	public String getReplyId() {
 		return replyId;
 	}
-	public void setReplyId(int replyId) {
+	public void setReplyId(String replyId) {
 		this.replyId = replyId;
 	}
 	public String getMenuJson() {
