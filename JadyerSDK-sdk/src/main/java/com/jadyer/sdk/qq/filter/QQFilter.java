@@ -28,15 +28,12 @@ import com.jadyer.sdk.util.SDKUtil;
  */
 public class QQFilter implements Filter {
 	private static final Logger logger = LoggerFactory.getLogger(QQFilter.class);
-	private String dataurl = null;
 
 	@Override
 	public void destroy() {}
 
 	@Override
-	public void init(FilterConfig filterConfig) throws ServletException {
-		this.dataurl = filterConfig.getInitParameter("dataurl");
-	}
+	public void init(FilterConfig filterConfig) throws ServletException {}
 
 	/**
 	 * 判断是否需要通过网页授权获取粉丝信息
@@ -82,7 +79,14 @@ public class QQFilter implements Filter {
 			String fullURL = request.getRequestURL().toString() + (null==request.getQueryString()?"":"?"+request.getQueryString());
 			String state = fullURL.replace("?", "/").replaceAll("&", "/").replace("/oauth=base", "");
 			logger.info("计算粉丝请求的资源得到state=[{}]", state);
-			String redirectURL = QQHelper.buildQQOAuthCodeURL(appid, QQConstants.QQ_OAUTH_SCOPE_SNSAPI_BASE, state, this.dataurl+"/qq/helper/oauth/"+appid);
+			//String appurl = http://www.jadyer.com/mpp
+			StringBuilder appurl = new StringBuilder();
+			appurl.append(request.getScheme()).append("://").append(request.getServerName());
+			if(80!=request.getServerPort() && 443!=request.getServerPort()){
+				appurl.append(":").append(request.getServerPort());
+			}
+			appurl.append(request.getContextPath());
+			String redirectURL = QQHelper.buildQQOAuthCodeURL(appid, QQConstants.QQ_OAUTH_SCOPE_SNSAPI_BASE, state, appurl.toString()+"/qq/helper/oauth/"+appid);
 			logger.info("计算请求到QQ服务器地址redirectURL=[{}]", redirectURL);
 			response.sendRedirect(redirectURL);
 		}else{
