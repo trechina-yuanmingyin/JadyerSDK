@@ -9,7 +9,6 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jadyer.sdk.demo.common.constant.Constants;
@@ -131,9 +130,9 @@ public class WeixinController extends WeixinMsgControllerCustomServiceAdapter {
 
 
 	@ResponseBody
-	@RequestMapping(value="/getOpenid", method=RequestMethod.GET)
-	public String getOpenid(String openid){
-		return openid;
+	@RequestMapping(value="/getopenid")
+	public String getopenid(String openid){
+		return "your openid is [" + openid + "]";
 	}
 
 

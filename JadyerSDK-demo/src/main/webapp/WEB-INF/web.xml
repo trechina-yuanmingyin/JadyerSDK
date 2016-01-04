@@ -100,8 +100,9 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
-	<!-- http://www.jadyer.com/mpp/weixin/getOpenid?test=7645&openid=openid&oauth=base -->
-	<!-- 
+	<!-- 网页授权 -->
+	<!-- http://www.jadyer.com/mpp/qq/getopenid?test=7645&appid=123456789&oauth=base&openid=openid -->
+	<!-- http://www.jadyer.com/mpp/weixin/getopenid?test=7645&appid=wx63ae5326e400cca2&oauth=base&openid=openid -->
 	<filter>
 		<filter-name>QQFilter</filter-name>
 		<filter-class>com.jadyer.sdk.qq.filter.QQFilter</filter-class>
@@ -126,5 +127,4 @@
 		<filter-name>WeixinFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	 -->
 </web-app>
