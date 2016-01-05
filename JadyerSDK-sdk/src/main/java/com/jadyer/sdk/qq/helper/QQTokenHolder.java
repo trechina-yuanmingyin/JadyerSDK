@@ -20,14 +20,11 @@ public class QQTokenHolder {
 	private static final Logger logger = LoggerFactory.getLogger(QQTokenHolder.class);
 	private static final String FLAG_QQ_ACCESSTOKEN = "qq_access_token";
 	private static final String FLAG_QQ_JSAPI_TICKET = "qq_jsapi_ticket";
-	private static final String FLAG_QQ_OAUTH_ACCESSTOKEN = "qq_oauth_access_token";
 	private static final String FLAG_QQ_ACCESSTOKEN_EXPIRETIME = FLAG_QQ_ACCESSTOKEN + "_expire_time";
 	private static final String FLAG_QQ_JSAPI_TICKET_EXPIRETIME = FLAG_QQ_JSAPI_TICKET + "_expire_time";
-	private static final String FLAG_QQ_OAUTH_ACCESSTOKEN_EXPIRETIME = FLAG_QQ_OAUTH_ACCESSTOKEN + "_expire_time";
 	private static final long QQ_TOKEN_EXPIRE_TIME_MILLIS = 7000 * 1000;
 	private static AtomicBoolean qqAccessTokenRefreshing = new AtomicBoolean(false);
 	private static AtomicBoolean qqJSApiTicketRefreshing = new AtomicBoolean(false);
-	private static AtomicBoolean qqOAuthAccessTokenRefreshing = new AtomicBoolean(false);
 	private static ConcurrentHashMap<String, Object> tokenMap = new ConcurrentHashMap<String, Object>();
 
 	private QQTokenHolder(){}
@@ -150,16 +147,17 @@ public class QQTokenHolder {
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
 	public static QQOAuthAccessToken getQQOAuthAccessToken(String appid, String code){
-		Long expireTime = (Long)tokenMap.get(FLAG_QQ_OAUTH_ACCESSTOKEN_EXPIRETIME + appid);
-		if(null!=expireTime && expireTime>=System.currentTimeMillis()){
-			return (QQOAuthAccessToken)tokenMap.get(FLAG_QQ_OAUTH_ACCESSTOKEN + appid);
-		}
-		if(qqOAuthAccessTokenRefreshing.compareAndSet(false, true)){
-			QQOAuthAccessToken qqOauthAccessToken = QQHelper.getQQOAuthAccessToken(appid, getQQAppsecret(appid), code);
-			tokenMap.put(FLAG_QQ_OAUTH_ACCESSTOKEN + appid, qqOauthAccessToken);
-			tokenMap.put(FLAG_QQ_OAUTH_ACCESSTOKEN_EXPIRETIME + appid, System.currentTimeMillis()+QQ_TOKEN_EXPIRE_TIME_MILLIS);
-			qqOAuthAccessTokenRefreshing.set(false);
-		}
-		return (QQOAuthAccessToken)tokenMap.get(FLAG_QQ_OAUTH_ACCESSTOKEN + appid);
+//		Long expireTime = (Long)tokenMap.get(FLAG_QQ_OAUTH_ACCESSTOKEN_EXPIRETIME + appid);
+//		if(null!=expireTime && expireTime>=System.currentTimeMillis()){
+//			return (QQOAuthAccessToken)tokenMap.get(FLAG_QQ_OAUTH_ACCESSTOKEN + appid);
+//		}
+//		if(qqOAuthAccessTokenRefreshing.compareAndSet(false, true)){
+//			QQOAuthAccessToken qqOauthAccessToken = QQHelper.getQQOAuthAccessToken(appid, getQQAppsecret(appid), code);
+//			tokenMap.put(FLAG_QQ_OAUTH_ACCESSTOKEN + appid, qqOauthAccessToken);
+//			tokenMap.put(FLAG_QQ_OAUTH_ACCESSTOKEN_EXPIRETIME + appid, System.currentTimeMillis()+QQ_TOKEN_EXPIRE_TIME_MILLIS);
+//			qqOAuthAccessTokenRefreshing.set(false);
+//		}
+//		return (QQOAuthAccessToken)tokenMap.get(FLAG_QQ_OAUTH_ACCESSTOKEN + appid);
+		return QQHelper.getQQOAuthAccessToken(appid, getQQAppsecret(appid), code);
 	}
 }

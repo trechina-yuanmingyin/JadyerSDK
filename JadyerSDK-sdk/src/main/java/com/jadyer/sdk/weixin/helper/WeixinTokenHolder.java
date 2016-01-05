@@ -20,14 +20,11 @@ public class WeixinTokenHolder {
 	private static final Logger logger = LoggerFactory.getLogger(WeixinTokenHolder.class);
 	private static final String FLAG_WEIXIN_ACCESSTOKEN = "weixin_access_token";
 	private static final String FLAG_WEIXIN_JSAPI_TICKET = "weixin_jsapi_ticket";
-	private static final String FLAG_WEIXIN_OAUTH_ACCESSTOKEN = "weixin_oauth_access_token";
 	private static final String FLAG_WEIXIN_ACCESSTOKEN_EXPIRETIME = FLAG_WEIXIN_ACCESSTOKEN + "_expire_time";
 	private static final String FLAG_WEIXIN_JSAPI_TICKET_EXPIRETIME = FLAG_WEIXIN_JSAPI_TICKET + "_expire_time";
-	private static final String FLAG_WEIXIN_OAUTH_ACCESSTOKEN_EXPIRETIME = FLAG_WEIXIN_OAUTH_ACCESSTOKEN + "_expire_time";
 	private static final long WEIXIN_TOKEN_EXPIRE_TIME_MILLIS = 7000 * 1000;
 	private static AtomicBoolean weixinAccessTokenRefreshing = new AtomicBoolean(false);
 	private static AtomicBoolean weixinJSApiTicketRefreshing = new AtomicBoolean(false);
-	private static AtomicBoolean weixinOAuthAccessTokenRefreshing = new AtomicBoolean(false);
 	private static ConcurrentHashMap<String, Object> tokenMap = new ConcurrentHashMap<String, Object>();
 
 	private WeixinTokenHolder(){}
@@ -150,16 +147,17 @@ public class WeixinTokenHolder {
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
 	public static WeixinOAuthAccessToken getWeixinOAuthAccessToken(String appid, String code){
-		Long expireTime = (Long)tokenMap.get(FLAG_WEIXIN_OAUTH_ACCESSTOKEN_EXPIRETIME + appid);
-		if(null!=expireTime && expireTime>=System.currentTimeMillis()){
-			return (WeixinOAuthAccessToken)tokenMap.get(FLAG_WEIXIN_OAUTH_ACCESSTOKEN + appid);
-		}
-		if(weixinOAuthAccessTokenRefreshing.compareAndSet(false, true)){
-			WeixinOAuthAccessToken weixinOauthAccessToken = WeixinHelper.getWeixinOAuthAccessToken(appid, getWeixinAppsecret(appid), code);
-			tokenMap.put(FLAG_WEIXIN_OAUTH_ACCESSTOKEN + appid, weixinOauthAccessToken);
-			tokenMap.put(FLAG_WEIXIN_OAUTH_ACCESSTOKEN_EXPIRETIME + appid, System.currentTimeMillis()+WEIXIN_TOKEN_EXPIRE_TIME_MILLIS);
-			weixinOAuthAccessTokenRefreshing.set(false);
-		}
-		return (WeixinOAuthAccessToken)tokenMap.get(FLAG_WEIXIN_OAUTH_ACCESSTOKEN + appid);
+//		Long expireTime = (Long)tokenMap.get(FLAG_WEIXIN_OAUTH_ACCESSTOKEN_EXPIRETIME + appid);
+//		if(null!=expireTime && expireTime>=System.currentTimeMillis()){
+//			return (WeixinOAuthAccessToken)tokenMap.get(FLAG_WEIXIN_OAUTH_ACCESSTOKEN + appid);
+//		}
+//		if(weixinOAuthAccessTokenRefreshing.compareAndSet(false, true)){
+//			WeixinOAuthAccessToken weixinOauthAccessToken = WeixinHelper.getWeixinOAuthAccessToken(appid, getWeixinAppsecret(appid), code);
+//			tokenMap.put(FLAG_WEIXIN_OAUTH_ACCESSTOKEN + appid, weixinOauthAccessToken);
+//			tokenMap.put(FLAG_WEIXIN_OAUTH_ACCESSTOKEN_EXPIRETIME + appid, System.currentTimeMillis()+WEIXIN_TOKEN_EXPIRE_TIME_MILLIS);
+//			weixinOAuthAccessTokenRefreshing.set(false);
+//		}
+//		return (WeixinOAuthAccessToken)tokenMap.get(FLAG_WEIXIN_OAUTH_ACCESSTOKEN + appid);
+		return WeixinHelper.getWeixinOAuthAccessToken(appid, getWeixinAppsecret(appid), code);
 	}
 }
