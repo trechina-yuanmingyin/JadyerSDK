@@ -70,7 +70,7 @@ level      CHAR(1) COMMENT '菜单级别：1--一级菜单，2--二级菜单',
 name       VARCHAR(16) COMMENT '菜单名称',
 viewURL    VARCHAR(256) COMMENT 'type=2时用到',
 replyId    INT COMMENT 'type=1时用到，对应t_reply_info#id',
-menuJson   VARCHAR(999) COMMENT '微信或QQ公众号菜单JSON',
+menuJson   VARCHAR(9999) COMMENT '微信或QQ公众号菜单JSON',
 createTime TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
 updateTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间'
 )ENGINE=InnoDB DEFAULT CHARSET=UTF8 COMMENT='自定义菜单表';
