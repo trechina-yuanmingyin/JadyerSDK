@@ -1,5 +1,6 @@
 package com.jadyer.sdk.weixin.helper;
 
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -18,10 +19,10 @@ import com.jadyer.sdk.weixin.model.WeixinOAuthAccessToken;
  */
 public class WeixinTokenHolder {
 	private static final Logger logger = LoggerFactory.getLogger(WeixinTokenHolder.class);
-	private static final String FLAG_WEIXIN_ACCESSTOKEN = "weixin_access_token";
-	private static final String FLAG_WEIXIN_JSAPI_TICKET = "weixin_jsapi_ticket";
-	private static final String FLAG_WEIXIN_ACCESSTOKEN_EXPIRETIME = FLAG_WEIXIN_ACCESSTOKEN + "_expire_time";
-	private static final String FLAG_WEIXIN_JSAPI_TICKET_EXPIRETIME = FLAG_WEIXIN_JSAPI_TICKET + "_expire_time";
+	private static final String FLAG_WEIXIN_ACCESSTOKEN = "weixin_access_token_";
+	private static final String FLAG_WEIXIN_JSAPI_TICKET = "weixin_jsapi_ticket_";
+	private static final String FLAG_WEIXIN_ACCESSTOKEN_EXPIRETIME = FLAG_WEIXIN_ACCESSTOKEN + "expire_time_";
+	private static final String FLAG_WEIXIN_JSAPI_TICKET_EXPIRETIME = FLAG_WEIXIN_JSAPI_TICKET + "expire_time_";
 	private static final long WEIXIN_TOKEN_EXPIRE_TIME_MILLIS = 7000 * 1000;
 	private static AtomicBoolean weixinAccessTokenRefreshing = new AtomicBoolean(false);
 	private static AtomicBoolean weixinJSApiTicketRefreshing = new AtomicBoolean(false);
@@ -36,6 +37,11 @@ public class WeixinTokenHolder {
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
 	public static String setWeixinAppidAppsecret(String appid, String appsecret){
+		for(Map.Entry<String,Object> entry : tokenMap.entrySet()){
+			if(entry.getKey().endsWith("_"+appid)){
+				tokenMap.remove(entry.getKey());
+			}
+		}
 		tokenMap.put(appid, appsecret);
 		return getWeixinAppsecret(appid);
 	}

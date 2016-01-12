@@ -1,5 +1,6 @@
 package com.jadyer.sdk.qq.helper;
 
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -18,10 +19,10 @@ import com.jadyer.sdk.qq.model.QQOAuthAccessToken;
  */
 public class QQTokenHolder {
 	private static final Logger logger = LoggerFactory.getLogger(QQTokenHolder.class);
-	private static final String FLAG_QQ_ACCESSTOKEN = "qq_access_token";
-	private static final String FLAG_QQ_JSAPI_TICKET = "qq_jsapi_ticket";
-	private static final String FLAG_QQ_ACCESSTOKEN_EXPIRETIME = FLAG_QQ_ACCESSTOKEN + "_expire_time";
-	private static final String FLAG_QQ_JSAPI_TICKET_EXPIRETIME = FLAG_QQ_JSAPI_TICKET + "_expire_time";
+	private static final String FLAG_QQ_ACCESSTOKEN = "qq_access_token_";
+	private static final String FLAG_QQ_JSAPI_TICKET = "qq_jsapi_ticket_";
+	private static final String FLAG_QQ_ACCESSTOKEN_EXPIRETIME = FLAG_QQ_ACCESSTOKEN + "expire_time_";
+	private static final String FLAG_QQ_JSAPI_TICKET_EXPIRETIME = FLAG_QQ_JSAPI_TICKET + "expire_time_";
 	private static final long QQ_TOKEN_EXPIRE_TIME_MILLIS = 7000 * 1000;
 	private static AtomicBoolean qqAccessTokenRefreshing = new AtomicBoolean(false);
 	private static AtomicBoolean qqJSApiTicketRefreshing = new AtomicBoolean(false);
@@ -36,6 +37,11 @@ public class QQTokenHolder {
 	 * @author 玄玉<http://blog.csdn.net/jadyer>
 	 */
 	public static String setQQAppidAppsecret(String appid, String appsecret){
+		for(Map.Entry<String,Object> entry : tokenMap.entrySet()){
+			if(entry.getKey().endsWith("_"+appid)){
+				tokenMap.remove(entry.getKey());
+			}
+		}
 		tokenMap.put(appid, appsecret);
 		return getQQAppsecret(appid);
 	}
