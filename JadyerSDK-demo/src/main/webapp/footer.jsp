@@ -13,5 +13,6 @@
 		<div class="clear"></div>
 	</div>
 	<!--/Foot-->
+</div>
 </body>
 </html>
