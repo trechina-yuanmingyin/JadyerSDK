@@ -187,14 +187,14 @@ public class UserController{
 		}
 		if("1".equals(userInfo.getMptype())){
 			WeixinErrorInfo errorInfo = WeixinHelper.createWeixinMenu(WeixinTokenHolder.getWeixinAccessToken(userInfo.getAppid()), menuJson);
-			if(0==errorInfo.getErrcode() && 0!=userService.menuJsonUpsert(userInfo.getId(), menuJson)){
+			if(0==errorInfo.getErrcode() && userService.menuJsonUpsert(userInfo.getId(), menuJson)){
 				return new CommonResult();
 			}
 			return new CommonResult(errorInfo.getErrcode(), errorInfo.getErrmsg());
 		}
 		if("2".equals(userInfo.getMptype())){
 			QQErrorInfo errorInfo = QQHelper.createQQMenu(QQTokenHolder.getQQAccessToken(userInfo.getAppid()), menuJson);
-			if(0==errorInfo.getErrcode() && 0!=userService.menuJsonUpsert(userInfo.getId(), menuJson)){
+			if(0==errorInfo.getErrcode() && userService.menuJsonUpsert(userInfo.getId(), menuJson)){
 				return new CommonResult();
 			}
 			return new CommonResult(errorInfo.getErrcode(), errorInfo.getErrmsg());

@@ -87,7 +87,23 @@ public class UserService {
 	 * @param menuJson 微信或QQ公众号自定义菜单数据的JSON字符串
 	 * @return 返回本次存储在数据库的自定义菜单内容
 	 */
-	public int menuJsonUpsert(int uid, String menuJson){
-		return menuInfoDao.updateJson(menuJson, uid);
+	public boolean menuJsonUpsert(int uid, String menuJson){
+		MenuInfo menu = null;
+		List<MenuInfo> menuList = menuInfoDao.findMenuListByUID(uid);
+		for(MenuInfo obj : menuList){
+			if("3".equals(obj.getType())){
+				menu = obj;
+				break;
+			}
+		}
+		if(null == menu){
+			menu = new MenuInfo();
+			menu.setUid(uid);
+			menu.setType("3");
+			menu.setName("json");
+			menu.setMenuJson(menuJson);
+		}
+		menu.setMenuJson(menuJson);
+		return null!=menuInfoDao.saveAndFlush(menu);
 	}
 }
