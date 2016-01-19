@@ -109,7 +109,7 @@ public class WeixinTokenHolder {
 				accessToken = WeixinHelper.getWeixinAccessToken(appid, getWeixinAppsecret(appid));
 				tokenMap.put(FLAG_WEIXIN_ACCESSTOKEN + appid, accessToken);
 				tokenMap.put(FLAG_WEIXIN_ACCESSTOKEN_EXPIRETIME + appid, System.currentTimeMillis()+WEIXIN_TOKEN_EXPIRE_TIME_MILLIS);
-			} catch (IllegalAccessException e) {
+			} catch (Exception e) {
 				logger.error("获取微信appid=["+appid+"]的access_token失败", e);
 			}
 			weixinAccessTokenRefreshing.set(false);
@@ -135,7 +135,7 @@ public class WeixinTokenHolder {
 				jsapiTicket = WeixinHelper.getWeixinJSApiTicket(getWeixinAccessToken(appid));
 				tokenMap.put(FLAG_WEIXIN_JSAPI_TICKET + appid, jsapiTicket);
 				tokenMap.put(FLAG_WEIXIN_JSAPI_TICKET_EXPIRETIME + appid, System.currentTimeMillis()+WEIXIN_TOKEN_EXPIRE_TIME_MILLIS);
-			} catch (IllegalAccessException e) {
+			} catch (Exception e) {
 				logger.error("获取微信appid=["+appid+"]的jsapi_ticket失败", e);
 			}
 			weixinJSApiTicketRefreshing.set(false);

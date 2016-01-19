@@ -109,7 +109,7 @@ public class QQTokenHolder {
 				accessToken = QQHelper.getQQAccessToken(appid, getQQAppsecret(appid));
 				tokenMap.put(FLAG_QQ_ACCESSTOKEN + appid, accessToken);
 				tokenMap.put(FLAG_QQ_ACCESSTOKEN_EXPIRETIME + appid, System.currentTimeMillis()+QQ_TOKEN_EXPIRE_TIME_MILLIS);
-			} catch (IllegalAccessException e) {
+			} catch (Exception e) {
 				logger.error("获取QQappid=["+appid+"]的access_token失败", e);
 			}
 			qqAccessTokenRefreshing.set(false);
@@ -135,7 +135,7 @@ public class QQTokenHolder {
 				jsapiTicket = QQHelper.getQQJSApiTicket(getQQAccessToken(appid));
 				tokenMap.put(FLAG_QQ_JSAPI_TICKET + appid, jsapiTicket);
 				tokenMap.put(FLAG_QQ_JSAPI_TICKET_EXPIRETIME + appid, System.currentTimeMillis()+QQ_TOKEN_EXPIRE_TIME_MILLIS);
-			} catch (IllegalAccessException e) {
+			} catch (Exception e) {
 				logger.error("获取QQappid=["+appid+"]的jsapi_ticket失败", e);
 			}
 			qqJSApiTicketRefreshing.set(false);
