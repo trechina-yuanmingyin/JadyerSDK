@@ -60,7 +60,7 @@ public class UserController{
 					LogUtil.getAppLogger().info("登记微信appid和appsecret任务异常, 堆栈轨迹如下", e);
 				}
 			}
-		}, 2, TimeUnit.MINUTES);
+		}, 1, TimeUnit.MINUTES);
 	}
 
 
