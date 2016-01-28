@@ -1,10 +1,17 @@
 package com.jadyer.sdk.demo.qq;
 
+import java.util.Date;
+
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.jadyer.sdk.demo.common.constant.Constants;
 import com.jadyer.sdk.demo.common.util.LogUtil;
+import com.jadyer.sdk.demo.user.UserService;
+import com.jadyer.sdk.demo.user.model.UserInfo;
 import com.jadyer.sdk.qq.controller.QQMsgController;
 import com.jadyer.sdk.qq.helper.QQHelper;
 import com.jadyer.sdk.qq.helper.QQTokenHolder;
@@ -32,17 +39,26 @@ import com.jadyer.sdk.qq.msg.out.QQOutTextMsg;
 @Controller
 @RequestMapping(value="/qq")
 public class QQController extends QQMsgController {
+	@Resource
+	private UserService userService;
+
 	@Override
 	protected QQOutMsg processInTextMsg(QQInTextMsg inTextMsg) {
-		//回复纯文本消息
-		if("有一事请教".equals(inTextMsg.getContent())){
-			return new QQOutTextMsg(inTextMsg).setContent("但说无妨");
+		//防伪
+		UserInfo userInfo = userService.findByQqid(inTextMsg.getToUserName());
+		if(null == userInfo){
+			return new QQOutTextMsg(inTextMsg).setContent("该公众号未绑定");
 		}
-		if("兄台的趟泥步如此精纯，未知师从何处".equals(inTextMsg.getContent())){
-			return new QQOutTextMsg(inTextMsg).setContent("家师不喜人闻，幸勿见怪");
+		//没绑定就提示绑定
+		if("0".equals(userInfo.getBindStatus()) && !Constants.MPP_BIND_TEXT.equals(inTextMsg.getContent())){
+			return new QQOutTextMsg(inTextMsg).setContent("账户未绑定\r请发送\"" + Constants.MPP_BIND_TEXT + "\"绑定");
 		}
-		if("小弟另有一套凌波微步".equals(inTextMsg.getContent())){
-			return new QQOutTextMsg(inTextMsg).setContent("好，我等便在这步法上，证个高下");
+		//绑定
+		if("0".equals(userInfo.getBindStatus()) && Constants.MPP_BIND_TEXT.equals(inTextMsg.getContent())){
+			userInfo.setBindStatus("1");
+			userInfo.setBindTime(new Date());
+			userService.save(userInfo);
+			return new QQOutTextMsg(inTextMsg).setContent("绑定完毕，升级成功");
 		}
 		//20151128183801测试发现QQ公众号暂时还不支持QQ表情的显示,但是支持在文本消息里写链接
 		//return new QQOutTextMsg(inTextMsg).setContent("言毕，二人竟瞬息不见，步法之神令人叹绝。欲知后事如何，请访问<a href=\"http://blog.csdn.net/jadyer\">我的博客</a>[阴险]");
@@ -70,7 +86,9 @@ public class QQController extends QQMsgController {
 	@Override
 	protected QQOutMsg processInFollowEventMsg(QQInFollowEventMsg inFollowEventMsg) {
 		if(QQInFollowEventMsg.EVENT_INFOLLOW_SUBSCRIBE.equals(inFollowEventMsg.getEvent())){
-			return new QQOutTextMsg(inFollowEventMsg).setContent("欢迎关注武林百晓生，民国武术，尽在此间。");
+			QQOutNewsMsg outMsg = new QQOutNewsMsg(inFollowEventMsg);
+			outMsg.addNews("欢迎关注", "更多精彩请访问我的博客", "http://img.my.csdn.net/uploads/201507/26/1437881866_3678.png", "http://blog.csdn.net/jadyer");
+			return outMsg;
 		}
 		if(QQInFollowEventMsg.EVENT_INFOLLOW_UNSUBSCRIBE.equals(inFollowEventMsg.getEvent())){
 			LogUtil.getAppLogger().info("您的粉丝" + inFollowEventMsg.getFromUserName() + "取消关注了您");

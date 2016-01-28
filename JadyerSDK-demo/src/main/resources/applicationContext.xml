@@ -26,7 +26,7 @@
 		<!-- 若没有找到db.properties,则会以config.properties的配置为准 -->
 		<property name="locations">
 			<list>
-				<value>classpath:config-${appenv.active}.properties</value>
+				<value>classpath:config-${spring.profiles.active}.properties</value>
 				<value>file:/home/jadyer/config/mpp.jadyer.com/db.properties</value>
 			</list>
 		</property>
