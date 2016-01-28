@@ -62,6 +62,7 @@ function login(){
 	var o        = $("#loginSubmit");
 	var username = $("#username").val();
 	var password = $("#password").val();
+	var captcha  = $("#captcha").val();
 	if(isEmpty(username)){
 		$.promptBox("请输入用户名", "#ffb848");
 		$("#username").focus();
@@ -72,12 +73,17 @@ function login(){
 		$("#password").focus();
 		return false;
 	}
+	if(isEmpty(captcha)){
+		$.promptBox("请输入验证码", "#ffb848");
+		$("#captcha").focus();
+		return false;
+	}
 	if(!flag){
 		return false;
 	}
 	flag = false;
 	o.attr("disabled", true).text("登录中...").css({"background":"#28b779", "cursor":"auto"});
-	$.get("${pageContext.request.contextPath}/user/login/" + username + "/" + password,
+	$.get("${pageContext.request.contextPath}/user/login/" + username + "/" + password + "/" + captcha,
 		function(data){
 			if(1000 == data.code){
 				window.location.href = "${pageContext.request.contextPath}/user/info";
@@ -89,6 +95,13 @@ function login(){
 		}
 	);
 }
+
+/**
+ * 重载验证码
+ */
+function reloadCaptcha(){
+	document.getElementById("captchaImg").src = "captcha.jsp?time=" +  Math.random();
+}
 </script>
 </head>
 <body onkeydown="if(13==event.keyCode)login();">
@@ -97,6 +110,14 @@ function login(){
 		<ul class="m">
 			<li class="l1"><i></i><p><input id="username" type="text" class="te" placeholder="Username" maxlength="16"/></p></li>
 			<li class="l2"><i></i><p><input id="password" type="password" class="te" placeholder="Password" maxlength="16"/></p></li>
+			<li class="l2">
+				<i></i>
+				<p>
+					<input id="captcha" name="captcha" type="text" class="te" placeholder="captcha" maxlength="4" style="width:190px; vertical-align:middle;"/>
+					<img style="cursor:pointer; vertical-align:middle; height:38px;" id="captchaImg" src="captcha.jsp" onClick="this.src='captcha.jsp?time'+Math.random();">
+					<a href="javascript:reloadCaptcha();" style="vertical-align:middle; color:#49afcd;">看不清，换一张！</a>
+				</p>
+			</li>
 		</ul>
 		<div class="d">
 			<p class="p1"><a href="javascript:alert('暂未开放');" title="注册">注册</a><span></span><a href="javascript:alert('暂未开放');" title="忘记密码">忘记密码</a></p>

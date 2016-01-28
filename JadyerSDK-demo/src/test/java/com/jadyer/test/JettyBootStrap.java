@@ -7,7 +7,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
 
 public class JettyBootStrap {
 	private int port = 80;
-	private String appenv_active = "dev";
+	private String spring_profiles_active = "dev";
 	private String context_path = "/";
 	private String webapp_path = "F:/Tool/Code/JavaSE/MyJettyDemo/WebRoot";
 	
@@ -26,7 +26,7 @@ public class JettyBootStrap {
 	public JettyBootStrap(int port, String context_path, String env) {
 		String webappPath = getClass().getClassLoader().getResource(".").getFile();
 		this.webapp_path = webappPath.substring(0, webappPath.indexOf("target")) + "src/main/webapp";
-		this.appenv_active = env;
+		this.spring_profiles_active = env;
 		this.port = port;
 		this.context_path = context_path;
 	}
@@ -42,7 +42,7 @@ public class JettyBootStrap {
 
 	private void run(){
 		long beginTime = System.currentTimeMillis();
-		System.setProperty("appenv.active", this.appenv_active);
+		System.setProperty("spring.profiles.active", this.spring_profiles_active);
 		Server server = createServer(this.port, this.context_path, this.webapp_path);
 		try {
 			server.start();

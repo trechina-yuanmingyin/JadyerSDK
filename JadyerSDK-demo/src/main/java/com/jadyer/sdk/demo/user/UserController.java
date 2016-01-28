@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -68,8 +69,13 @@ public class UserController{
 	 * 登录
 	 */
 	@ResponseBody
-	@RequestMapping("/login/{username}/{password}")
-	public CommonResult login(@PathVariable String username, @PathVariable String password, HttpServletRequest request){
+	@RequestMapping("/login/{username}/{password}/{captcha}")
+	public CommonResult login(@PathVariable String username, @PathVariable String password, @PathVariable String captcha, HttpServletRequest request){
+		if(StringUtils.isNotBlank(captcha)){
+			if(!captcha.equals(request.getSession().getAttribute("rand"))){
+				return new CommonResult(CodeEnum.SYSTEM_BUSY.getCode(), "无效的验证码");
+			}
+		}
 		UserInfo userInfo = userService.findByUsernameAndPassword(username, password);
 		if(null == userInfo){
 			return new CommonResult(CodeEnum.SYSTEM_BUSY.getCode(), "无效的用户名或密码");
