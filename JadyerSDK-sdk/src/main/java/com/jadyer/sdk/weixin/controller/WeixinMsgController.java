@@ -57,6 +57,11 @@ public abstract class WeixinMsgController {
 			return;
 		}
 		//POST过来的请求表示微信服务器请求通信
+		//https://github.com/chanjarster/weixin-java-tools/wiki/MP_%E6%B6%88%E6%81%AF%E7%9A%84%E5%8A%A0%E8%A7%A3%E5%AF%86
+		//http://www.lai18.com/content/1437764.html
+		//http://www.dannysite.com/blog/213/
+		//http://git.devzeng.com/blog/wechat-qiyehao-developement-with-url-config-and-verify.html
+		//http://chn0515.blog.51cto.com/10646281/1691201
 		//String aeskey = "WhyEzMHrSKfV5HbsVf5DjZfV3yx7bsJ7TUivKdeeH22";
 		//decrypt(aeskey);
 		WeixinInMsg inMsg = WeixinInMsgParser.parse(reqBodyMsg);
