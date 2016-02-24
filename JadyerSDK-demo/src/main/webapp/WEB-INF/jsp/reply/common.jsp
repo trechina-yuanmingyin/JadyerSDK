@@ -14,7 +14,7 @@
 		<tr class="ti">
 			<th colspan="2">
 				<span class="fl">
-					${replyInfo.type eq 4 ? '自动转发多客服' : '<span style="color:red;">未设定</span>'}
+					${replyInfo.type eq 4 ? '自动转发多客服' : '<span style="color:red;">未知设定</span>'}
 				</span>
 			</th>
 		</tr>
