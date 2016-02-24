@@ -10,6 +10,7 @@ import com.jadyer.sdk.weixin.msg.in.WeixinInTextMsg;
 import com.jadyer.sdk.weixin.msg.in.event.WeixinInCustomServiceEventMsg;
 import com.jadyer.sdk.weixin.msg.in.event.WeixinInFollowEventMsg;
 import com.jadyer.sdk.weixin.msg.in.event.WeixinInMenuEventMsg;
+import com.jadyer.sdk.weixin.msg.in.event.WeixinInQrcodeEventMsg;
 import com.jadyer.sdk.weixin.msg.out.WeixinOutImageMsg;
 import com.jadyer.sdk.weixin.msg.out.WeixinOutMsg;
 import com.jadyer.sdk.weixin.msg.out.WeixinOutTextMsg;
@@ -26,6 +27,7 @@ public abstract class WeixinMsgControllerAdapter extends WeixinMsgController {
 	@Override
 	protected abstract WeixinOutMsg processInMenuEventMsg(WeixinInMenuEventMsg inMenuEventMsg);
 
+
 	/**
 	 * 处理收到的文本消息
 	 * @see 默认原样返回
@@ -34,6 +36,7 @@ public abstract class WeixinMsgControllerAdapter extends WeixinMsgController {
 	protected WeixinOutMsg processInTextMsg(WeixinInTextMsg inTextMsg) {
 		return new WeixinOutTextMsg(inTextMsg).setContent(inTextMsg.getContent());
 	}
+
 
 	/**
 	 * 处理收到的图片消息
@@ -44,6 +47,7 @@ public abstract class WeixinMsgControllerAdapter extends WeixinMsgController {
 		return new WeixinOutImageMsg(inImageMsg).setMediaId(inImageMsg.getMediaId());
 	}
 
+
 	/**
 	 * 处理收到的地址位置消息
 	 * @see 默认返回粉丝地理位置的明文地址
@@ -53,6 +57,7 @@ public abstract class WeixinMsgControllerAdapter extends WeixinMsgController {
 		return new WeixinOutTextMsg(inLocationMsg).setContent(inLocationMsg.getLabel());
 	}
 
+
 	/**
 	 * 处理收到的链接消息
 	 * @see 默认返回用户输入的链接
@@ -61,6 +66,7 @@ public abstract class WeixinMsgControllerAdapter extends WeixinMsgController {
 	protected WeixinOutMsg processInLinkMsg(WeixinInLinkMsg inLinkMsg) {
 		return new WeixinOutTextMsg(inLinkMsg).setContent("您的链接为<a href=\""+inLinkMsg.getUrl()+"\">"+inLinkMsg.getTitle()+"</a>");
 	}
+
 
 	/**
 	 * 处理收到的关注/取消关注事件
@@ -77,6 +83,22 @@ public abstract class WeixinMsgControllerAdapter extends WeixinMsgController {
 		}
 		return null;
 	}
+
+
+	/**
+	 * 处理收到的扫描带参数二维码事件
+	 */
+	@Override
+	protected WeixinOutMsg processInQrcodeEventMsg(WeixinInQrcodeEventMsg inQrcodeEventMsg) {
+		if(WeixinInQrcodeEventMsg.EVENT_INQRCODE_SUBSCRIBE.equals(inQrcodeEventMsg.getEvent())){
+			return new WeixinOutTextMsg(inQrcodeEventMsg).setContent("感谢您的扫码并关注[" + inQrcodeEventMsg.getEventKey().substring(8) + "]");
+		}
+		if(WeixinInQrcodeEventMsg.EVENT_INQRCODE_SCAN.equals(inQrcodeEventMsg.getEvent())){
+			return new WeixinOutTextMsg(inQrcodeEventMsg).setContent("感谢您的扫码[" + inQrcodeEventMsg.getEventKey() + "]");
+		}
+		return null;
+	}
+
 
 	/**
 	 * 处理多客服接入会话/关闭会话/转接会话的事件

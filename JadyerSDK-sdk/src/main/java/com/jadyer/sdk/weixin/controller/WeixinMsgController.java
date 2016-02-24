@@ -25,6 +25,7 @@ import com.jadyer.sdk.weixin.msg.in.WeixinInTextMsg;
 import com.jadyer.sdk.weixin.msg.in.event.WeixinInCustomServiceEventMsg;
 import com.jadyer.sdk.weixin.msg.in.event.WeixinInFollowEventMsg;
 import com.jadyer.sdk.weixin.msg.in.event.WeixinInMenuEventMsg;
+import com.jadyer.sdk.weixin.msg.in.event.WeixinInQrcodeEventMsg;
 import com.jadyer.sdk.weixin.msg.out.WeixinOutMsg;
 
 /**
@@ -80,6 +81,9 @@ public abstract class WeixinMsgController {
 		}
 		if(inMsg instanceof WeixinInFollowEventMsg){
 			outMsg = this.processInFollowEventMsg((WeixinInFollowEventMsg)inMsg);
+		}
+		if(inMsg instanceof WeixinInQrcodeEventMsg){
+			outMsg = this.processInQrcodeEventMsg((WeixinInQrcodeEventMsg)inMsg);
 		}
 		if(inMsg instanceof WeixinInMenuEventMsg){
 			outMsg = this.processInMenuEventMsg((WeixinInMenuEventMsg)inMsg);
@@ -146,6 +150,12 @@ public abstract class WeixinMsgController {
 	 * 处理收到的关注/取消关注事件
 	 */
 	protected abstract WeixinOutMsg processInFollowEventMsg(WeixinInFollowEventMsg inFollowEventMsg);
+
+
+	/**
+	 * 处理收到的扫描带参数二维码事件
+	 */
+	protected abstract WeixinOutMsg processInQrcodeEventMsg(WeixinInQrcodeEventMsg inQrcodeEventMsg);
 
 
 	/**

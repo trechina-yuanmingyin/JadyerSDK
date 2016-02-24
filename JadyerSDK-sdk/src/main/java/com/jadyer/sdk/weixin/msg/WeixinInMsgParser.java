@@ -14,6 +14,7 @@ import com.jadyer.sdk.weixin.msg.in.WeixinInTextMsg;
 import com.jadyer.sdk.weixin.msg.in.event.WeixinInCustomServiceEventMsg;
 import com.jadyer.sdk.weixin.msg.in.event.WeixinInFollowEventMsg;
 import com.jadyer.sdk.weixin.msg.in.event.WeixinInMenuEventMsg;
+import com.jadyer.sdk.weixin.msg.in.event.WeixinInQrcodeEventMsg;
 
 /**
  * 微信服务器请求消息解析器
@@ -108,6 +109,20 @@ public class WeixinInMsgParser{
 		//包括二维码扫描关注在内的关注/取消关注事件(二维码扫描关注事件与扫描带参数二维码事件是不一样的)
 		if(("subscribe".equals(event) || "unsubscribe".equals(event)) && StringUtils.isBlank(eventKey)){
 			return new WeixinInFollowEventMsg(toUserName, fromUserName, createTime, msgType, event);
+		}
+		//扫描带参数二维码事件之用户未关注时,进行关注后的事件推送
+		if("subscribe".equals(event) && StringUtils.isNotBlank(eventKey) && eventKey.startsWith("qrscene_")){
+			WeixinInQrcodeEventMsg e = new WeixinInQrcodeEventMsg(toUserName, fromUserName, createTime, msgType, event);
+			e.setEventKey(eventKey);
+			e.setTicket(root.elementText("Ticket"));
+			return e;
+		}
+		//扫描带参数二维码事件之用户已关注时的事件推送
+		if("SCAN".equals(event)){
+			WeixinInQrcodeEventMsg e = new WeixinInQrcodeEventMsg(toUserName, fromUserName, createTime, msgType, event);
+			e.setEventKey(eventKey);
+			e.setTicket(root.elementText("Ticket"));
+			return e;
 		}
 		//自定义菜单事件之点击菜单拉取消息时的事件推送
 		if("CLICK".equals(event)){
