@@ -93,7 +93,7 @@
 	<!-- 菜单过滤 -->
 	<filter>
 		<filter-name>MenuFilter</filter-name>
-		<filter-class>com.jadyer.sdk.demo.filter.MenuFilter</filter-class>
+		<filter-class>com.jadyer.sdk.demo.common.base.MenuFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>MenuFilter</filter-name>

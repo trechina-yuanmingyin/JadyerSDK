@@ -1,4 +1,4 @@
-package com.jadyer.sdk.demo.filter;
+package com.jadyer.sdk.demo.common.base;
 
 import java.io.IOException;
 
