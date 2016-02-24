@@ -113,9 +113,8 @@ function reloadCaptcha(){
 			<li class="l2">
 				<i></i>
 				<p>
-					<input id="captcha" name="captcha" type="text" class="te" placeholder="captcha" maxlength="4" style="width:190px; vertical-align:middle;"/>
+					<input id="captcha" name="captcha" type="text" class="te" placeholder="captcha" maxlength="4" style="width:300px; vertical-align:middle;"/>
 					<img style="cursor:pointer; vertical-align:middle; height:38px;" id="captchaImg" src="captcha.jsp" onClick="this.src='captcha.jsp?time'+Math.random();">
-					<a href="javascript:reloadCaptcha();" style="vertical-align:middle; color:#49afcd;">看不清，换一张！</a>
 				</p>
 			</li>
 		</ul>
