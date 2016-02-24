@@ -10,15 +10,16 @@ public interface WeixinConstants {
 	/**
 	 * URL属性中的占位符
 	 */
-	String URL_PLACEHOLDER_APPID        = "{appid}";
-	String URL_PLACEHOLDER_APPSECRET    = "{appsecret}";
-	String URL_PLACEHOLDER_ACCESSTOKEN  = "{accesstoken}";
-	String URL_PLACEHOLDER_OPENID       = "{openid}";
-	String URL_PLACEHOLDER_REDIRECT_URI = "{redirecturi}";
-	String URL_PLACEHOLDER_SCOPE        = "{scope}";
-	String URL_PLACEHOLDER_STATE        = "{state}";
-	String URL_PLACEHOLDER_CODE         = "{code}";
-	String URL_PLACEHOLDER_MEDIAID      = "{mediaid}";
+	String URL_PLACEHOLDER_APPID         = "{appid}";
+	String URL_PLACEHOLDER_APPSECRET     = "{appsecret}";
+	String URL_PLACEHOLDER_ACCESSTOKEN   = "{accesstoken}";
+	String URL_PLACEHOLDER_OPENID        = "{openid}";
+	String URL_PLACEHOLDER_REDIRECT_URI  = "{redirecturi}";
+	String URL_PLACEHOLDER_SCOPE         = "{scope}";
+	String URL_PLACEHOLDER_STATE         = "{state}";
+	String URL_PLACEHOLDER_CODE          = "{code}";
+	String URL_PLACEHOLDER_MEDIAID       = "{mediaid}";
+	String URL_PLACEHOLDER_QRCODE_TICKET = "{qrcodeticket}";
 
 	/**
 	 * 微信URL
@@ -39,4 +40,8 @@ public interface WeixinConstants {
 	String URL_WEIXIN_GET_JSAPI_TICKET       = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + URL_PLACEHOLDER_ACCESSTOKEN + "&type=jsapi";
 	//获取微信临时素材
 	String URL_WEIXIN_GET_TEMP_MEDIA_FILE    = "https://api.weixin.qq.com/cgi-bin/media/get?access_token=" + URL_PLACEHOLDER_ACCESSTOKEN + "&media_id=" + URL_PLACEHOLDER_MEDIAID;
+	//获取微信二维码ticket
+	String URL_WEIXIN_GET_QRCODE_TICKET      = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=" + URL_PLACEHOLDER_ACCESSTOKEN;
+	//获取微信二维码
+	String URL_WEIXIN_GET_QRCODE             = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=" + URL_PLACEHOLDER_QRCODE_TICKET;
 }

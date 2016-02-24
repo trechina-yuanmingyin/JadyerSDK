@@ -245,4 +245,47 @@ public final class WeixinHelper {
 		}
 		return resultMap.get("fullPath");
 	}
+
+
+	/**
+	 * 创建二维码ticket
+	 * @see http://mp.weixin.qq.com/wiki/18/167e7d94df85d8389df6c94a7a8f78ba.html
+	 * @see {"action_name":"QR_LIMIT_STR_SCENE","action_info":{"scene":{"scene_str":"xuanyuabc"}}}
+	 * @see {"ticket":"gQHy8DoAAAAAAAAAASxodHRwOi8vd2VpeGluLnFxLmNvbS9xL1pVeHIyaFhsOTJfT29HTWdZV1FaAAIE_6jNVgMEAAAAAA==","url":"http:\/\/weixin.qq.com\/q\/ZUxr2hXl92_OoGMgYWQZ"}
+	 * @param type          二维码类型,0--临时二维码,1--永久二维码,2--永久字符串二维码
+	 * @param expireSeconds 二维码临时有效的时间,单位为秒,最大不超过2592000s,即30天,不填则默认有效期为30s
+	 * @param sceneId       二维码参数场景值ID,临时二维码时为32位非0整型,永久二维码时值为1--100000
+	 * @param sceneStr      二维码参数场景值ID,字符串形式的ID,字符串类型,长度限制为1到64,仅永久二维码支持此字段
+	 * @create Feb 22, 2016 10:33:17 PM
+	 * @author 玄玉<http://blog.csdn.net/jadyer>
+	 */
+	public static String createQrcodeTicket(String accesstoken, int type, int expireSeconds, long sceneId, String sceneStr){
+		String reqURL = WeixinConstants.URL_WEIXIN_GET_QRCODE_TICKET.replace(WeixinConstants.URL_PLACEHOLDER_ACCESSTOKEN, accesstoken);
+		String reqData = null;
+		if(type == 0){
+			reqData = "{\"expire_seconds\":" + expireSeconds + ",\"action_name\":\"QR_SCENE\",\"action_info\":{\"scene\":{\"scene_id\":" + sceneId + "}}}";
+		}else if(type == 1){
+			reqData = "{\"action_name\":\"QR_LIMIT_SCENE\",\"action_info\":{\"scene\":{\"scene_id\":" + sceneId + "}}}";
+		}else if(type == 2){
+			reqData = "{\"action_name\":\"QR_LIMIT_STR_SCENE\",\"action_info\":{\"scene\":{\"scene_str\":\"" + sceneStr + "\"}}}";
+		}else{
+			throw new IllegalArgumentException("无法识别的二维码类型-->[" + type + "]");
+		}
+		logger.info("创建二维码ticket-->待发送的JSON为{}", reqData);
+		String respData = HttpUtil.post(reqURL, reqData, null);
+		logger.info("创建二维码ticket-->微信应答JSON为{}", respData);
+		if(respData.contains("ticket")){
+			return JSON.parseObject(respData, new TypeReference<Map<String, String>>(){}).get("ticket");
+		}else{
+			WeixinErrorInfo errinfo = JSON.parseObject(respData, WeixinErrorInfo.class);
+			if(errinfo.getErrcode() != 0){
+				String errmsg = WeixinCodeEnum.getMessageByCode(errinfo.getErrcode());
+				if(StringUtils.isBlank(errmsg)){
+					errmsg = errinfo.getErrmsg();
+				}
+				throw new RuntimeException(errmsg);
+			}
+			throw new RuntimeException("获取微信二维码时遇到未知异常");
+		}
+	}
 }

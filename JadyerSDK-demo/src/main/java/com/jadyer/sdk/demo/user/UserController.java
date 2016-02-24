@@ -45,6 +45,11 @@ public class UserController{
 			public void run() {
 				try {
 					List<UserInfo> userinfoList = userService.findAll();
+					if(userinfoList.isEmpty()){
+						logger.info("未查询到需要登记的appid");
+					}else{
+						logger.info("查询到需要登记的appid-->[" + userinfoList.size() + "]个");
+					}
 					for(UserInfo obj : userinfoList){
 						if("1".equals(obj.getBindStatus())){
 							if("1".equals(obj.getMptype())){
@@ -61,7 +66,7 @@ public class UserController{
 					LogUtil.getAppLogger().info("登记微信appid和appsecret任务异常, 堆栈轨迹如下", e);
 				}
 			}
-		}, 1, TimeUnit.MINUTES);
+		}, 6, TimeUnit.SECONDS);
 	}
 
 

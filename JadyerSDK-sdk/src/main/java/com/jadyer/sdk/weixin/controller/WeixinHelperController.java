@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jadyer.sdk.util.HttpUtil;
+import com.jadyer.sdk.weixin.constant.WeixinConstants;
 import com.jadyer.sdk.weixin.helper.WeixinHelper;
 import com.jadyer.sdk.weixin.helper.WeixinTokenHolder;
 import com.jadyer.sdk.weixin.model.WeixinOAuthAccessToken;
@@ -141,5 +142,36 @@ public class WeixinHelperController {
 			logger.info("删除存储在本地的微信临时媒体文件mediaId=["+mediaId+"],fullPath=["+localFileFullPath+"]失败,堆栈轨迹如下", e);
 			return false;
 		}
+	}
+
+
+	/**
+	 * 获取微信二维码图片URL
+	 * @param type          二维码类型,0--临时二维码,1--永久二维码,2--永久字符串二维码
+	 * @param expireSeconds 二维码临时有效的时间,单位为秒,最大不超过2592000s,即30天,不填则默认有效期为30s
+	 * @param sceneId       二维码参数场景值ID,临时二维码时为32位非0整型,永久二维码时值为1--100000
+	 * @param sceneStr      二维码参数场景值ID,字符串形式的ID,字符串类型,长度限制为1到64,仅永久二维码支持此字段
+	 * @create Feb 22, 2016 11:15:08 PM
+	 * @author 玄玉<http://blog.csdn.net/jadyer>
+	 */
+	@RequestMapping(value="/getQrcodeURL")
+	public void getQrcodeURL(String appid, int type, String expireSeconds, String sceneId, String sceneStr, HttpServletResponse response) throws IOException{
+		if(StringUtils.isBlank(expireSeconds)){
+			expireSeconds = "2";
+		}
+		if(StringUtils.isBlank(sceneId)){
+			sceneId = "2";
+		}
+		String ticket = WeixinHelper.createQrcodeTicket(WeixinTokenHolder.getWeixinAccessToken(appid), type, Integer.parseInt(expireSeconds), Long.parseLong(sceneId), sceneStr);
+		String qrcodeURL = WeixinConstants.URL_WEIXIN_GET_QRCODE.replace(WeixinConstants.URL_PLACEHOLDER_QRCODE_TICKET, ticket);
+		response.setCharacterEncoding(HttpUtil.DEFAULT_CHARSET);
+		response.setContentType("text/plain; charset=" + HttpUtil.DEFAULT_CHARSET);
+		response.setHeader("Cache-Control", "no-cache");
+		response.setHeader("Pragma", "no-cache");
+		response.setDateHeader("Expires", 0);
+		PrintWriter out = response.getWriter();
+		out.print(qrcodeURL);
+		out.flush();
+		out.close();
 	}
 }
