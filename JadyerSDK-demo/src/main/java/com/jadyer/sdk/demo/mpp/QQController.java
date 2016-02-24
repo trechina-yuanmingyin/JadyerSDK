@@ -1,4 +1,4 @@
-package com.jadyer.sdk.demo.qq;
+package com.jadyer.sdk.demo.mpp;
 
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jadyer.sdk.demo.common.constant.Constants;
 import com.jadyer.sdk.demo.common.util.LogUtil;
+import com.jadyer.sdk.demo.mpp.fans.FansInfoDao;
+import com.jadyer.sdk.demo.mpp.fans.FansSaveThread;
+import com.jadyer.sdk.demo.mpp.reply.ReplyInfoDao;
+import com.jadyer.sdk.demo.mpp.reply.model.ReplyInfo;
 import com.jadyer.sdk.demo.user.UserService;
 import com.jadyer.sdk.demo.user.model.UserInfo;
-import com.jadyer.sdk.demo.weixin.fans.FansInfoDao;
-import com.jadyer.sdk.demo.weixin.fans.FansSaveThread;
-import com.jadyer.sdk.demo.weixin.reply.ReplyInfoDao;
-import com.jadyer.sdk.demo.weixin.reply.model.ReplyInfo;
 import com.jadyer.sdk.qq.controller.QQMsgController;
 import com.jadyer.sdk.qq.msg.in.QQInImageMsg;
 import com.jadyer.sdk.qq.msg.in.QQInLocationMsg;

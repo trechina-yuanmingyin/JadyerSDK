@@ -1,4 +1,4 @@
-package com.jadyer.sdk.demo.weixin.reply.model;
+package com.jadyer.sdk.demo.mpp.reply.model;
 
 import java.util.Date;
 

@@ -1,4 +1,4 @@
-package com.jadyer.sdk.demo.weixin.fans.model;
+package com.jadyer.sdk.demo.mpp.fans.model;
 
 import java.util.Date;
 

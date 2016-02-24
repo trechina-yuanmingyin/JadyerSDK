@@ -1,4 +1,4 @@
-package com.jadyer.sdk.demo.weixin.fans;
+package com.jadyer.sdk.demo.mpp.fans;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.jadyer.sdk.demo.common.constant.Constants;
-import com.jadyer.sdk.demo.weixin.fans.model.FansInfo;
+import com.jadyer.sdk.demo.mpp.fans.model.FansInfo;
 
 @Controller
 @RequestMapping(value="/fans")

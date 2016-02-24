@@ -1,4 +1,4 @@
-package com.jadyer.sdk.demo.weixin.fans;
+package com.jadyer.sdk.demo.mpp.fans;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.jadyer.sdk.demo.weixin.fans.model.FansInfo;
+import com.jadyer.sdk.demo.mpp.fans.model.FansInfo;
 
 public interface FansInfoDao extends JpaRepository<FansInfo, Integer>, JpaSpecificationExecutor<FansInfo> {
 	/**
