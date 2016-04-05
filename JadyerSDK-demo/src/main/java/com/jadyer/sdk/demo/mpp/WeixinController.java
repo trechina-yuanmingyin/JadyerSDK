@@ -108,13 +108,13 @@ public class WeixinController extends WeixinMsgControllerCustomServiceAdapter {
 		if(null == userInfo){
 			return new WeixinOutTextMsg(inFollowEventMsg).setContent("该公众号未绑定");
 		}
-		List<ReplyInfo> replyInfoList = replyInfoDao.findByCategory(userInfo.getId(), "1");
 		if(WeixinInFollowEventMsg.EVENT_INFOLLOW_SUBSCRIBE.equals(inFollowEventMsg.getEvent())){
 			//记录粉丝关注情况
 			ExecutorService threadPool = Executors.newSingleThreadExecutor();
 			threadPool.execute(new FansSaveThread(userInfo, inFollowEventMsg.getFromUserName()));
 			threadPool.shutdown();
 			//目前设定关注后回复文本
+			List<ReplyInfo> replyInfoList = replyInfoDao.findByCategory(userInfo.getId(), "1");
 			if(replyInfoList.isEmpty()){
 				return new WeixinOutTextMsg(inFollowEventMsg).setContent("感谢您的关注");
 			}else{
