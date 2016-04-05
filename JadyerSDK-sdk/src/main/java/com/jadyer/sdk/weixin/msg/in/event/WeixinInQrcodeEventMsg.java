@@ -3,7 +3,9 @@ package com.jadyer.sdk.weixin.msg.in.event;
 /**
  * 扫描带参数二维码事件
  * @see -----------------------------------------------------------------------------------------------------------
- * @see 用户未关注时,进行关注后的事件推送(如果用户此时没有点击按钮进行关注,则微信不会推送此事件给开发者服务器)
+ * @see 用户未关注时,进行关注后的事件推送
+ * @see 若用户此时没有点击按钮进行关注,则微信不会推送此事件给开发者服务器
+ * @see 若用户点击了关注,那么也只会推送该事件给开发者服务器,不会额外再推送WeixinInFollowEventMsg.java描述的subscribe事件
  * @see <xml>
  * @see 	<ToUserName><![CDATA[gh_4769d11d72e0]]></ToUserName>
  * @see 	<FromUserName><![CDATA[o3SHot22_IqkUI7DpahNv-KBiFIs]]></FromUserName>

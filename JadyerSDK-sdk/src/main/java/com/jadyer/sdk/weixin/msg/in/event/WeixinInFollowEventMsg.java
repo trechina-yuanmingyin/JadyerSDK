@@ -3,7 +3,8 @@ package com.jadyer.sdk.weixin.msg.in.event;
 /**
  * 接收关注/取消关注事件
  * @see -----------------------------------------------------------------------------------------------------------
- * @see 测试发现,关注和取消关注时,微信服务器发送到开发者服务器的xml中都比官方文档多一个控制的EventKey元素
+ * @see 测试发现,关注和取消关注时,微信服务器主动推给开发者服务器的xml都比官方文档多一个空值的EventKey元素
+ * @see 事实上多的EventKey元素,当用户通过扫码关注后,它就有值了,详见WeixinInQrcodeEventMsg.java
  * @see <xml>
  * @see 	<ToUserName><![CDATA[gh_4769d11d72e0]]></ToUserName>
  * @see 	<FromUserName><![CDATA[o3SHot22_IqkUI7DpahNv-KBiFIs]]></FromUserName>
