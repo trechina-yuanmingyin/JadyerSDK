@@ -10,36 +10,44 @@ import java.util.HashMap;
 public class QQTemplateMsg {
 	public static final String TEMPLATE_MSG_TYPE_VIEW = "view";
 	public static final String TEMPLATE_MSG_TYPE_CLICK = "click";
+
 	/**
 	 * 根据OpenID发送消息,使用接口send
 	 */
 	private String tousername;
+
 	/**
 	 * 指定消息模板的id(模板通过审核之后可获得)
 	 */
 	private String templateid;
+
 	/**
 	 * click/view(点击事件或者跳转)
 	 * @see 非必传
 	 */
 	private String type;
+
 	/**
 	 * 点击事件上报的关键字
 	 * @see 非必传
 	 */
 	private String key;
+
 	/**
 	 * 点击事件跳转的url
 	 * @see 非必传
 	 */
 	private String url;
+
 //	private String topcolor;
+
 	/**
 	 * 指定传入消息模板的模板参数内容,每个模板参数包含两部分内容,即变量名:{变量值}
 	 * @see 用户在data参数中列出的变量名仅用于调用方辨识方便,接口parse数据时不做单独处理
 	 * @see 识别变量仅依序从前至后,严格按照参数前后顺序将内容填充拼接至模板内
 	 */
 	private DataItem data;
+
 	/**
 	 * 指定传入消息模板的模板参数内容,每个模板参数包含两部分内容,即变量名:{按钮类型  按钮名称  按钮数据}
 	 * @see 用户在button参数中列出的变量名仅用于调用方辨识方便,接口parse数据时不做单独处理
