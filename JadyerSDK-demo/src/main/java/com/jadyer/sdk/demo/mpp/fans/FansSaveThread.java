@@ -57,7 +57,7 @@ public class FansSaveThread implements Runnable {
 			fansInfo.setOpenid(openid);
 			fansInfo.setSubscribe(String.valueOf(qqFansInfo.getSubscribe()));
 			fansInfo.setSubscribeTime(DateFormatUtils.format(new Date(Long.parseLong(qqFansInfo.getSubscribe_time())*1000), "yyyy-MM-dd HH:mm:ss"));
-			fansInfo.setNickname(qqFansInfo.getNickname());
+			fansInfo.setNickname(SDKUtil.escapeEmoji(qqFansInfo.getNickname()));
 			fansInfo.setSex(String.valueOf(qqFansInfo.getSex()));
 			fansInfo.setCity(qqFansInfo.getCity());
 			fansInfo.setCountry(qqFansInfo.getCountry());
