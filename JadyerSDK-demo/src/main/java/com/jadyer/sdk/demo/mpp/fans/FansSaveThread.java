@@ -9,6 +9,7 @@ import com.jadyer.sdk.demo.mpp.fans.model.FansInfo;
 import com.jadyer.sdk.demo.user.model.UserInfo;
 import com.jadyer.sdk.qq.helper.QQHelper;
 import com.jadyer.sdk.qq.helper.QQTokenHolder;
+import com.jadyer.sdk.util.SDKUtil;
 import com.jadyer.sdk.weixin.helper.WeixinHelper;
 import com.jadyer.sdk.weixin.helper.WeixinTokenHolder;
 
@@ -38,7 +39,7 @@ public class FansSaveThread implements Runnable {
 			fansInfo.setOpenid(openid);
 			fansInfo.setSubscribe(String.valueOf(weixinFansInfo.getSubscribe()));
 			fansInfo.setSubscribeTime(DateFormatUtils.format(new Date(Long.parseLong(weixinFansInfo.getSubscribe_time())*1000), "yyyy-MM-dd HH:mm:ss"));
-			fansInfo.setNickname(weixinFansInfo.getNickname());
+			fansInfo.setNickname(SDKUtil.escapeEmoji(weixinFansInfo.getNickname()));
 			fansInfo.setSex(String.valueOf(weixinFansInfo.getSex()));
 			fansInfo.setCity(weixinFansInfo.getCity());
 			fansInfo.setCountry(weixinFansInfo.getCountry());

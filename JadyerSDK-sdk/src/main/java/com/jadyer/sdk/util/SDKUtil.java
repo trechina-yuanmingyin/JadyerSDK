@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public final class SDKUtil {
 	private SDKUtil(){}
@@ -29,6 +30,28 @@ public final class SDKUtil {
 			return true;
 		}else{
 			return false;
+		}
+	}
+
+
+	/**
+	 * 转义emoji表情为*星号
+	 * @see 现在的APP或者微信已经广泛支持Emoji表情了,但是MySQL的UTF8编码对Emoji的支持却不是很好
+	 * @see 所以通常会遇到这样的异常提示Incorrect string value: '\xF0\x90\x8D\x83...' for column
+	 * @see 原因是MySQL的UTF8编码最多能支持3个字节,而Emoji表情字符所使用的UTF8编码很多都是4个甚至6个字节
+	 * @see 解决方案有两种
+	 * @see 1)使用utf8mb4的MySQL编码存储表情字符(不过在浏览器显示时,这些表情字符显示的是一个空心的方框)
+	 * @see 2)过滤表情字符
+	 * @see 第一种方案需要注意很多,比如MySQL版本、MySQL的表和数据库配置、MySQL Connector的版本等等
+	 * @see 所以写了这个第二种方案的转义方法
+	 * @create Apr 7, 2016 11:41:35 AM
+	 * @author 玄玉<http://blog.csdn.net/jadyer>
+	 */
+	public static String escapeEmoji(String emoji){
+		if(StringUtils.isNotBlank(emoji)){
+			return emoji.replaceAll("[\\ud800\\udc00-\\udbff\\udfff\\ud800-\\udfff]", "*");
+		}else{
+			return emoji;
 		}
 	}
 
