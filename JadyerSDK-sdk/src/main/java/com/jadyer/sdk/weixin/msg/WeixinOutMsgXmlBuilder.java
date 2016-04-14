@@ -1,10 +1,6 @@
 package com.jadyer.sdk.weixin.msg;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-
-import javax.servlet.http.HttpServletResponse;
-
+import com.jadyer.sdk.weixin.constant.WeixinConstants;
 import com.jadyer.sdk.weixin.msg.out.WeixinOutCustomServiceMsg;
 import com.jadyer.sdk.weixin.msg.out.WeixinOutImageMsg;
 import com.jadyer.sdk.weixin.msg.out.WeixinOutMsg;
@@ -19,16 +15,16 @@ import com.jadyer.sdk.weixin.msg.out.WeixinOutTextMsg;
 public class WeixinOutMsgXmlBuilder {
 	private WeixinOutMsgXmlBuilder(){}
 	
-	public static void write(WeixinOutMsg outMsg, HttpServletResponse response){
-		try{
-			PrintWriter out = response.getWriter();
-			out.write(build(outMsg));
-			out.flush();
-			out.close();
-		}catch(IOException e){
-			throw new RuntimeException(e);
-		}
-	}
+//	public static void write(WeixinOutMsg outMsg, HttpServletResponse response){
+//		try{
+//			PrintWriter out = response.getWriter();
+//			out.write(build(outMsg));
+//			out.flush();
+//			out.close();
+//		}catch(IOException e){
+//			throw new RuntimeException(e);
+//		}
+//	}
 
 
 	public static String build(WeixinOutMsg outMsg){
@@ -67,6 +63,9 @@ public class WeixinOutMsgXmlBuilder {
 	 * @see -----------------------------------------------------------------------------------------------------------
 	 */
 	private static String buildOutTextMsg(WeixinOutTextMsg outTexgMsg){
+		if(WeixinConstants.NOT_NEED_REPLY_FLAG.equals(outTexgMsg.getContent())){
+			return WeixinConstants.NOT_NEED_REPLY_FLAG;
+		}
 		StringBuilder sb = new StringBuilder();
 		sb.append("<xml>")
 		  .append("<ToUserName><![CDATA[").append(outTexgMsg.getToUserName()).append("]]></ToUserName>")

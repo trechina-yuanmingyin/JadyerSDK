@@ -19,6 +19,7 @@ import com.jadyer.sdk.demo.mpp.reply.ReplyInfoDao;
 import com.jadyer.sdk.demo.mpp.reply.model.ReplyInfo;
 import com.jadyer.sdk.demo.user.UserService;
 import com.jadyer.sdk.demo.user.model.UserInfo;
+import com.jadyer.sdk.weixin.constant.WeixinConstants;
 import com.jadyer.sdk.weixin.controller.WeixinMsgControllerCustomServiceAdapter;
 import com.jadyer.sdk.weixin.msg.in.WeixinInTextMsg;
 import com.jadyer.sdk.weixin.msg.in.event.WeixinInFollowEventMsg;
@@ -96,8 +97,8 @@ public class WeixinController extends WeixinMsgControllerCustomServiceAdapter {
 				return new WeixinOutTextMsg(inMenuEventMsg).setContent(replyInfo.getContent());
 			}
 		}
-		//跳到URL时,这里也不会真的推送消息给用户
-		return new WeixinOutTextMsg(inMenuEventMsg).setContent("您正在访问<a href=\""+inMenuEventMsg.getEventKey()+"\">"+inMenuEventMsg.getEventKey()+"</a>");
+		//跳到URL时,返回特定的消息使得微信服务器不会回复消息给用户手机上
+		return new WeixinOutTextMsg(inMenuEventMsg).setContent(WeixinConstants.NOT_NEED_REPLY_FLAG);
 	}
 
 

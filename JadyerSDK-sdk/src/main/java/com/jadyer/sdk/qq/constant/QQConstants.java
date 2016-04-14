@@ -3,8 +3,8 @@ package com.jadyer.sdk.qq.constant;
 public interface QQConstants {
 	/**
 	 * 如果希望QQ服务器对我们回复的消息不做任何处理,并且不会发起重试,可采用两种回复方式告之QQ服务器
-	 * 1)直接回复空串(指字节长度为0的空字符串,而不是XML结构体中content字段的内容为空)
-	 * 2)直接回复success
+	 * 1)直接回复success(个人推荐此方式,且已验证通过)
+	 * 2)直接回复空串(指字节长度为0的空字符串,而不是XML结构体中content字段的内容为空)
 	 */
 	String NOT_NEED_REPLY_FLAG = "success";
 

@@ -2,6 +2,14 @@ package com.jadyer.sdk.weixin.constant;
 
 public interface WeixinConstants {
 	/**
+	 * 如果希望微信服务器对我们回复的消息不做任何处理,并且不会发起重试,可采用两种回复方式告之微信服务器
+	 * 1)直接回复success(推荐方式)
+	 * 2)直接回复空串(指字节长度为0的空字符串,而不是XML结构体中content字段的内容为空)
+	 * 详细介绍见https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421140543&token=&lang=zh_CN
+	 */
+	String NOT_NEED_REPLY_FLAG = "success";
+
+	/**
 	 * 网页授权获取用户信息的方式
 	 */
 	String WEIXIN_OAUTH_SCOPE_SNSAPI_BASE     = "snsapi_base";

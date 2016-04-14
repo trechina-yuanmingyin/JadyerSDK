@@ -1,10 +1,5 @@
 package com.jadyer.sdk.qq.msg;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-
-import javax.servlet.http.HttpServletResponse;
-
 import com.jadyer.sdk.qq.constant.QQConstants;
 import com.jadyer.sdk.qq.msg.out.QQOutImageMsg;
 import com.jadyer.sdk.qq.msg.out.QQOutMsg;
@@ -19,16 +14,16 @@ import com.jadyer.sdk.qq.msg.out.QQOutTextMsg;
 public class QQOutMsgXmlBuilder {
 	private QQOutMsgXmlBuilder(){}
 	
-	public static void write(QQOutMsg outMsg, HttpServletResponse response){
-		try{
-			PrintWriter out = response.getWriter();
-			out.write(build(outMsg));
-			out.flush();
-			out.close();
-		}catch(IOException e){
-			throw new RuntimeException(e);
-		}
-	}
+//	public static void write(QQOutMsg outMsg, HttpServletResponse response){
+//		try{
+//			PrintWriter out = response.getWriter();
+//			out.write(build(outMsg));
+//			out.flush();
+//			out.close();
+//		}catch(IOException e){
+//			throw new RuntimeException(e);
+//		}
+//	}
 
 
 	public static String build(QQOutMsg outMsg){
