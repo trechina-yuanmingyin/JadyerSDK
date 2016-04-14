@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.jadyer.sdk.qq.constant.QQConstants;
 import com.jadyer.sdk.qq.msg.out.QQOutImageMsg;
 import com.jadyer.sdk.qq.msg.out.QQOutMsg;
 import com.jadyer.sdk.qq.msg.out.QQOutNewsMsg;
@@ -60,6 +61,9 @@ public class QQOutMsgXmlBuilder {
 	 * @see -----------------------------------------------------------------------------------------------------------
 	 */
 	private static String buildOutTextMsg(QQOutTextMsg outTexgMsg){
+		if(QQConstants.NOT_NEED_REPLY_FLAG.equals(outTexgMsg.getContent())){
+			return QQConstants.NOT_NEED_REPLY_FLAG;
+		}
 		StringBuilder sb = new StringBuilder();
 		sb.append("<xml>")
 		  .append("<ToUserName><![CDATA[").append(outTexgMsg.getToUserName()).append("]]></ToUserName>")

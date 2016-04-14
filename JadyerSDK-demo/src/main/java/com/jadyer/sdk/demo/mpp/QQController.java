@@ -18,6 +18,7 @@ import com.jadyer.sdk.demo.mpp.reply.ReplyInfoDao;
 import com.jadyer.sdk.demo.mpp.reply.model.ReplyInfo;
 import com.jadyer.sdk.demo.user.UserService;
 import com.jadyer.sdk.demo.user.model.UserInfo;
+import com.jadyer.sdk.qq.constant.QQConstants;
 import com.jadyer.sdk.qq.controller.QQMsgController;
 import com.jadyer.sdk.qq.msg.in.QQInImageMsg;
 import com.jadyer.sdk.qq.msg.in.QQInLocationMsg;
@@ -101,8 +102,8 @@ public class QQController extends QQMsgController {
 				return new QQOutTextMsg(inMenuEventMsg).setContent(replyInfo.getContent());
 			}
 		}
-		//跳到URL时,这里也不会真的推送消息给用户
-		return new QQOutTextMsg(inMenuEventMsg).setContent("您正在访问<a href=\""+inMenuEventMsg.getEventKey()+"\">"+inMenuEventMsg.getEventKey()+"</a>");
+		//跳到URL时,返回特定的消息使得QQ服务器不会回复消息给用户手机上
+		return new QQOutTextMsg(inMenuEventMsg).setContent(QQConstants.NOT_NEED_REPLY_FLAG);
 	}
 
 
