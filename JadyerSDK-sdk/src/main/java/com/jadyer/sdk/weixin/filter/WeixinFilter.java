@@ -1,7 +1,12 @@
 package com.jadyer.sdk.weixin.filter;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import com.jadyer.sdk.util.HttpUtil;
+import com.jadyer.sdk.util.SDKUtil;
+import com.jadyer.sdk.weixin.constant.WeixinConstants;
+import com.jadyer.sdk.weixin.helper.WeixinHelper;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -11,15 +16,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.jadyer.sdk.util.HttpUtil;
-import com.jadyer.sdk.util.SDKUtil;
-import com.jadyer.sdk.weixin.constant.WeixinConstants;
-import com.jadyer.sdk.weixin.helper.WeixinHelper;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * 用于处理微信相关的Filter
@@ -95,145 +93,4 @@ public class WeixinFilter implements Filter {
 			chain.doFilter(req, resp);
 		}
 	}
-
-
-/*
-	/**
-	 * 可手工设置HttpServletRequest入参的Wrapper
-	 * @see ---------------------------------------------------------------------------------------
-	 * @see 由于HttpServletRequest.getParameterMap()得到的Map是immutable的,不可更改的
-	 * @see 而且HttpServletRequest.setAttribute()方法也是不能修改请求参数的,故扩展此类
-	 * @see ---------------------------------------------------------------------------------------
-	 * @see RequestParameterWrapper requestWrapper = new RequestParameterWrapper(request);
-	 * @see requestWrapper.addAllParameters(Map<String, Object> allParams);
-	 * @see filterChain.doFilter(requestWrapper, response);
-	 * @see ---------------------------------------------------------------------------------------
-	 * @create Dec 19, 2015 9:06:04 PM
-	 * @author 玄玉<http://blog.csdn.net/jadyer>
-	 *
-	class RequestParameterWrapper extends HttpServletRequestWrapper{
-		private Map<String, String[]> paramMap = new HashMap<String, String[]>();
-		public RequestParameterWrapper(HttpServletRequest request) {
-			super(request);
-			this.paramMap.putAll(request.getParameterMap());
-		}
-		@Override
-		public String getParameter(String name) {
-			String[] values = this.paramMap.get(name);
-			if(null==values || values.length==0){
-				return null;
-			}
-			return values[0];
-		}
-		@Override
-		public Map<String, String[]> getParameterMap() {
-			return this.paramMap;
-		}
-		@Override
-		public Enumeration<String> getParameterNames() {
-			return new Vector<String>(this.paramMap.keySet()).elements();
-		}
-		@Override
-		public String[] getParameterValues(String name) {
-			return this.paramMap.get(name);
-		}
-		public void addParameter(String name, Object value){
-			if(null != value){
-				if(value instanceof String[]){
-					this.paramMap.put(name, (String[])value);
-				}else if(value instanceof String){
-					this.paramMap.put(name, new String[]{(String)value});
-				}else{
-					this.paramMap.put(name, new String[]{String.valueOf(value)});
-				}
-			}
-		}
-		public void addAllParameters(Map<String,Object> allParams){
-			for(Map.Entry<String,Object> entry : allParams.entrySet()){
-				this.addParameter(entry.getKey(), entry.getValue());
-			}
-		}
-	}
-
-
-	/**
-	 * 可手工设置HttpServletResponse出参的Wrapper
-	 * @see ---------------------------------------------------------------------------------------
-	 * @see ResponseContentWrapper wrapperResponse = new ResponseContentWrapper(response);
-	 * @see filterChain.doFilter(request, wrapperResponse);
-	 * @see String content = wrapperResponse.getContent();
-	 * @see response.getOutputStream().write(content.getBytes("UTF-8"));
-	 * @see return;
-	 * @see ---------------------------------------------------------------------------------------
-	 * @see response.setHeader("Content-Type", "application/json; charset=UTF-8");
-	 * @see //response.getWriter().write("abcdefg");
-	 * @see response.getOutputStream().write(("{\"code\":\"102\", \"message\":\"重复请求\"}").getBytes("UTF-8"));
-	 * @see return;
-	 * @see ---------------------------------------------------------------------------------------
-	 * @create Dec 19, 2015 9:07:09 PM
-	 * @author 玄玉<http://blog.csdn.net/jadyer>
-	 *
-	class ResponseContentWrapper extends HttpServletResponseWrapper {
-		private ResponsePrintWriter writer;
-		private OutputStreamWrapper outputWrapper;
-		private ByteArrayOutputStream output;
-		public ResponseContentWrapper(HttpServletResponse httpServletResponse) {
-			super(httpServletResponse);
-			output = new ByteArrayOutputStream();
-			outputWrapper = new OutputStreamWrapper(output);
-			writer = new ResponsePrintWriter(output);
-		}
-		public void finalize() throws Throwable {
-			super.finalize();
-			output.close();
-			writer.close();
-		}
-		@Override
-		public ServletOutputStream getOutputStream() throws IOException {
-			return outputWrapper;
-		}
-		public String getContent() {
-			try {
-				writer.flush();
-				return writer.getByteArrayOutputStream().toString("UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				return "UnsupportedEncoding";
-			}
-		}
-		public void close() throws IOException {
-			writer.close();
-		}
-		public PrintWriter getWriter() throws IOException {
-			return writer;
-		}
-		private class ResponsePrintWriter extends PrintWriter {
-			ByteArrayOutputStream output;
-			public ResponsePrintWriter(ByteArrayOutputStream output) {
-				super(output);
-				this.output = output;
-			}
-			public ByteArrayOutputStream getByteArrayOutputStream() {
-				return output;
-			}
-		}
-		private class OutputStreamWrapper extends ServletOutputStream {
-			ByteArrayOutputStream output;
-			public OutputStreamWrapper(ByteArrayOutputStream output) {
-				this.output = output;
-			}
-			@Override
-			public boolean isReady() {
-				return true;
-			}
-			@Override
-			public void setWriteListener(WriteListener listener) {
-				throw new UnsupportedOperationException("UnsupportedMethod setWriteListener.");
-			}
-			@Override
-			public void write(int b) throws IOException {
-				output.write(b);
-			}
-		}
-	}
-*/
 }
